@@ -30,12 +30,6 @@ list(APPEND CMAKE_AUTORCC_SEARCH_PATHS "qrc")
 
 add_library(${PROJECT_NAME} SHARED ${INCS} ${SRCS} ${QRCS})
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/Zc:wchar_t /MD>
-    $<$<CXX_COMPILER_ID:GNU>:-Wall>
-)
-target_compile_definitions(${PROJECT_NAME} PRIVATE UNICODE _UNICODE)
-
 if(MSVC)
     target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _WIN32_WINNT=0x0600)
 endif()

@@ -1,4 +1,3 @@
-//-----------------------------------------------------------------------------
 //- Define the sole extension module object.
 AC_IMPLEMENT_EXTENSION_MODULE(arxApi)
 //- Now you can use the CAcModuleResourceOverride class in
@@ -22,5 +21,5 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
     {
         arxApi.DetachInstance();
     }
-    return (TRUE);
+    return TRUE;
 }

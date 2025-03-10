@@ -8,15 +8,15 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRCS} ${INCS})
 
 add_library(${PROJECT_NAME} SHARED ${INCS} ${SRCS})
 
-target_compile_options(${PROJECT_NAME} PRIVATE
+target_compile_options(${PROJECT_NAME} PUBLIC
     $<$<CXX_COMPILER_ID:MSVC>:/Zc:wchar_t /MD>
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
 )
-target_compile_definitions(${PROJECT_NAME} PRIVATE UNICODE _UNICODE)
+target_compile_definitions(${PROJECT_NAME} PUBLIC UNICODE _UNICODE)
 target_precompile_headers(${PROJECT_NAME} PUBLIC inc/stdafx.h)
 
 if(MSVC)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _AFXEXT _WIN32_WINNT=0x0600 KK_OBJECTARX _WINDLL ZRX=24)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _AFXEXT _WIN32_WINNT=0x0600 KK_OBJECTARX)
 endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC
