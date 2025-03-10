@@ -1,58 +1,33 @@
-project(ArxApi)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(QT_PATH "D:/soft/Qt/Qt5.14.2/5.14.2/msvc2017_64" CACHE PATH "QT_PATH")
-
-# set(CMAKE_PREFIX_PATH ${QT_PATH})
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core Gui)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-
-if(Qt${QT_VERSION_MAJOR}_FOUND)
-    message(STATUS "Qt information:")
-    message(STATUS "    QT_PATH: " ${QT_PATH})
-    message(STATUS "    Qt${QT_VERSION_MAJOR}::Widgets found at " ${Qt${QT_VERSION_MAJOR}_DIR} "(Qt5/6_DIR)")
-    message(STATUS "    CMAKE_PREFIX_PATH:" ${CMAKE_PREFIX_PATH})
-endif()
+project(arxApi)
 
 file(GLOB_RECURSE INCS CONFIGURE_DEPENDS inc/*.h)
 file(GLOB_RECURSE SRCS CONFIGURE_DEPENDS src/*.cpp src/*.def)
-file(GLOB_RECURSE UIS CONFIGURE_DEPENDS ui/*.ui)
-file(GLOB_RECURSE QRCS CONFIGURE_DEPENDS qrc/*.qrc)
 file(GLOB_RECURSE LIBS CONFIGURE_DEPENDS ${zrxsdk_dir}/lib-${CMAKE_VS_PLATFORM_NAME}/*.lib)
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRCS} ${INCS} ${UIS} ${QRCS})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRCS} ${INCS})
 
-list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "ui")
-list(APPEND CMAKE_AUTORCC_SEARCH_PATHS "qrc")
-
-add_library(${PROJECT_NAME} SHARED ${INCS} ${SRCS} ${QRCS})
+add_library(${PROJECT_NAME} SHARED ${INCS} ${SRCS})
 
 target_compile_options(${PROJECT_NAME} PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/Zc:wchar_t /MD>
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
 )
 target_compile_definitions(${PROJECT_NAME} PRIVATE UNICODE _UNICODE)
-target_precompile_headers(${PROJECT_NAME} PRIVATE inc/stdafx.h)
+target_precompile_headers(${PROJECT_NAME} PUBLIC inc/stdafx.h)
 
 if(MSVC)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _WIN32_WINNT=0x0600 KK_OBJECTARX)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _AFXEXT _WIN32_WINNT=0x0600 KK_OBJECTARX)
 endif()
 
-target_include_directories(${PROJECT_NAME} PRIVATE
+target_include_directories(${PROJECT_NAME} PUBLIC
     ${zrxsdk_dir}/inc
     ${zrxsdk_dir}/arxport/inc
     ${zrxsdk_dir}/arxport/inc-x64
     inc
 )
 
-target_link_directories(${PROJECT_NAME} PRIVATE ${zrxsdk_dir}/lib-${CMAKE_VS_PLATFORM_NAME})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS}
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui)
+target_link_directories(${PROJECT_NAME} PUBLIC ${zrxsdk_dir}/lib-${CMAKE_VS_PLATFORM_NAME})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBS})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     FOLDER "Api"

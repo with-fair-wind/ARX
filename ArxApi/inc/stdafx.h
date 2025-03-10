@@ -1,11 +1,5 @@
 #pragma once
 
-// undef _DEBUG
-#ifdef _DEBUG
-#define _DEBUG_DEFINED
-#undef _DEBUG
-#endif
-
 #pragma pack(push, 8)
 #pragma warning(disable : 4786 4996)
 // #pragma warning(disable: 4098)
@@ -71,12 +65,6 @@
 #include <unordered_map>
 
 #pragma pack(pop)
-
-#ifdef _DEBUG_DEFINED
-#undef _DEBUG_DEFINED
-#define _DEBUG
-#endif
-// redefine _DEBUG
 
 //- Declare extern here so that becomes available in all modules
 

@@ -3,6 +3,7 @@ namespace KK
     AcDbObjectId KKArxUtility::postToModelSpace(AcDbEntity *pEnt, AcDbDatabase *pDb /*= acdbCurDwg()*/)
     {
         assert(pEnt);
+#if 0
         AcDbBlockTable *pBlkTbl = nullptr;
         pDb->getBlockTable(pBlkTbl, AcDb::kForRead);
         AcDbBlockTableRecord *pBlkTblRcd = nullptr;
@@ -25,6 +26,19 @@ namespace KK
         pEnt->close();
 
         return entId;
+#else
+        AcDbBlockTableRecordPointer pBlkTblRec(pDb->currentSpaceId(), AcDb::kForWrite);
+        if (pBlkTblRec.openStatus() != Acad::eOk)
+            return AcDbObjectId::kNull;
+        AcDbObjectId entId = AcDbObjectId::kNull;
+        if (Acad::eOk != pBlkTblRec->appendAcDbEntity(entId, pEnt))
+        {
+            delete pEnt;
+            pEnt = nullptr;
+            return AcDbObjectId::kNull;
+        }
+        pEnt->close();
+        return entId;
+#endif
     }
-
 } // namespace KK
