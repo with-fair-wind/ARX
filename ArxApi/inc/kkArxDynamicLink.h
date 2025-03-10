@@ -9,6 +9,6 @@
 #include <kkArxUtility.h>
 
 #ifndef KK_OBJECTARX
-// ç›¸å½“äºåœ¨vsé…ç½®ä¸­æ·»åŠ  é™„åŠ ä¾èµ–é¡¹
+// Ïàµ±ÓÚÔÚvsÅäÖÃÖĞÌí¼Ó ¸½¼ÓÒÀÀµÏî
 #pragma comment(lib, "ArxApi.lib")
 #endif
