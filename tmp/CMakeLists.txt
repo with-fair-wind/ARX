@@ -16,7 +16,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE UNICODE _UNICODE)
 target_precompile_headers(${PROJECT_NAME} PUBLIC inc/stdafx.h)
 
 if(MSVC)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _AFXEXT _WIN32_WINNT=0x0600 KK_OBJECTARX)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _AFXEXT _WIN32_WINNT=0x0600 KK_OBJECTARX _WINDLL ZRX=24)
 endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC
