@@ -1,11 +1,11 @@
 #pragma once
 
-namespace KK
+namespace KTArxTool
 {
-    class KK_OBJECTARX_API KKArxUtility
+    class KT_EXPORTARX_API KTArxUtility
     {
     public:
         AcDbObjectId postToModelSpace(AcDbEntity *pEnt, AcDbDatabase *pDb = acdbCurDwg());
     };
 
-} // namespace KK
+} // namespace KTARXTOOL

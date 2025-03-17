@@ -1,6 +1,6 @@
-namespace KK
+namespace KTArxTool
 {
-    AcDbObjectId KKArxUtility::postToModelSpace(AcDbEntity *pEnt, AcDbDatabase *pDb /*= acdbCurDwg()*/)
+    AcDbObjectId KTArxUtility::postToModelSpace(AcDbEntity *pEnt, AcDbDatabase *pDb /*= acdbCurDwg()*/)
     {
         assert(pEnt);
 #if 0
