@@ -69,4 +69,4 @@
 //- Declare extern here so that becomes available in all modules
 
 //-----------------------------------------------------------------------------
-#include "kkArxDynamicLink.h"
+#include "KTArxTool/KTArxDynamicLink.h"

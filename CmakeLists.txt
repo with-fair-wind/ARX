@@ -34,8 +34,10 @@ message(STATUS "    Platform: ${CMAKE_VS_PLATFORM_NAME}")
 message(STATUS "    Using Windows SDK version: ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}")
 
 if(MSVC)
-    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ArxApi)
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT arxApi)
 endif()
 
-add_subdirectory(ArxApi)
+SET(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install CACHE PATH "installation path" FORCE)
+
+add_subdirectory(arxApi)
 add_subdirectory(main)
