@@ -459,4 +459,184 @@ namespace KTArxTool
             }
         }
     }
+
+    double KTArxUtility::GetArcBulge(AcDbArc *pArc)
+    {
+        return GetArcBulge(pArc->startAngle(), pArc->endAngle());
+    }
+
+    double KTArxUtility::GetArcBulge(double dAngleStart, double dAngleEnd)
+    {
+        double dAlfa = dAngleEnd - dAngleStart;
+        if (dAlfa < 0.0) // 如果终点角度小于起点角度;
+            dAlfa = 2 * (atan(1.0) * 4) + dAlfa;
+        return tan((dAlfa) / 4.0);
+    }
+
+    double KTArxUtility::GetArcBulge(const AcGeCircArc2d &geArc)
+    {
+        return GetArcBulge(geArc.startAng(), geArc.endAng());
+    }
+
+    double KTArxUtility::GetArcBulge(AcDbCurve *pCurve)
+    {
+        double dBulge = 0.0;
+        if (pCurve->isKindOf(AcDbArc::desc()))
+        {
+            AcDbArc *pArc = AcDbArc::cast(pCurve);
+            dBulge = GetArcBulge(pArc->startAngle(), pArc->endAngle());
+        }
+        return dBulge;
+    }
+
+    double KTArxUtility::GetArcBulge(const AcDbObjectId &idArc)
+    {
+        AcDbObjectPointer<AcDbArc> pArc(idArc, AcDb::kForRead);
+        if (Acad::eOk != pArc.openStatus())
+            return 0;
+        return GetArcBulge(pArc->startAngle(), pArc->endAngle());
+    }
+
+    AcGeLine2d KTArxUtility::GetGeLine2d(AcDbLine *pLine)
+    {
+        AcGePoint3d ptStart = pLine->startPoint();
+        AcGePoint3d ptEnd = pLine->endPoint();
+        AcGeLine2d geLine;
+        geLine.set(ptStart.convert2d(AcGePlane::kXYPlane), ptEnd.convert2d(AcGePlane::kXYPlane));
+        return geLine;
+    }
+
+    AcGeLineSeg2d KTArxUtility::GetGeLineSeg2d(AcDbLine *pLine)
+    {
+        AcGePoint3d ptStart = pLine->startPoint();
+        AcGePoint3d ptEnd = pLine->endPoint();
+        AcGeLineSeg2d geLine;
+        geLine.set(ptStart.convert2d(AcGePlane::kXYPlane), ptEnd.convert2d(AcGePlane::kXYPlane));
+        return geLine;
+    }
+
+    AcGeLineSeg2d KTArxUtility::GetGeLineSeg2d(AcDbPolyline *pPolyline, unsigned int unIndex)
+    {
+        AcGeLineSeg2d geLine;
+        Acad::ErrorStatus es = pPolyline->getLineSegAt(unIndex, geLine);
+        return geLine;
+    }
+
+    AcGeLineSeg2d KTArxUtility::GetGeLineSeg2d(const AcDbObjectId &idLine)
+    {
+        AcGeLineSeg2d geLine;
+        AcDbObjectPointer<AcDbLine> pLine(idLine, AcDb::kForRead);
+        if (Acad::eOk != pLine.openStatus())
+            return geLine;
+        AcGePoint3d ptStart = pLine->startPoint();
+        AcGePoint3d ptEnd = pLine->endPoint();
+        geLine.set(ptStart.convert2d(AcGePlane::kXYPlane), ptEnd.convert2d(AcGePlane::kXYPlane));
+        return geLine;
+    }
+
+    AcGeCircArc2d KTArxUtility::GetGeCircArc2d(AcDbPolyline *pPolyline, unsigned int unIndex)
+    {
+        AcGeCircArc2d geCircArc;
+        Acad::ErrorStatus es = pPolyline->getArcSegAt(unIndex, geCircArc);
+        return geCircArc;
+    }
+
+    AcGeCircArc2d KTArxUtility::GetGeCircArc2d(AcDbArc *pArc)
+    {
+        AcGePoint3d centerPt = pArc->center();
+        double dRadius = pArc->radius();
+        double dStartAngle = pArc->startAngle();
+        double dEndAngle = pArc->endAngle();
+        AcGeCircArc2d geCircArc;
+        geCircArc.set(centerPt.convert2d(AcGePlane::kXYPlane), dRadius, dStartAngle, dEndAngle);
+        return geCircArc;
+    }
+
+    AcGeCircArc2d KTArxUtility::GetGeCircArc2d(AcDbCircle *pCircle)
+    {
+        AcGePoint3d centerPt = pCircle->center();
+        double dRadius = pCircle->radius();
+        AcGeCircArc2d geCircArc;
+        geCircArc.set(centerPt.convert2d(AcGePlane::kXYPlane), dRadius);
+        return geCircArc;
+    }
+
+    bool KTArxUtility::GetIntersectPoint(const AcGeLine2d &geLine1, const AcGeLine2d &geLine2, AcGePoint3d &ptIntersect)
+    {
+        AcGePoint2d pt2d;
+        bool bRet = geLine1.intersectWith(geLine2, pt2d);
+        if (!bRet)
+            return false;
+        ptIntersect = AcGePoint3d(pt2d.x, pt2d.y, 0);
+        return true;
+    }
+
+    bool KTArxUtility::GetIntersectPoint(const AcGeLineSeg2d &geLine1, const AcGeLineSeg2d &geLine2, AcGePoint3d &ptIntersect)
+    {
+        AcGePoint2d pt2d;
+        bool bRet = geLine1.intersectWith(geLine2, pt2d);
+        if (!bRet)
+            return false;
+        ptIntersect = AcGePoint3d(pt2d.x, pt2d.y, 0);
+        return true;
+    }
+
+    bool KTArxUtility::GetIntersectPoint(const AcGeLineSeg2d &geLine1, const AcGeLine2d &geLine2, AcGePoint3d &ptIntersect)
+    {
+        AcGePoint2d pt2d;
+        bool bRet = geLine1.intersectWith(geLine2, pt2d);
+        if (!bRet)
+            return false;
+        ptIntersect = AcGePoint3d(pt2d.x, pt2d.y, 0);
+        return true;
+    }
+
+    bool KTArxUtility::GetIntersectPoint(const AcGeCircArc2d &geCirArc1, const AcGeCircArc2d &geCirArc2, int &nNum, AcGePoint3dArray &arrptIntersect)
+    {
+        nNum = 0;
+        AcGePoint2d pt1, pt2;
+        bool bRet = geCirArc1.intersectWith(geCirArc2, nNum, pt1, pt2);
+        if (!bRet)
+            return false;
+        if (1 == nNum)
+            arrptIntersect.append(AcGePoint3d(pt1.x, pt1.y, 0));
+        else if (2 == nNum)
+        {
+            arrptIntersect.append(AcGePoint3d(pt1.x, pt1.y, 0));
+            arrptIntersect.append(AcGePoint3d(pt2.x, pt2.y, 0));
+        }
+        return true;
+    }
+
+    bool KTArxUtility::GetIntersectPoint(const AcGeLine2d &geLine, const AcGeCircArc2d &geCircArc, int &nNum, AcGePoint3dArray &arrptIntersect)
+    {
+        nNum = 0;
+        AcGePoint2d pt1, pt2;
+        if (!geCircArc.intersectWith(geLine, nNum, pt1, pt2))
+            return false;
+        if (nNum == 1)
+            arrptIntersect.append(AcGePoint3d(pt1.x, pt1.y, 0));
+        else if (nNum == 2)
+        {
+            arrptIntersect.append(AcGePoint3d(pt1.x, pt1.y, 0));
+            arrptIntersect.append(AcGePoint3d(pt2.x, pt2.y, 0));
+        }
+        return true;
+    }
+
+    bool KTArxUtility::GetIntersectPoint(const AcGeLineSeg2d &geLine, const AcGeCircArc2d &geCircArc, int &nNum, AcGePoint3dArray &arrptIntersect)
+    {
+        nNum = 0;
+        AcGePoint2d pt1, pt2;
+        if (!geCircArc.intersectWith(geLine, nNum, pt1, pt2))
+            return false;
+        if (nNum == 1)
+            arrptIntersect.append(AcGePoint3d(pt1.x, pt1.y, 0));
+        else if (nNum == 2)
+        {
+            arrptIntersect.append(AcGePoint3d(pt1.x, pt1.y, 0));
+            arrptIntersect.append(AcGePoint3d(pt2.x, pt2.y, 0));
+        }
+        return true;
+    }
 } // namespace KK
