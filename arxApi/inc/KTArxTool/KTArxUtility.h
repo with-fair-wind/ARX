@@ -5,26 +5,26 @@ namespace KTArxTool
     class KT_EXPORTARX_API KTArxUtility
     {
     public:
-        // Summary:   得到当前项目zrx文件路径
+        /// @brief 得到当前项目zrx文件路径
         CString GetCurZrxFilePath();
 
-        // Summary:   得到当前项目zrx文件所在目录路径
+        /// @brief 得到当前项目zrx文件所在目录路径
         // Explain:   返回的目录路径含带'\\'
         CString GetCurZrxFolderPath();
 
-        // Summary:   加载cad菜单文件
+        /// @brief 加载cad菜单文件
         bool LoadCadMenu(const CString &strMenuFileName, const CString &strMenuGroupName);
 
-        // Summary:   卸载cad菜单
+        /// @brief 卸载cad菜单
         bool UnloadCadMenu(const CString &strMenuGroupName);
 
-        // Summary:   加载zrx文件
+        /// @brief 加载zrx文件
         bool LoadZrxFile(LPCTSTR szFilePath);
 
-        // Summary:   添加搜索路径
+        /// @brief 添加搜索路径
         bool AddSearchPath(LPCTSTR szSearchDir);
 
-        // Summary:   将实体添加到模型空间
+        /// @brief 将实体添加到模型空间
         AcDbObjectId PostToModelSpace(AcDbEntity *pEnt, AcDbDatabase *pDb = acdbCurDwg());
 
         /// @brief 对点的数组进行排序

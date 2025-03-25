@@ -124,6 +124,14 @@ namespace KTArxTool
 
     AcGePoint3dArray KTArxUtility::SortPtArr(const AcGePoint3dArray &PointArr, bool bVertical)
     {
-        return AcGePoint3dArray();
+        AcGePoint3dArray tempPointArr = PointArr;
+        if (bVertical) // ÊÇ´¹Ö±µÄ
+            std::sort(tempPointArr.asArrayPtr(), tempPointArr.asArrayPtr() + tempPointArr.length(), [](const AcGePoint3d &a, const AcGePoint3d &b)
+                      { return a.y < b.y; });
+        else
+            std::sort(tempPointArr.asArrayPtr(), tempPointArr.asArrayPtr() + tempPointArr.length(), [](const AcGePoint3d &a, const AcGePoint3d &b)
+                      { return a.x < b.x; });
+
+        return tempPointArr;
     }
 } // namespace KK
