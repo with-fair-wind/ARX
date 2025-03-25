@@ -63,6 +63,7 @@
 // TODO: 其他系统库include
 #include <vector>
 #include <unordered_map>
+#include <thread>
 
 #pragma pack(pop)
 

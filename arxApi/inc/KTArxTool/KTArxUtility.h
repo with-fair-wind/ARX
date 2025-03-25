@@ -77,5 +77,43 @@ namespace KTArxTool
 
         // Summary:   判断点是否在线段上
         bool IsPtOnCurve(const AcGePoint3d &pt, AcDbCurve *pCurve, double dTol = 0);
+
+        // Summary:   得到圆弧凸度
+        double GetArcBulge(AcDbArc *pArc);
+        double GetArcBulge(double dAngleStart, double dAngleEnd);
+        double GetArcBulge(const AcDbObjectId &idArc);
+        double GetArcBulge(AcDbCurve *pCurve);
+        double GetArcBulge(const AcGeCircArc2d &geArc);
+
+        // Summary:   得到几何类对象
+        AcGeLine2d GetGeLine2d(AcDbLine *pLine);
+        AcGeLineSeg2d GetGeLineSeg2d(AcDbLine *pLine);
+        AcGeLineSeg2d GetGeLineSeg2d(const AcDbObjectId &idLine);
+        AcGeLineSeg2d GetGeLineSeg2d(AcDbPolyline *pPolyline, unsigned int unIndex);
+        AcGeCircArc2d GetGeCircArc2d(AcDbArc *pArc);
+        AcGeCircArc2d GetGeCircArc2d(AcDbCircle *pCircle);
+        AcGeCircArc2d GetGeCircArc2d(AcDbPolyline *pPolyline, unsigned int unIndex);
+
+        // Summary:   得到交点
+        bool GetIntersectPoint(const AcGeLine2d &geLine1, const AcGeLine2d &geLine2,
+                               AcGePoint3d &ptIntersect);
+        bool GetIntersectPoint(const AcGeLineSeg2d &geLine1, const AcGeLineSeg2d &geLine2,
+                               AcGePoint3d &ptIntersect);
+        bool GetIntersectPoint(const AcGeLineSeg2d &geLine1, const AcGeLine2d &geLine2,
+                               AcGePoint3d &ptIntersect);
+        bool GetIntersectPoint(const AcGeCircArc2d &geCircArc1, const AcGeCircArc2d &geCircArc2,
+                               int &nNum, AcGePoint3dArray &arrptIntersect);
+        bool GetIntersectPoint(const AcGeLine2d &geLine, const AcGeCircArc2d &geCircArc,
+                               int &nNum, AcGePoint3dArray &arrptIntersect);
+        bool GetIntersectPoint(const AcGeLineSeg2d &geLine, const AcGeCircArc2d &geCircArc,
+                               int &nNum, AcGePoint3dArray &arrptIntersect);
+
+        /// @brief 得到向量在另一向量上的投影向量
+        /// @param ptBase 	    输入基点
+        /// @param vctOffset    输入被投影的向量
+        /// @param vctDirection 输入方向向量
+        /// @return
+        AcGeVector3d GetProjectVector(const AcGePoint3d &ptBase, const AcGeVector3d &vctOffset,
+                                      const AcGeVector3d &vctDirection);
     };
 } // namespace KTARXTOOL
