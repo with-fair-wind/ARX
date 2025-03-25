@@ -5,46 +5,46 @@ namespace KTArxTool
     class KT_EXPORTARX_API KTArxCurve
     {
     public:
-        // Summary:   得到向量方向在线段左右的正负值
-        // Explain:	  ptBase 沿 vecDir 偏移后，是否属于曲线的“正向”
+        /// @brief   得到向量方向在线段左右的正负值
+        /// @details ptBase 沿 vecDir 偏移后，是否属于曲线的“正向”
         bool GetPosAngNegValue(AcDbCurve *pCurve, const AcGePoint3d &ptBase, const AcGeVector3d &vecDir);
 
-        // Summary:   偏移线段
+        /// @brief 偏移线段
         AcArray<AcDbCurve *> OffsetCurve(AcDbCurve *pCurve, double dOffset);
-        // Explain:	  通过 pt 自动计算偏移方向
+        /// @details 通过 pt 自动计算偏移方向
         AcArray<AcDbCurve *> OffsetCurve(AcDbCurve *pCurve, double dOffset, const AcGePoint3d &pt, bool bOpposite = false);
 
-        // Summary:   得到线段上距离该点最近的点
+        /// @brief 得到线段上距离该点最近的点
         AcGePoint3d GetClosedPtInCurve(AcDbCurve *pCurve, const AcGePoint3d &pt);
         bool GetClosedPtInCurve(const AcDbObjectId &idCurve, const AcGePoint3d &pt, AcGePoint3d &ptClosed);
 
-        // Summary:   打断线段
-        // Explain:	  输入的点必须要用getClosestPointTo函数重新获得
+        /// @brief 打断线段
+        /// @details 输入的点必须要用getClosestPointTo函数重新获得
         AcArray<AcDbCurve *> SplitCurve(AcDbCurve *pCurve, const AcGePoint3dArray &arrSplitPt);
         AcArray<AcDbCurve *> SplitCurve(const AcDbObjectId &idCurve, const AcGePoint3dArray &arrSplitPt);
         AcArray<AcDbCurve *> SplitCurve(AcDbCurve *pCurve, const AcGePoint3d &ptSplit);
 
-        // Summary:   通过距离延伸线段
+        /// @brief 通过距离延伸线段
         bool ExtendCurveByDist(AcDbPolyline *pPline, bool isStartPt, double dDist);
-        // Summary:   延伸线段
-        // Explain:   扩展一条曲线(pExtend), 使其与另一条边界曲线(pBorder)相交
+        /// @brief 延伸线段
+        /// @details 扩展一条曲线(pExtend), 使其与另一条边界曲线(pBorder)相交
         bool ExtendCurve(AcDbCurve *pBorder, AcDbCurve *pExtend, const AcGePoint3d &ptExtend);
 
-        // Summary:   修剪线段
-        // Explain:   修剪一条曲线(pTrim), 使其与另一条边界曲线(pBorder)相交, 修剪点 ptTrim, 修剪后的新曲线 pNewTrim
+        /// @brief 修剪线段
+        /// @details 修剪一条曲线(pTrim), 使其与另一条边界曲线(pBorder)相交, 修剪点 ptTrim, 修剪后的新曲线 pNewTrim
         bool TrimCurve(AcDbCurve *pBorder, AcDbCurve *pTrim, const AcGePoint3d &ptTrim, AcDbCurve *&pNewTrim);
 
-        // Summary:   判断点是否在线段上
+        /// @brief 判断点是否在线段上
         bool IsPtOnCurve(const AcGePoint3d &pt, AcDbCurve *pCurve, double dTol = 0);
 
-        // Summary:   得到圆弧凸度
+        /// @brief 得到圆弧凸度
         double GetArcBulge(AcDbArc *pArc);
         double GetArcBulge(double dAngleStart, double dAngleEnd);
         double GetArcBulge(const AcDbObjectId &idArc);
         double GetArcBulge(AcDbCurve *pCurve);
         double GetArcBulge(const AcGeCircArc2d &geArc);
 
-        // Summary:   得到几何类对象
+        /// @brief 得到几何类对象
         AcGeLine2d GetGeLine2d(AcDbLine *pLine);
         AcGeLineSeg2d GetGeLineSeg2d(AcDbLine *pLine);
         AcGeLineSeg2d GetGeLineSeg2d(const AcDbObjectId &idLine);
@@ -53,7 +53,7 @@ namespace KTArxTool
         AcGeCircArc2d GetGeCircArc2d(AcDbCircle *pCircle);
         AcGeCircArc2d GetGeCircArc2d(AcDbPolyline *pPolyline, unsigned int unIndex);
 
-        // Summary:   得到交点
+        /// @brief 得到交点
         bool GetIntersectPoint(const AcGeLine2d &geLine1, const AcGeLine2d &geLine2,
                                AcGePoint3d &ptIntersect);
         bool GetIntersectPoint(const AcGeLineSeg2d &geLine1, const AcGeLineSeg2d &geLine2,
