@@ -111,6 +111,72 @@ namespace KTArxTool
         return flag;
     }
 
+    bool KTArxEntity::DeleteEnt(const AcDbObjectId &idEnt)
+    {
+        AcDbEntityPointer pEnt(idEnt, AcDb::kForWrite);
+        if (Acad::eOk != pEnt.openStatus())
+            return false;
+        return pEnt->erase() == Acad::eOk;
+    }
+
+    void KTArxEntity::DeleteEnt(AcArray<AcDbEntity *> &arrpEnt)
+    {
+        for (int i = 0; i < arrpEnt.length(); i++)
+        {
+            DEL(arrpEnt[i]);
+        }
+    }
+
+    AcArray<AcDbEntity *> KTArxEntity::CopyEnt(const AcDbObjectIdArray &arrid)
+    {
+        AcArray<AcDbEntity *> arrEnt;
+        for (int i = (arrid.length() - 1); i >= 0; i--)
+        {
+            AcDbEntityPointer pEnt(arrid[i], AcDb::kForRead);
+            if (Acad::eOk != pEnt.openStatus())
+                continue;
+            AcDbEntity *pCopy = AcDbEntity::cast(pEnt->clone());
+            if (pCopy)
+                arrEnt.append(pCopy);
+        }
+        return arrEnt;
+    }
+
+    AcArray<AcDbEntity *> KTArxEntity::CopyEnt(const AcArray<AcDbEntity *> &arrp)
+    {
+        return AcArray<AcDbEntity *>();
+    }
+
+    AcDbEntity *KTArxEntity::CopyEnt(const AcDbObjectId &idEnt)
+    {
+        return nullptr;
+    }
+
+    AcDbEntity *KTArxEntity::MirrorEnt(AcDbEntity *pEnt, const AcGePoint3d &pt1, const AcGePoint3d &pt2)
+    {
+        return nullptr;
+    }
+
+    AcArray<AcDbEntity *> KTArxEntity::MirrorEnt(const AcDbObjectIdArray &arrid, const AcGePoint3d &pt1, const AcGePoint3d &pt2)
+    {
+        return AcArray<AcDbEntity *>();
+    }
+
+    AcArray<AcDbEntity *> KTArxEntity::MirrorEnt(const AcArray<AcDbEntity *> &arrp, const AcGePoint3d &pt1, const AcGePoint3d &pt2)
+    {
+        return AcArray<AcDbEntity *>();
+    }
+
+    AcArray<AcDbEntity *> KTArxEntity::AnnularMatrix(const AcDbObjectIdArray &arrid, const AcGePoint3d &ptBase, int nCurNum, int nSum)
+    {
+        return AcArray<AcDbEntity *>();
+    }
+
+    AcArray<AcDbEntity *> KTArxEntity::AnnularMatrix(const AcArray<AcDbEntity *> &arrp, const AcGePoint3d &ptBase, int nYxcs, int nSum)
+    {
+        return AcArray<AcDbEntity *>();
+    }
+
     bool KTArxEntity::IsClosedPline(AcDbPolyline *pPline)
     {
         if (pPline->isClosed())
