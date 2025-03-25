@@ -47,6 +47,9 @@
     "xutility": "cpp",
     "sstream": "cpp",
     "thread": "cpp",
-    "xthread": "cpp"
+    "xthread": "cpp",
+    "chrono": "cpp",
+    "functional": "cpp",
+    "ratio": "cpp"
   }
 }

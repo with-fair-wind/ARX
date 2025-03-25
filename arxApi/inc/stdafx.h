@@ -64,6 +64,7 @@
 #include <vector>
 #include <unordered_map>
 #include <thread>
+#include <memory>
 
 #pragma pack(pop)
 
