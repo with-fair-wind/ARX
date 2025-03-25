@@ -27,23 +27,8 @@ namespace KTArxTool
         // Summary:   将实体添加到模型空间
         AcDbObjectId PostToModelSpace(AcDbEntity *pEnt, AcDbDatabase *pDb = acdbCurDwg());
 
-        // Summary:   按比例缩放实体
-        bool ModifyEntByScale(AcDbEntity *pEnt, double dScale, const AcGePoint3d &ptBase);
-        bool ModifyEntByScale(const AcDbObjectId &idEnt, double dScale, const AcGePoint3d &ptBase);
-        bool ModifyEntByScale(const AcArray<AcDbEntity *> &arrpEnt, double dScale, const AcGePoint3d &ptBase);
-
-        // Summary:   分解实体
-        AcArray<AcDbEntity *> ExplodeEnt(AcDbEntity *pEnt);
-        AcArray<AcDbEntity *> ExplodeEnt(const AcDbObjectId &idEnt);
-
-        // Summary:   移动实体
-        bool MoveEnt(AcDbEntity *pEnt, const AcGePoint3d &ptBase, const AcGePoint3d &ptDest);
-        bool MoveEnt(const AcDbObjectIdArray &arrid, const AcGePoint3d &ptBase, const AcGePoint3d &ptDest);
-        bool MoveEnt(const AcDbObjectId &idEnt, const AcGePoint3d &ptBase, const AcGePoint3d &ptDest);
-        bool MoveEnt(const AcArray<AcDbEntity *> &arrEnt, const AcGePoint3d &ptBase, const AcGePoint3d &ptDest);
-
-        // Summary:   旋转实体(弧度)
-        bool RotateEnt(AcDbEntity *pEnt, const AcGePoint3d &ptBase, double rotation);
-        bool RotateEnt(const AcArray<AcDbEntity *> &arrpEnt, const AcGePoint3d &ptBase, double rotation);
+        /// @brief 对点的数组进行排序
+        /// @param bVertical 输入排序标识	false:按水平排序	true:按垂直排序
+        AcGePoint3dArray SortPtArr(const AcGePoint3dArray &PointArr, bool bVertical = false);
     };
 } // namespace KTARXTOOL

@@ -6,26 +6,26 @@ namespace KTArxTool
         AcGePoint3d ptNew = ptBase + vecDir;
         bool bFlag = true;
 
-        // ÁÆóÂá∫ÂÆû‰ΩìÂπ≥Èù¢Ê≥ïÂêëÈáè
+        // À„≥ˆ µÃÂ∆Ω√Ê∑®œÚ¡ø
         AcGePlane plane;
         AcDb::Planarity type;
         pCurve->getPlane(plane, type);
         AcGeVector3d vecNormalNew = plane.normal();
-        // Ê†πÊçÆÂÅèÁßªÁÇπÔºàÈº†Ê†áÁÇπÔºâÔºåÊâæÂá∫Áü©ÂΩ¢‰∏äË∑ùÁ¶ªËØ•ÁÇπÊúÄËøëÁöÑÁÇπptClosed
+        // ∏˘æ›∆´“∆µ„£® Û±Íµ„£©£¨’“≥ˆæÿ–Œ…œæ‡¿Î∏√µ„◊ÓΩ¸µƒµ„ptClosed
         AcGePoint3d ptClosed;
         pCurve->getClosestPointTo(ptNew, ptClosed);
-        // ÁÆóÂá∫Áü©ÂΩ¢‰∏äÁªèËøáptClosedÁöÑÂàáÁ∫øÔºåÂç≥ÁªèËøáËØ•ÁÇπÁöÑÈÇ£Êù°ËæπvecDerive
+        // À„≥ˆæÿ–Œ…œæ≠π˝ptClosedµƒ«–œﬂ£¨º¥æ≠π˝∏√µ„µƒƒ«Ãı±ﬂvecDerive
         AcGeVector3d vecDerive;
         pCurve->getFirstDeriv(ptClosed, vecDerive);
-        // ‰ΩøÁî®ptClosedÂæóÂà∞‰∏Ä‰∏™ÂÅèÁßªÂêëÈáèvecOffsetdir
+        //  π”√ptClosedµ√µΩ“ª∏ˆ∆´“∆œÚ¡øvecOffsetdir
         AcGeVector3d vecOffsetdir = ptNew - ptClosed;
-        // vecOffsetÂíåvecDeriveÂÅöÂèâ‰πòÔºåÁÆóÂá∫Ê≥ïÂêëÈáèvecOffsetNormalÔºåÁúãvecOffsetNormalÂíå
-        // vecNormalÊòØÂê¶ÂêåÂêëÔºåÂ¶ÇÊûúÂêåÂêëÂÅèÁßªË∑ùÁ¶ª‰∏∫dOffsetÔºåÂ¶ÇÊûú‰∏çÂêåÂêëÂÅèÁßªË∑ùÁ¶ª‰∏∫-dOffset
+        // vecOffset∫ÕvecDerive◊ˆ≤Ê≥À£¨À„≥ˆ∑®œÚ¡øvecOffsetNormal£¨ø¥vecOffsetNormal∫Õ
+        // vecNormal «∑ÒÕ¨œÚ£¨»Áπ˚Õ¨œÚ∆´“∆æ‡¿ÎŒ™dOffset£¨»Áπ˚≤ªÕ¨œÚ∆´“∆æ‡¿ÎŒ™-dOffset
         AcGeVector3d vecOffsetNormal = vecOffsetdir.crossProduct(vecDerive);
         bool bCodirectional = vecOffsetNormal.isCodirectionalTo(vecNormalNew);
         if (!bCodirectional)
             bFlag = !bFlag;
-        // Â¶ÇÊûúÊòØÁõ¥Á∫øÔºåÂèñÂèç
+        // »Áπ˚ «÷±œﬂ£¨»°∑¥
         if (pCurve->isKindOf(AcDbLine::desc()))
             bFlag = !bFlag;
 
@@ -46,31 +46,31 @@ namespace KTArxTool
 
     AcArray<AcDbCurve *> KTArxCurve::OffsetCurve(AcDbCurve *pCurve, double dOffset, const AcGePoint3d &pt, bool bOpposite /*= false*/)
     {
-        dOffset = std::fabs(dOffset); // ÁªùÂØπÂÄº
-        // ÁÆóÂá∫ÂÆû‰ΩìÂπ≥Èù¢Ê≥ïÂêëÈáè
+        dOffset = std::fabs(dOffset); // æ¯∂‘÷µ
+        // À„≥ˆ µÃÂ∆Ω√Ê∑®œÚ¡ø
         AcGePlane plane;
         AcDb::Planarity type;
         pCurve->getPlane(plane, type);
         AcGeVector3d vecNormal = plane.normal();
-        // Ê†πÊçÆÂÅèÁßªÁÇπÔºàÈº†Ê†áÁÇπÔºâÔºåÊâæÂá∫Áü©ÂΩ¢‰∏äË∑ùÁ¶ªËØ•ÁÇπÊúÄËøëÁöÑÁÇπptClosed
+        // ∏˘æ›∆´“∆µ„£® Û±Íµ„£©£¨’“≥ˆæÿ–Œ…œæ‡¿Î∏√µ„◊ÓΩ¸µƒµ„ptClosed
         AcGePoint3d ptClosed = GetClosedPtInCurve(pCurve, pt);
-        // ÁÆóÂá∫Áü©ÂΩ¢‰∏äÁªèËøáptClosedÁöÑÂàáÁ∫øÔºåÂç≥ÁªèËøáËØ•ÁÇπÁöÑÈÇ£Êù°ËæπvecDerive
+        // À„≥ˆæÿ–Œ…œæ≠π˝ptClosedµƒ«–œﬂ£¨º¥æ≠π˝∏√µ„µƒƒ«Ãı±ﬂvecDerive
         AcGeVector3d vecDerive;
         pCurve->getFirstDeriv(ptClosed, vecDerive);
-        // ‰ΩøÁî®ptClosedÂæóÂà∞‰∏Ä‰∏™ÂÅèÁßªÂêëÈáèvecOffsetdir
+        //  π”√ptClosedµ√µΩ“ª∏ˆ∆´“∆œÚ¡øvecOffsetdir
         AcGeVector3d vecOffsetdir = pt - ptClosed;
-        // vecOffsetÂíåvecDeriveÂÅöÂèâ‰πòÔºåÁÆóÂá∫Ê≥ïÂêëÈáèvecOffsetNormalÔºåÁúãvecOffsetNormalÂíå
-        // vecNormalÊòØÂê¶ÂêåÂêëÔºåÂ¶ÇÊûúÂêåÂêëÂÅèÁßªË∑ùÁ¶ª‰∏∫dOffsetÔºåÂ¶ÇÊûú‰∏çÂêåÂêëÂÅèÁßªË∑ùÁ¶ª‰∏∫-dOffset
+        // vecOffset∫ÕvecDerive◊ˆ≤Ê≥À£¨À„≥ˆ∑®œÚ¡øvecOffsetNormal£¨ø¥vecOffsetNormal∫Õ
+        // vecNormal «∑ÒÕ¨œÚ£¨»Áπ˚Õ¨œÚ∆´“∆æ‡¿ÎŒ™dOffset£¨»Áπ˚≤ªÕ¨œÚ∆´“∆æ‡¿ÎŒ™-dOffset
         AcGeVector3d vecOffsetNormal = vecOffsetdir.crossProduct(vecDerive);
         bool bCodirectional = vecOffsetNormal.isCodirectionalTo(vecNormal);
         if (!bCodirectional)
             dOffset = -dOffset;
-        // Â¶ÇÊûúÊòØÁõ¥Á∫øÔºåÂèñÂèç
+        // »Áπ˚ «÷±œﬂ£¨»°∑¥
         if (pCurve->isKindOf(AcDbLine::desc()))
             dOffset = -dOffset;
         if (bOpposite)
             dOffset = -dOffset;
-        // ÂÅèÁßªÂÆû‰Ωì
+        // ∆´“∆ µÃÂ
         return OffsetCurve(pCurve, dOffset);
     }
 
@@ -235,7 +235,7 @@ namespace KTArxTool
     double KTArxCurve::GetArcBulge(double dAngleStart, double dAngleEnd)
     {
         double dAlfa = dAngleEnd - dAngleStart;
-        if (dAlfa < 0.0) // Â¶ÇÊûúÁªàÁÇπËßíÂ∫¶Â∞è‰∫éËµ∑ÁÇπËßíÂ∫¶;
+        if (dAlfa < 0.0) // »Áπ˚÷’µ„Ω«∂»–°”⁄∆µ„Ω«∂»;
             dAlfa = 2 * (atan(1.0) * 4) + dAlfa;
         return tan((dAlfa) / 4.0);
     }
@@ -433,8 +433,8 @@ namespace KTArxTool
         if (nCountVerts < 2)
             return false;
 
-        AcGePoint3dArray arrVertex; // È°∂ÁÇπÈõÜÂêà
-        AcArray<double> arrBulge;   // Âá∏Â∫¶ÈõÜÂêà
+        AcGePoint3dArray arrVertex; // ∂•µ„ºØ∫œ
+        AcArray<double> arrBulge;   // Õπ∂»ºØ∫œ
         bool bClosed = m_pArxEntity->IsClosedPline(pPline);
         bool bClosedFlag = pPline->isClosed();
         for (int i = 0; i < nCountVerts; i++)
@@ -451,8 +451,8 @@ namespace KTArxTool
             arrBulge.append(dBugle);
         }
 
-        bool bIsVertex = false; // ÊòØÂê¶ÊòØÁ´ØÁÇπ
-        int nIndexVertex = -1;  // Á´ØÁÇπÁ¥¢Âºï
+        bool bIsVertex = false; //  «∑Ò «∂Àµ„
+        int nIndexVertex = -1;  // ∂Àµ„À˜“˝
         for (int i = 0; i < arrVertex.length(); i++)
         {
             if (ptOnCurve.isEqualTo(arrVertex[i]))
@@ -472,17 +472,17 @@ namespace KTArxTool
         }
         else
         {
-            if (bClosed) // Èó≠ÂêàÁ∫øÊÆµ
+            if (bClosed) // ±’∫œœﬂ∂Œ
             {
-                if (nIndexVertex == 0) // Á∫øÊÆµÁ¨¨‰∏ÄÁÇπ
+                if (nIndexVertex == 0) // œﬂ∂Œµ⁄“ªµ„
                 {
-                    // Á¨¨‰∏ÄÊù°ÊñπÂêë
-                    if (arrBulge[nIndexVertex] == 0) // ÊòØÁõ¥Á∫ø
+                    // µ⁄“ªÃı∑ΩœÚ
+                    if (arrBulge[nIndexVertex] == 0) //  «÷±œﬂ
                     {
                         AcGeVector3d vecDeriv = arrVertex[1] - arrVertex[0];
                         arrvec.append(vecDeriv);
                     }
-                    else // ‰∏çÊòØÁõ¥Á∫ø
+                    else // ≤ª «÷±œﬂ
                     {
                         AcGeCircArc2d segArc;
                         pPline->getArcSegAt(nIndexVertex, segArc);
@@ -490,12 +490,12 @@ namespace KTArxTool
                         AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                         AcGeVector3d vecDeriv;
                         if (arrBulge[nIndexVertex] > 0)
-                            vecDeriv = vec.perpVector(); // ÈÄÜÊó∂Èíà
+                            vecDeriv = vec.perpVector(); // ƒÊ ±’Î
                         else
-                            vecDeriv = vec.perpVector().negate(); // È°∫Êó∂Èíà
+                            vecDeriv = vec.perpVector().negate(); // À≥ ±’Î
                         arrvec.append(vecDeriv);
                     }
-                    // Á¨¨‰∫åÊù°ÊñπÂêë
+                    // µ⁄∂˛Ãı∑ΩœÚ
                     int nEndIndex = arrBulge.length() - 1;
                     if (arrBulge[nEndIndex] == 0)
                     {
@@ -510,16 +510,16 @@ namespace KTArxTool
                         AcGeVector3d vec = arrVertex[0] - ptCenter;
                         AcGeVector3d vecDeriv;
                         if (arrBulge[nEndIndex] > 0)
-                            vecDeriv = vec.perpVector().negate(); // ÈÄÜÊó∂Èíà
+                            vecDeriv = vec.perpVector().negate(); // ƒÊ ±’Î
                         else
-                            vecDeriv = vec.perpVector(); // È°∫Êó∂Èíà
+                            vecDeriv = vec.perpVector(); // À≥ ±’Î
                         arrvec.append(vecDeriv);
                     }
                     return true;
                 }
                 else
                 {
-                    // Á¨¨‰∏ÄÊù°ÊñπÂêë
+                    // µ⁄“ªÃı∑ΩœÚ
                     if (arrBulge[nIndexVertex] == 0)
                     {
                         AcGeVector3d vecDeriv = arrVertex[nIndexVertex + 1] - arrVertex[nIndexVertex];
@@ -533,12 +533,12 @@ namespace KTArxTool
                         AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                         AcGeVector3d vecDeriv;
                         if (arrBulge[nIndexVertex] > 0)
-                            vecDeriv = vec.perpVector(); // ÈÄÜÊó∂Èíà
+                            vecDeriv = vec.perpVector(); // ƒÊ ±’Î
                         else
-                            vecDeriv = vec.perpVector().negate(); // È°∫Êó∂Èíà
+                            vecDeriv = vec.perpVector().negate(); // À≥ ±’Î
                         arrvec.append(vecDeriv);
                     }
-                    // Á¨¨‰∫åÊù°ÊñπÂêë
+                    // µ⁄∂˛Ãı∑ΩœÚ
                     if (arrBulge[nIndexVertex - 1] == 0)
                     {
                         AcGeVector3d vecDeriv = arrVertex[nIndexVertex - 1] - arrVertex[nIndexVertex];
@@ -552,15 +552,15 @@ namespace KTArxTool
                         AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                         AcGeVector3d vecDeriv;
                         if (arrBulge[nIndexVertex - 1] > 0)
-                            vecDeriv = vec.perpVector().negate(); // ÈÄÜÊó∂Èíà
+                            vecDeriv = vec.perpVector().negate(); // ƒÊ ±’Î
                         else
-                            vecDeriv = vec.perpVector(); // È°∫Êó∂Èíà
+                            vecDeriv = vec.perpVector(); // À≥ ±’Î
                         arrvec.append(vecDeriv);
                     }
                     return true;
                 }
             }
-            else // ÈùûÈó≠ÂêàÁ∫øÊÆµ
+            else // ∑«±’∫œœﬂ∂Œ
             {
                 if (nIndexVertex == 0)
                 {
@@ -577,9 +577,9 @@ namespace KTArxTool
                         AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                         AcGeVector3d vecDeriv;
                         if (arrBulge[nIndexVertex] > 0)
-                            vecDeriv = vec.perpVector(); // ÈÄÜÊó∂Èíà
+                            vecDeriv = vec.perpVector(); // ƒÊ ±’Î
                         else
-                            vecDeriv = vec.perpVector().negate(); // È°∫Êó∂Èíà
+                            vecDeriv = vec.perpVector().negate(); // À≥ ±’Î
                         arrvec.append(vecDeriv);
                     }
                     return true;
@@ -599,16 +599,16 @@ namespace KTArxTool
                         AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                         AcGeVector3d vecDeriv;
                         if (arrBulge[nIndexVertex - 1] > 0)
-                            vecDeriv = vec.perpVector().negate(); // ÈÄÜÊó∂Èíà
+                            vecDeriv = vec.perpVector().negate(); // ƒÊ ±’Î
                         else
-                            vecDeriv = vec.perpVector(); // È°∫Êó∂Èíà
+                            vecDeriv = vec.perpVector(); // À≥ ±’Î
                         arrvec.append(vecDeriv);
                     }
                     return true;
                 }
                 else
                 {
-                    // Á¨¨‰∏ÄÊù°ÊñπÂêë
+                    // µ⁄“ªÃı∑ΩœÚ
                     if (arrBulge[nIndexVertex] == 0)
                     {
                         AcGeVector3d vecDeriv = arrVertex[nIndexVertex + 1] - arrVertex[nIndexVertex];
@@ -622,12 +622,12 @@ namespace KTArxTool
                         AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                         AcGeVector3d vecDeriv;
                         if (arrBulge[nIndexVertex] > 0)
-                            vecDeriv = vec.perpVector(); // ÈÄÜÊó∂Èíà
+                            vecDeriv = vec.perpVector(); // ƒÊ ±’Î
                         else
-                            vecDeriv = vec.perpVector().negate(); // È°∫Êó∂Èíà
+                            vecDeriv = vec.perpVector().negate(); // À≥ ±’Î
                         arrvec.append(vecDeriv);
                     }
-                    // Á¨¨‰∫åÊù°ÊñπÂêë
+                    // µ⁄∂˛Ãı∑ΩœÚ
                     if (arrBulge[nIndexVertex - 1] == 0)
                     {
                         AcGeVector3d vecDeriv = arrVertex[nIndexVertex - 1] - arrVertex[nIndexVertex];
@@ -641,9 +641,9 @@ namespace KTArxTool
                         AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                         AcGeVector3d vecDeriv;
                         if (arrBulge[nIndexVertex - 1] > 0)
-                            vecDeriv = vec.perpVector().negate(); // ÈÄÜÊó∂Èíà
+                            vecDeriv = vec.perpVector().negate(); // ƒÊ ±’Î
                         else
-                            vecDeriv = vec.perpVector(); // È°∫Êó∂Èíà
+                            vecDeriv = vec.perpVector(); // À≥ ±’Î
                         arrvec.append(vecDeriv);
                     }
                     return true;
@@ -654,7 +654,7 @@ namespace KTArxTool
 
     AcGeVector3dArray KTArxCurve::GetTangentLineVecArr(const AcGePoint3d &pt, AcDbCurve *pCurve)
     {
-        // ÂÖ¨Â∑Æ
+        // π´≤Ó
         double dTol = 0.01;
         AcGeTol tol;
         tol.setEqualPoint(dTol);
@@ -666,7 +666,7 @@ namespace KTArxTool
 
         if (pCurve->isKindOf(AcDbCircle::desc()) ||
             pCurve->isKindOf(AcDbEllipse::desc()))
-        { // ÂúÜ„ÄÅÊ§≠ÂúÜ
+        { // ‘≤°¢Õ÷‘≤
             AcGeVector3d vecDeriv;
             pCurve->getFirstDeriv(ptOnCurve, vecDeriv);
             arrvec.append(vecDeriv);
@@ -675,7 +675,7 @@ namespace KTArxTool
         }
         else if (pCurve->isKindOf(AcDbLine::desc()) ||
                  pCurve->isKindOf(AcDbArc::desc()))
-        { // Áõ¥Á∫ø„ÄÅÂúÜÂºß
+        { // ÷±œﬂ°¢‘≤ª°
             AcGeVector3d vecDeriv;
             pCurve->getFirstDeriv(ptOnCurve, vecDeriv);
             AcGePoint3d ptStart, ptEnd;
@@ -740,4 +740,18 @@ namespace KTArxTool
         pCurve->getDistAtParam(endParam, dLength);
         return dLength;
     }
+}
+
+double KTArxTool::KTArxCurve::GetAngleOfLines(AcDbLine *pLine1, AcDbLine *pLine2)
+{
+    AcGeLine2d geLine1 = GetGeLine2d(pLine1);
+    AcGeLine2d geLine2 = GetGeLine2d(pLine2);
+    AcGePoint3d ptInter;
+    if (!GetIntersectPoint(geLine1, geLine2, ptInter))
+        return 0.;
+    AcGePoint3d ptEnd1 = ptInter.isEqualTo(pLine1->startPoint()) ? pLine1->endPoint() : pLine1->startPoint();
+    AcGePoint3d ptEnd2 = ptInter.isEqualTo(pLine2->startPoint()) ? pLine2->endPoint() : pLine2->startPoint();
+    AcGeVector2d vec1 = ptEnd1.convert2d(AcGePlane::kXYPlane) - ptInter.convert2d(AcGePlane::kXYPlane);
+    AcGeVector2d vec2 = ptEnd2.convert2d(AcGePlane::kXYPlane) - ptInter.convert2d(AcGePlane::kXYPlane);
+    return vec1.angleTo(vec2);
 }
