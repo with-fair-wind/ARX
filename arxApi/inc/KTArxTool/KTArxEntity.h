@@ -45,6 +45,25 @@ namespace KTArxTool
         AcArray<AcDbEntity *> AnnularMatrix(const AcDbObjectIdArray &arrid, const AcGePoint3d &ptBase, int nCurNum, int nSum);
         AcArray<AcDbEntity *> AnnularMatrix(const AcArray<AcDbEntity *> &arrp, const AcGePoint3d &ptBase, int nCurNum, int nSum);
 
+        /// @brief 设置实体被选中
+        void SetEntSelected(const AcDbObjectIdArray &arridEnt, bool bSeled = true, bool bHighlight = false);
+
+        /// @brief 调整绘图次序
+        bool SetEntToBottom(const AcDbObjectId &id, AcDbDatabase *pDb = acdbCurDwg());
+
+        /// @brief 拉伸实体
+        /// @param arrid        输入需要被拉伸的实体id数组
+        /// @param ptCorner1    输入被拉伸的角点1
+        /// @param ptCorner2    输入被拉伸的角点2
+        /// @param ptBase       输入基点
+        /// @param ptTarget     输入目标点
+        /// @return
+        bool StretchEnt(const AcDbObjectIdArray &arrid, const AcGePoint3d &ptCorner1, const AcGePoint3d &ptCorner2,
+                        const AcGePoint3d &ptBase, const AcGePoint3d &ptTarget);
+
+        /// @brief 得到经过点坐标上的实体id
+        AcDbObjectIdArray GetEntIdByPt(const AcGePoint3d &pt, bool bAll = false);
+
 #pragma region polyline
         /// @brief 判断该多段线是否是闭合多段线
         bool IsClosedPline(AcDbPolyline *pPline);
