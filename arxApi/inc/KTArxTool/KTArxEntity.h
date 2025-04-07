@@ -2,6 +2,7 @@
 
 namespace KTArxTool
 {
+    class KT_EXPORTARX_API KTArxConvert;
     class KT_EXPORTARX_API KTArxEntity
     {
     public:
@@ -33,10 +34,6 @@ namespace KTArxTool
         AcArray<AcDbEntity *> CopyEnt(const AcArray<AcDbEntity *> &arrp);
         AcDbEntity *CopyEnt(const AcDbObjectId &idEnt);
 
-        // Summary:
-        // Time:	  2020年3月5日 peihaodong
-        // Explain:
-
         /// @brief 镜像实体
         AcDbEntity *MirrorEnt(AcDbEntity *pEnt, const AcGePoint3d &pt1, const AcGePoint3d &pt2);
         AcArray<AcDbEntity *> MirrorEnt(const AcDbObjectIdArray &arrid, const AcGePoint3d &pt1, const AcGePoint3d &pt2);
@@ -46,11 +43,14 @@ namespace KTArxTool
         /// @param nCurNum 当前需要的数量
         /// @param nSum 总共的数量
         AcArray<AcDbEntity *> AnnularMatrix(const AcDbObjectIdArray &arrid, const AcGePoint3d &ptBase, int nCurNum, int nSum);
-        AcArray<AcDbEntity *> AnnularMatrix(const AcArray<AcDbEntity *> &arrp, const AcGePoint3d &ptBase, int nYxcs, int nSum);
+        AcArray<AcDbEntity *> AnnularMatrix(const AcArray<AcDbEntity *> &arrp, const AcGePoint3d &ptBase, int nCurNum, int nSum);
 
 #pragma region polyline
         /// @brief 判断该多段线是否是闭合多段线
         bool IsClosedPline(AcDbPolyline *pPline);
 #pragma endregion
+
+    private:
+        std::shared_ptr<KTArxConvert> m_pArxConvert;
     };
 } // namespace KTArxTool

@@ -144,37 +144,115 @@ namespace KTArxTool
 
     AcArray<AcDbEntity *> KTArxEntity::CopyEnt(const AcArray<AcDbEntity *> &arrp)
     {
-        return AcArray<AcDbEntity *>();
+        AcArray<AcDbEntity *> arrEnt;
+        for (int i = (arrp.length() - 1); i >= 0; i--)
+        {
+            AcDbEntity *pCopy = AcDbEntity::cast(arrp[i]->clone());
+            if (pCopy)
+                arrEnt.append(pCopy);
+        }
+        return arrEnt;
     }
 
     AcDbEntity *KTArxEntity::CopyEnt(const AcDbObjectId &idEnt)
     {
-        return nullptr;
+        AcDbEntityPointer pEnt(idEnt, AcDb::kForRead);
+        if (Acad::eOk != pEnt.openStatus())
+            return nullptr;
+        return AcDbEntity::cast(pEnt->clone());
     }
 
     AcDbEntity *KTArxEntity::MirrorEnt(AcDbEntity *pEnt, const AcGePoint3d &pt1, const AcGePoint3d &pt2)
     {
-        return nullptr;
+        AcGeMatrix3d mat;
+        mat.setToMirroring(AcGeLine3d(pt1, pt2));
+        AcDbEntity *pCopy = AcDbEntity::cast(pEnt->clone());
+        pCopy->transformBy(mat);
+
+        AcGeMatrix3d mat2;
+        mat2.setToMirroring(AcGePlane::kXYPlane);
+        pCopy->transformBy(mat2);
+        return pCopy;
     }
 
     AcArray<AcDbEntity *> KTArxEntity::MirrorEnt(const AcDbObjectIdArray &arrid, const AcGePoint3d &pt1, const AcGePoint3d &pt2)
     {
-        return AcArray<AcDbEntity *>();
+        AcArray<AcDbEntity *> arrpEnt;
+        AcGeMatrix3d mat;
+        mat.setToMirroring(AcGeLine3d(pt1, pt2));
+
+        for (int i = 0; i < arrid.length(); i++)
+        {
+            AcDbEntityPointer pEnt(arrid[i], AcDb::kForRead);
+            if (Acad::eOk != pEnt.openStatus())
+                continue;
+            AcDbEntity *pCopy = AcDbEntity::cast(pEnt->clone());
+            pCopy->transformBy(mat);
+            arrpEnt.append(pCopy);
+        }
+
+        return arrpEnt;
     }
 
     AcArray<AcDbEntity *> KTArxEntity::MirrorEnt(const AcArray<AcDbEntity *> &arrp, const AcGePoint3d &pt1, const AcGePoint3d &pt2)
     {
-        return AcArray<AcDbEntity *>();
+        AcArray<AcDbEntity *> arrpEnt;
+        AcGeMatrix3d mat;
+        mat.setToMirroring(AcGeLine3d(pt1, pt2));
+
+        for (int i = 0; i < arrp.length(); i++)
+        {
+            AcDbEntity *pEnt = arrp[i];
+            AcDbEntity *pCopy = AcDbEntity::cast(pEnt->clone());
+            pCopy->transformBy(mat);
+            arrpEnt.append(pCopy);
+        }
+
+        return arrpEnt;
     }
 
     AcArray<AcDbEntity *> KTArxEntity::AnnularMatrix(const AcDbObjectIdArray &arrid, const AcGePoint3d &ptBase, int nCurNum, int nSum)
     {
-        return AcArray<AcDbEntity *>();
+        AcArray<AcDbEntity *> arrpMatrix;
+
+        if (nSum < 2 || arrid.isEmpty())
+            return arrpMatrix;
+
+        AcArray<double> arrAngle;
+        double dAngle = 360 / nSum;
+        for (int i = 1; i < nCurNum; i++)
+            arrAngle.append(dAngle * i);
+
+        for (int i = 0; i < arrAngle.length(); i++)
+        {
+            AcArray<AcDbEntity *> arrpCopy = CopyEnt(arrid);
+            RotateEnt(arrpCopy, ptBase, m_pArxConvert->ToRadian(arrAngle[i]));
+            arrpMatrix.append(arrpCopy);
+        }
+
+        return arrpMatrix;
     }
 
-    AcArray<AcDbEntity *> KTArxEntity::AnnularMatrix(const AcArray<AcDbEntity *> &arrp, const AcGePoint3d &ptBase, int nYxcs, int nSum)
+    AcArray<AcDbEntity *> KTArxEntity::AnnularMatrix(const AcArray<AcDbEntity *> &arrp, const AcGePoint3d &ptBase, int nCurNum, int nSum)
     {
-        return AcArray<AcDbEntity *>();
+        AcArray<AcDbEntity *> arrpMatrix;
+
+        if (nCurNum < 2 || arrp.isEmpty())
+            return arrpMatrix;
+
+        AcArray<double> arrAngle;
+        double dAngle = 360.0 / nSum;
+        for (int i = 1; i < nCurNum; i++)
+            arrAngle.append(dAngle * i);
+
+        for (int i = 0; i < arrAngle.length(); i++)
+        {
+            AcArray<AcDbEntity *> arrpCopy = CopyEnt(arrp);
+            RotateEnt(arrpCopy, ptBase, m_pArxConvert->ToRadian(arrAngle[i]));
+            arrpMatrix.append(arrpCopy);
+        }
+
+        return arrpMatrix;
     }
 
     bool KTArxEntity::IsClosedPline(AcDbPolyline *pPline)
