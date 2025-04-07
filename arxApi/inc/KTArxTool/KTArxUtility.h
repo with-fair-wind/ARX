@@ -12,6 +12,12 @@ namespace KTArxTool
         /// @details 返回的目录路径含带'\\'
         CString GetCurZrxFolderPath();
 
+        /// @brief 得到目录下所有的dwg图纸路径
+        AcArray<CString> GetAllDwgPath(LPCTSTR szFolderPath);
+
+        /// @brief 得到目录下所有的dwg图纸名
+        AcArray<CString> GetAllDwgName(LPCTSTR szFolderPath);
+
         /// @brief 加载cad菜单文件
         bool LoadCadMenu(const CString &strMenuFileName, const CString &strMenuGroupName);
 

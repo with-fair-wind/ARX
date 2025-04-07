@@ -17,6 +17,42 @@ namespace KTArxTool
         return strFloder;
     }
 
+    AcArray<CString> KTArxUtility::GetAllDwgPath(LPCTSTR szFolderPath)
+    {
+        AcArray<CString> arrDwgPath;
+        CFileFind finder;
+        CString path;
+        path.Format(_T("%s\\*.dwg"), szFolderPath);
+        BOOL bWorking = finder.FindFile(path);
+        while (bWorking)
+        {
+            bWorking = finder.FindNextFileW();
+            if (finder.IsDirectory() || finder.IsDots())
+                continue;
+            CString strDwgPath = finder.GetFilePath();
+            arrDwgPath.append(strDwgPath);
+        }
+        return arrDwgPath;
+    }
+
+    AcArray<CString> KTArxUtility::GetAllDwgName(LPCTSTR szFolderPath)
+    {
+        AcArray<CString> arrDwgPath;
+        CFileFind finder;
+        CString path;
+        path.Format(_T("%s\\*.dwg"), szFolderPath);
+        BOOL bWorking = finder.FindFile(path);
+        while (bWorking)
+        {
+            bWorking = finder.FindNextFileW();
+            if (finder.IsDirectory() || finder.IsDots())
+                continue;
+            CString strDwgName = finder.GetFileTitle();
+            arrDwgPath.append(strDwgName);
+        }
+        return arrDwgPath;
+    }
+
     bool KTArxUtility::LoadCadMenu(const CString &strMenuFileName, const CString &strMenuGroupName)
     {
         CString strFilePath = strMenuFileName;
