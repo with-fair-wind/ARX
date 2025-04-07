@@ -264,4 +264,115 @@ namespace KTArxTool
         pPline->getEndPoint(ptEnd);
         return ptStart.isEqualTo(ptEnd);
     }
+
+    void KTArxEntity::SetEntSelected(const AcDbObjectIdArray &arridEnt, bool bSeled /*= true*/, bool bHighlight /*= false*/)
+    {
+        //	acedSSDel(ent, ssname);		//将实体从集合中删除掉
+        acedSSSetFirst(NULL, NULL); // 将选中状态清除
+        if (bSeled)
+        {
+            // 使实体被选中
+            ads_name ssname, ent;
+            acdbNameClear(ssname);
+            for (int i = 0; i < arridEnt.length(); ++i)
+            {
+                acdbGetAdsName(ent, arridEnt.at(i));
+                acedSSAdd(ent, ssname, ssname); // 将实体增加到集合中
+            }
+            acedSSSetFirst(ssname, NULL); // 把实体变为选中状态
+        }
+
+        if (bHighlight)
+        {
+            for (int i = 0; i < arridEnt.length(); ++i)
+            {
+                AcDbEntityPointer pEnt(arridEnt.at(i), AcDb::kForWrite);
+                if (pEnt.openStatus() != Acad::eOk)
+                    continue;
+                pEnt->highlight(); // 设置实体为高亮状态
+            }
+        }
+    }
+
+    bool KTArxEntity::SetEntToBottom(const AcDbObjectId &id, AcDbDatabase *pDb /*= acdbCurDwg()*/)
+    {
+        AcDbObjectId spaceId = pDb->currentSpaceId();
+        AcDbObjectPointer<AcDbBlockTableRecord> pBTR(spaceId, AcDb::kForRead);
+        if (pBTR.openStatus() != Acad::eOk)
+            return false;
+        AcDbSortentsTable *pSortTab = nullptr;
+        AcDbObjectIdArray idarrTemp;
+        idarrTemp.append(id);
+        Acad::ErrorStatus es = pBTR->getSortentsTable(pSortTab, AcDb::kForWrite, true);
+        if (Acad::eOk != es)
+            return false;
+        pSortTab->moveToBottom(idarrTemp);
+        pSortTab->close();
+        return true;
+    }
+
+    bool KTArxEntity::StretchEnt(const AcDbObjectIdArray &arrid, const AcGePoint3d &ptCorner1, const AcGePoint3d &ptCorner2, const AcGePoint3d &ptBase, const AcGePoint3d &ptTarget)
+    {
+        AcGeVector3d stretchVec = ptTarget - ptBase; // 拉伸距离
+        AcGeBoundBlock3d box;
+        box.set(ptCorner1, AcGeVector3d((ptCorner2 - ptCorner1).x, 0, 0),
+                AcGeVector3d(0, (ptCorner2 - ptCorner1).y, 0),
+                AcGeVector3d(0, 0, (ptCorner2 - ptCorner1).z));
+        for (int i = 0; i < arrid.length(); ++i)
+        {
+            AcDbObjectPointer<AcDbEntity> pEnt(arrid[i], AcDb::kForWrite);
+            if (Acad::eOk != pEnt.openStatus())
+                continue;
+            AcGePoint3dArray arrpt;
+            if (Acad::eOk != pEnt->getStretchPoints(arrpt))
+                continue;
+            AcDbIntArray arrint;
+            bool bFound = false;
+            for (int j = 0; j < arrpt.length(); ++j)
+            {
+                AcGePoint3d pt = arrpt[j];
+                if (box.contains(pt))
+                {
+                    arrint.append(j);
+                    bFound = true;
+                }
+            }
+            if (bFound)
+                pEnt->moveStretchPointsAt(arrint, stretchVec);
+        }
+        return true;
+    }
+
+    AcDbObjectIdArray KTArxEntity::GetEntIdByPt(const AcGePoint3d &pt, bool bAll /*= false*/)
+    {
+        AcDbObjectIdArray arrid;
+        ads_name ssname;
+
+        if (bAll)
+        {
+            // 得到通过该点的所有实体
+            if (RTNORM != acedSSGet(_T("C"), asDblArray(pt), asDblArray(pt), NULL, ssname))
+                return arrid;
+        }
+        else
+        {
+            // 得到位于该点最上面的实体
+            if (RTNORM != acedSSGet(NULL, asDblArray(pt), NULL, NULL, ssname))
+                return arrid;
+        }
+        // 遍历选择集
+        int lLength = 0;
+        acedSSLength(ssname, &lLength);
+        for (int i = 0; i < lLength; i++)
+        {
+            ads_name name;
+            acedSSName(ssname, i, name);
+            AcDbObjectId id;
+            acdbGetObjectId(id, name);
+            arrid.append(id);
+        }
+        acedSSFree(ssname);
+
+        return arrid;
+    }
 } // namespace KTArxTool

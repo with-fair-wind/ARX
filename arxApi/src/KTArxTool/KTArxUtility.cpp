@@ -134,4 +134,18 @@ namespace KTArxTool
 
         return tempPointArr;
     }
+
+    void KTArxUtility::ShowProgressBar(const CString &strName, bool bStart)
+    {
+        if (bStart)
+            acedSetStatusBarProgressMeter(strName, 0, 100); // 显示进度条
+        else
+            acedRestoreStatusBar(); // 关闭进度条
+    }
+
+    void KTArxUtility::SetProgressBar(int nCurIndex, int nSum)
+    {
+        int nNum = (nCurIndex + 1) * 100 / nSum;
+        acedSetStatusBarProgressMeterPos(nNum); // 设置进度条的进度
+    }
 } // namespace KK

@@ -9,7 +9,7 @@ namespace KTArxTool
         CString GetCurZrxFilePath();
 
         /// @brief 得到当前项目zrx文件所在目录路径
-        // Explain:   返回的目录路径含带'\\'
+        /// @details 返回的目录路径含带'\\'
         CString GetCurZrxFolderPath();
 
         /// @brief 加载cad菜单文件
@@ -30,5 +30,13 @@ namespace KTArxTool
         /// @brief 对点的数组进行排序
         /// @param bVertical 输入排序标识	false:按水平排序	true:按垂直排序
         AcGePoint3dArray SortPtArr(const AcGePoint3dArray &PointArr, bool bVertical = false);
+
+        /// @brief 显示/关闭进度条
+        void ShowProgressBar(const CString &strName, bool bStart);
+
+        /// @brief 设置进度条
+        /// @param nCurIndex    当前下标
+        /// @param nSum         总的下标数量
+        void SetProgressBar(int nCurIndex, int nSum);
     };
 } // namespace KTARXTOOL
