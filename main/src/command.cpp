@@ -1,6 +1,6 @@
-#include <Test/test1.h>
+#include <Test/command.h>
 
-namespace Test
+namespace Test_Command
 {
     void test1()
     {
@@ -26,7 +26,7 @@ namespace Test
 
         // double bulges[] = {0.0, 1.0, -0.5}; // 第二段为半圆，第三段为顺时针四分之一圆
         // double bulges[] = {0.0, 1.0, 0.0}; // 第二段为半圆，第三段为顺时针四分之一圆
-        double bulge = tan((90.0 / 4) * M_PI / 180.0);
+        double bulge = tan((-90.0 / 4) * M_PI / 180.0);
         double bulges[] = {0.0, 1.0, bulge}; // 第二段为半圆，第三段为顺时针四分之一圆
         CreatePolylineWithBulge(pPline, points, bulges);
 
@@ -35,4 +35,4 @@ namespace Test
         utility.PostToModelSpace(pPline);
     }
 
-} // namespace Test
+} // namespace Test_Command

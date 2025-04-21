@@ -1,7 +1,7 @@
 #pragma once
 
-namespace Test
+namespace Test_Command
 {
     void test1();
     void test2();
-} // namespace Test
+} // namespace Test_Command

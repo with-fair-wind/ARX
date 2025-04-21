@@ -41,8 +41,8 @@ namespace KTArxTool
         void ShowProgressBar(const CString &strName, bool bStart);
 
         /// @brief 设置进度条
-        /// @param nCurIndex    当前下标
-        /// @param nSum         总的下标数量
+        /// @param nCurIndex 当前下标
+        /// @param nSum 总的下标数量
         void SetProgressBar(int nCurIndex, int nSum);
     };
 } // namespace KTARXTOOL

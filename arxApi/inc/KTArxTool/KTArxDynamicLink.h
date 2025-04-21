@@ -19,6 +19,7 @@
 #include <KTArxTool/KTArxEntity.h>
 #include <KTArxTool/KTArxConvert.h>
 #include <KTArxTool/KTArxCurve.h>
+#include <KTArxTool/KTArxCompare.h>
 
 #ifndef KT_EXPORTARX
 // 相当于在vs配置中添加 附加依赖项
