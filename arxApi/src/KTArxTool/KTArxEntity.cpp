@@ -375,4 +375,81 @@ namespace KTArxTool
 
         return arrid;
     }
+
+    AcDbExtents KTArxEntity::GetEntExtents(const AcDbObjectId &idEnt)
+    {
+        AcDbExtents es;
+        AcDbEntityPointer pEnt(idEnt, AcDb::kForRead);
+        if (Acad::eOk != pEnt.openStatus())
+            return es;
+        pEnt->getGeomExtents(es);
+        return es;
+    }
+
+    AcDbExtents KTArxEntity::GetEntExtents(const AcArray<AcDbEntity *> &arrEnt)
+    {
+        AcDbExtents extents;
+        for (int i = 0; i < arrEnt.length(); i++)
+        {
+            AcDbExtents ext;
+            arrEnt[i]->getGeomExtents(ext);
+            extents.addExt(ext);
+        }
+        return extents;
+    }
+
+    AcDbExtents KTArxEntity::GetEntExtents(const AcDbObjectIdArray &arrid)
+    {
+        AcDbExtents extents;
+        for (int i = 0; i < arrid.length(); i++)
+        {
+            AcDbEntityPointer pEnt(arrid[i], AcDb::kForRead);
+            if (Acad::eOk != pEnt.openStatus())
+                continue;
+            AcDbExtents ext;
+            pEnt->getGeomExtents(ext);
+            extents.addExt(ext);
+        }
+        return extents;
+    }
+
+    bool KTArxEntity::GetExtentsPt(const AcDbObjectId &idEnt, AcGePoint3d &ptMax, AcGePoint3d &ptMin)
+    {
+        AcDbEntityPointer pEnt(idEnt, AcDb::kForRead);
+        if (Acad::eOk != pEnt.openStatus())
+            return false;
+        AcDbExtents extents;
+        pEnt->getGeomExtents(extents);
+        ptMax = extents.maxPoint();
+        ptMin = extents.minPoint();
+        return true;
+    }
+
+    bool KTArxEntity::GetExtentsPt(const AcDbObjectIdArray &arrid, AcGePoint3d &ptMax, AcGePoint3d &ptMin)
+    {
+        AcDbExtents extents;
+        for (int i = 0; i < arrid.length(); i++)
+        {
+            AcDbEntityPointer pEnt(arrid[i], AcDb::kForRead);
+            if (Acad::eOk != pEnt.openStatus())
+                continue;
+            AcDbExtents ex;
+            pEnt->getGeomExtents(ex);
+            extents.addExt(ex);
+        }
+        ptMax = extents.maxPoint();
+        ptMin = extents.minPoint();
+        return true;
+    }
+
+    bool KTArxEntity::GetExtentsPt(AcDbEntity *pEnt, AcGePoint3d &ptMax, AcGePoint3d &ptMin)
+    {
+        AcDbExtents extents;
+        auto es = pEnt->getGeomExtents(extents);
+        if (Acad::eOk != es)
+            return false;
+        ptMax = extents.maxPoint();
+        ptMin = extents.minPoint();
+        return true;
+    }
 } // namespace KTArxTool

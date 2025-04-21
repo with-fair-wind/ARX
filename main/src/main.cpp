@@ -1,10 +1,10 @@
 #include <sstream>
-#include <Test/test1.h>
+#include <Test/command.h>
 
 void initApp()
 {
-    acedRegCmds->addCommand(_T("TestCMD"), _T("test0"), _T("test0"), ACRX_CMD_TRANSPARENT, Test::test1);
-    acedRegCmds->addCommand(_T("TestCMD"), _T("test1"), _T("test1"), ACRX_CMD_TRANSPARENT, Test::test2);
+    acedRegCmds->addCommand(_T("TestCMD"), _T("test0"), _T("test0"), ACRX_CMD_TRANSPARENT, Test_Command::test1);
+    acedRegCmds->addCommand(_T("TestCMD"), _T("test1"), _T("test1"), ACRX_CMD_TRANSPARENT, Test_Command::test2);
     acrxBuildClassHierarchy();
 }
 

@@ -64,6 +64,16 @@ namespace KTArxTool
         /// @brief 得到经过点坐标上的实体id
         AcDbObjectIdArray GetEntIdByPt(const AcGePoint3d &pt, bool bAll = false);
 
+        /// @brief 得到实体外包矩形
+        AcDbExtents GetEntExtents(const AcDbObjectId &idEnt);
+        AcDbExtents GetEntExtents(const AcDbObjectIdArray &arrid);
+        AcDbExtents GetEntExtents(const AcArray<AcDbEntity *> &arrEnt);
+
+        /// @brief 得到实体外包矩形的最大点和最小点
+        bool GetExtentsPt(const AcDbObjectId &idEnt, AcGePoint3d &ptMax, AcGePoint3d &ptMin);
+        bool GetExtentsPt(AcDbEntity *pEnt, AcGePoint3d &ptMax, AcGePoint3d &ptMin);
+        bool GetExtentsPt(const AcDbObjectIdArray &arrid, AcGePoint3d &ptMax, AcGePoint3d &ptMin);
+
 #pragma region polyline
         /// @brief 判断该多段线是否是闭合多段线
         bool IsClosedPline(AcDbPolyline *pPline);
