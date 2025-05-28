@@ -1,15 +1,34 @@
 #include <sstream>
 #include <Test/command.h>
+#include <Entity/testEntity.h>
+
+void registerEntity()
+{
+    Test_Entity::TestEntity::rxInit();
+    Test_Entity::TestEntity2::rxInit();
+}
+
+void deleteEntity()
+{
+    deleteAcRxClass(Test_Entity::TestEntity::desc());
+    deleteAcRxClass(Test_Entity::TestEntity2::desc());
+}
 
 void initApp()
 {
     acedRegCmds->addCommand(_T("TestCMD"), _T("test0"), _T("test0"), ACRX_CMD_TRANSPARENT, Test_Command::test1);
     acedRegCmds->addCommand(_T("TestCMD"), _T("test1"), _T("test1"), ACRX_CMD_TRANSPARENT, Test_Command::test2);
+    acedRegCmds->addCommand(_T("TestCMD"), _T("test3"), _T("test3"), ACRX_CMD_TRANSPARENT, Test_Command::test3);
+    acedRegCmds->addCommand(_T("TestCMD"), _T("test4"), _T("test4"), ACRX_CMD_TRANSPARENT, Test_Command::test4);
+    acedRegCmds->addCommand(_T("TestCMD"), _T("test5"), _T("test5"), ACRX_CMD_TRANSPARENT, Test_Command::test5);
+
+    registerEntity();
     acrxBuildClassHierarchy();
 }
 
 void unloadApp()
 {
+    deleteEntity();
     acedRegCmds->removeGroup(_T("TestCMD"));
 }
 
