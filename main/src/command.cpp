@@ -1,4 +1,5 @@
 #include <Test/command.h>
+#include <Entity/testEntity.h>
 
 namespace Test_Command
 {
@@ -17,17 +18,17 @@ namespace Test_Command
 
     void test2()
     {
-        AcDbPolyline *pPline = new AcDbPolyline(); // ÈªòËÆ§È°∂ÁÇπÊï∞‰∏∫0
+        AcDbPolyline *pPline = new AcDbPolyline(); // ƒ¨»œ∂•µ„ ˝Œ™0
 
         AcGePoint2dArray points;
         points.append(AcGePoint2d(0, 0));
         points.append(AcGePoint2d(100, 0));
         points.append(AcGePoint2d(100, 100));
 
-        // double bulges[] = {0.0, 1.0, -0.5}; // Á¨¨‰∫åÊÆµ‰∏∫ÂçäÂúÜÔºåÁ¨¨‰∏âÊÆµ‰∏∫È°∫Êó∂ÈíàÂõõÂàÜ‰πã‰∏ÄÂúÜ
-        // double bulges[] = {0.0, 1.0, 0.0}; // Á¨¨‰∫åÊÆµ‰∏∫ÂçäÂúÜÔºåÁ¨¨‰∏âÊÆµ‰∏∫È°∫Êó∂ÈíàÂõõÂàÜ‰πã‰∏ÄÂúÜ
+        // double bulges[] = {0.0, 1.0, -0.5}; // µ⁄∂˛∂ŒŒ™∞Î‘≤£¨µ⁄»˝∂ŒŒ™À≥ ±’ÎÀƒ∑÷÷Æ“ª‘≤
+        // double bulges[] = {0.0, 1.0, 0.0}; // µ⁄∂˛∂ŒŒ™∞Î‘≤£¨µ⁄»˝∂ŒŒ™À≥ ±’ÎÀƒ∑÷÷Æ“ª‘≤
         double bulge = tan((-90.0 / 4) * M_PI / 180.0);
-        double bulges[] = {0.0, 1.0, bulge}; // Á¨¨‰∫åÊÆµ‰∏∫ÂçäÂúÜÔºåÁ¨¨‰∏âÊÆµ‰∏∫È°∫Êó∂ÈíàÂõõÂàÜ‰πã‰∏ÄÂúÜ
+        double bulges[] = {0.0, 1.0, bulge}; // µ⁄∂˛∂ŒŒ™∞Î‘≤£¨µ⁄»˝∂ŒŒ™À≥ ±’ÎÀƒ∑÷÷Æ“ª‘≤
         CreatePolylineWithBulge(pPline, points, bulges);
 
         pPline->setClosed(true);
@@ -35,4 +36,41 @@ namespace Test_Command
         utility.PostToModelSpace(pPline);
     }
 
+    void test3()
+    {
+        using namespace Test_Entity;
+        TestEntity *pEnt = new TestEntity();
+        KTArxTool::KTArxUtility utility;
+        utility.PostToModelSpace(pEnt);
+    }
+
+    void test4()
+    {
+        using namespace Test_Entity;
+        TestEntity2 *pEnt = new TestEntity2{};
+        KTArxTool::KTArxUtility utility;
+        AcDbObjectId entId = utility.PostToModelSpace(pEnt);
+    }
+
+    void test5()
+    {
+        using namespace Test_Entity;
+        KTArxTool::KTArxUiPr uiPr;
+        AcDbObjectId entId;
+        AcGePoint3d pt;
+        if (uiPr.SelEnt(_T("—°‘Ò µÃÂ"), TestEntity2::desc(), entId, pt))
+        {
+            if (entId.isValid())
+            {
+                AcDbObjectPointer<TestEntity2> pTestEnt(entId, AcDb::kForWrite);
+                {
+                    if (pTestEnt.openStatus() == Acad::eOk)
+                    {
+                        // pTestEnt->setCenterPos(AcGePoint3d(100, 100, 0));
+                        pTestEnt->setTestNum(1000);
+                    }
+                }
+            }
+        }
+    }
 } // namespace Test_Command
