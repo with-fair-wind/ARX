@@ -14,7 +14,17 @@
 #>
 
 # 1. 切到脚本所在目录（项目根）
+Param(
+    [string[]]$ExcludeDirs = @()
+)
+
+# 切到脚本所在目录（项目根）
 Set-Location (Split-Path -Parent $MyInvocation.MyCommand.Path)
+
+# 可在脚本内指定要排除的文件夹（编辑此处以固定排除某些目录），
+# 命令行通过 `-ExcludeDirs` 仍然可以附加或覆盖（合并后去重）。
+# 例如：@('3rdparty','out','vendor')
+$ScriptExcludeDirs = @('3rdparty')
 
 # 2. 自动查找 clang-format.exe 路径
 $clangFormatPath = $null
@@ -51,16 +61,37 @@ if (-not (Test-Path $clangFormatPath)) {
 
 Write-Host "✔ 使用 clang-format 路径：$clangFormatPath" -ForegroundColor Green
 
-# 4. 查找所有 C/C++ 文件，排除 build 文件夹
+# 4. 查找所有 C/C++ 文件，排除指定文件夹（默认包含 build）
+# 处理排除列表并构造正则表达式以匹配路径中的目录分隔符
+$defaultExcludes = @('build')
+
+# 合并脚本内配置、命令行传入和默认排除项，去空并去重
+$allProvided = @()
+if ($ScriptExcludeDirs) { $allProvided += $ScriptExcludeDirs }
+if ($ExcludeDirs) { $allProvided += $ExcludeDirs }
+
+$excludeDirs = @($allProvided + $defaultExcludes) | Where-Object { $_ -and $_.Trim() -ne '' } | Select-Object -Unique
+
+if ($excludeDirs.Count -gt 0) {
+    $escaped = $excludeDirs | ForEach-Object { [regex]::Escape($_) }
+    $patternParts = $escaped | ForEach-Object { "[\\/]+$_[\\/]" }
+    $excludePattern = ($patternParts -join '|')
+}
+
 $files = Get-ChildItem -Recurse -File -Include '*.c', '*.cpp', '*.h', '*.hpp' |
-Where-Object { $_.FullName -notmatch '[\\/]+build[\\/]' }
+Where-Object {
+    if (-not $excludePattern) { return $true }
+    -not ($_.FullName -match $excludePattern)
+}
 
 if (-not $files) {
     Write-Host "⚠️ 未找到任何符合条件的 C/C++ 源文件。" -ForegroundColor Yellow
     exit 0
 }
 
-Write-Host "🔄 开始使用 `$clangFormatPath` 格式化以下文件（已排除 build 目录）：" -ForegroundColor Cyan
+$scriptList = if ($ScriptExcludeDirs -and $ScriptExcludeDirs.Count -gt 0) { $ScriptExcludeDirs -join ', ' } else { '<none>' }
+$cliList = if ($ExcludeDirs -and $ExcludeDirs.Count -gt 0) { $ExcludeDirs -join ', ' } else { '<none>' }
+Write-Host "🔄 开始使用 `$clangFormatPath` 格式化以下文件（脚本排除：$scriptList；命令行排除：$cliList；合并后：$(($excludeDirs -join ', '))）" -ForegroundColor Cyan
 $files | ForEach-Object { Write-Host "  $_.FullName" }
 
 # 5. 循环格式化

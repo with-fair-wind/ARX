@@ -6,19 +6,15 @@ AC_IMPLEMENT_EXTENSION_MODULE(arxTool)
 
 //-----------------------------------------------------------------------------
 //- DLL Entry Point
-extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
-{
+extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved) {
     //- Remove this if you use lpReserved
     UNREFERENCED_PARAMETER(lpReserved);
 
-    if (dwReason == DLL_PROCESS_ATTACH)
-    {
+    if (dwReason == DLL_PROCESS_ATTACH) {
         _hdllInstance = hInstance;
         arxTool.AttachInstance(hInstance);
         InitAcUiDLL();
-    }
-    else if (dwReason == DLL_PROCESS_DETACH)
-    {
+    } else if (dwReason == DLL_PROCESS_DETACH) {
         arxTool.DetachInstance();
     }
     return TRUE;

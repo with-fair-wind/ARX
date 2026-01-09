@@ -1,12 +1,10 @@
 #define szRDS _RXST("")
 
-class CObjectArxApp : public AcRxArxApp
-{
-public:
+class CObjectArxApp : public AcRxArxApp {
+   public:
     CObjectArxApp() : AcRxArxApp() {}
 
-    virtual AcRx::AppRetCode On_kInitAppMsg(void *pkt) override
-    {
+    virtual AcRx::AppRetCode On_kInitAppMsg(void* pkt) override {
         // TODO: 如果有其他依赖项，请在这里加载
 
         // You *must* call On_kInitAppMsg here
@@ -17,8 +15,7 @@ public:
         return (retCode);
     }
 
-    virtual AcRx::AppRetCode On_kUnloadAppMsg(void *pkt) override
-    {
+    virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt) override {
         // TODO: 退出
 
         // You *must* call On_kUnloadAppMsg here
