@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef KTARXTOOL_KTARXCONVERT_H
+#define KTARXTOOL_KTARXCONVERT_H
+
 namespace KTArxTool {
 class KT_EXPORTARX_API KTArxConvert {
    public:
@@ -10,3 +13,5 @@ class KT_EXPORTARX_API KTArxConvert {
     double ToRadian(double dAngle) { return (dAngle * (M_PI / 180.0)); }
 };
 }  // namespace KTArxTool
+
+#endif  // KTARXTOOL_KTARXCONVERT_H

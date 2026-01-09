@@ -1,3 +1,7 @@
+#include <KTArxTool/KTArxConvert.h>
+#include <KTArxTool/KTArxCurve.h>
+#include <KTArxTool/KTArxEntity.h>
+
 namespace KTArxTool {
 bool KTArxCurve::GetPosAngNegValue(AcDbCurve* pCurve, const AcGePoint3d& ptBase, const AcGeVector3d& vecDir) {
     AcGePoint3d ptNew = ptBase + vecDir;

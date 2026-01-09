@@ -1,3 +1,6 @@
+#include <KTArxTool/KTArxConvert.h>
+#include <KTArxTool/KTArxEntity.h>
+
 namespace KTArxTool {
 bool KTArxEntity::ModifyEntByScale(AcDbEntity* pEnt, double dScale, const AcGePoint3d& ptBase) {
     AcGeMatrix3d mtx;

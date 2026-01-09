@@ -1,7 +1,7 @@
 #pragma once
 
 namespace KTArxTool {
-class KT_EXPORTARX_API KTArxConvert;
+class KTArxConvert;
 class KT_EXPORTARX_API KTArxEntity {
    public:
     /// @brief 按比例缩放实体

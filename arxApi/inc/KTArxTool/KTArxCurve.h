@@ -1,8 +1,8 @@
 #pragma once
 
 namespace KTArxTool {
-class KT_EXPORTARX_API KTArxEntity;
-class KT_EXPORTARX_API KTArxConvert;
+class KTArxEntity;
+class KTArxConvert;
 class KT_EXPORTARX_API KTArxCurve {
    public:
     /// @brief   得到向量方向在线段左右的正负值

@@ -1,3 +1,4 @@
+#include <KTArxTool/KTArxUiPr.h>
 
 namespace KTArxTool {
 bool KTArxUiPr::SelEnt(LPCTSTR szPrompt, AcRxClass* classType, AcDbObjectId& id, AcGePoint3d& pt) {

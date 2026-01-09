@@ -1,3 +1,5 @@
+#include <KTArxTool/KTArxUtility.h>
+
 namespace KTArxTool {
 CString KTArxUtility::GetCurZrxFilePath() {
     TCHAR szPath[_MAX_PATH];
