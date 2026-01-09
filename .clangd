@@ -1,0 +1,22 @@
+Diagnostics:
+  ClangTidy:
+    Add: ["*"]
+    Remove:
+      [
+        abseil*,
+        fuchsia*,
+        llvmlib*,
+        zircon*,
+        altera*,
+        google-readability-todo,
+        readability-braces-around-statements,
+        hicpp-braces-around-statements,
+        modernize-use-trailing-return-type,
+      ]
+Index:
+  Background: Build
+CompileFlags:
+  Add: [--cuda-gpu-arch=sm_86] # 这里写你的 GPU 计算能力版本
+  Remove:
+    - -rdc=true
+    - -gencode

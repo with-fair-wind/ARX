@@ -1,0 +1,8 @@
+# 基于 Google 风格，但将缩进宽度改为 4
+BasedOnStyle: Google
+IndentWidth: 4
+TabWidth: 4      # 如果你希望制表符宽度也为 4，可以加上这一行
+UseTab: Never    # 强制使用空格缩进（可选，默认 Google 就是不用 Tab）
+# —— 以下两行控制注释不被重排/换行 —— 
+ReflowComments: false   # 不自动重排注释文本
+ColumnLimit: 200    # 不限制行宽（200 是个较大的值，实际可根据需要调整）
