@@ -1,16 +1,22 @@
 #include <KTArxTool/KTArxUtility.h>
 
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <iterator>
+#include <memory>
+
 namespace KTArxTool {
 CString KTArxUtility::GetCurZrxFilePath() {
-    TCHAR szPath[_MAX_PATH];
-    ::GetModuleFileName(_hdllInstance, szPath, _MAX_PATH);
-    return szPath;
+    std::array<TCHAR, _MAX_PATH> pathBuffer{};
+    ::GetModuleFileName(_hdllInstance, pathBuffer.data(), static_cast<DWORD>(pathBuffer.size()));
+    return pathBuffer.data();
 }
 
 CString KTArxUtility::GetCurZrxFolderPath() {
-    TCHAR szPath[_MAX_PATH];
-    ::GetModuleFileName(_hdllInstance, szPath, _MAX_PATH);
-    CString strZrxPath = szPath;
+    std::array<TCHAR, _MAX_PATH> pathBuffer{};
+    ::GetModuleFileName(_hdllInstance, pathBuffer.data(), static_cast<DWORD>(pathBuffer.size()));
+    CString strZrxPath = pathBuffer.data();
     int nIndex = strZrxPath.ReverseFind(_T('\\'));
     CString strFloder = strZrxPath.Left(nIndex + 1);
     return strFloder;
@@ -19,12 +25,18 @@ CString KTArxUtility::GetCurZrxFolderPath() {
 AcArray<CString> KTArxUtility::GetAllDwgPath(LPCTSTR szFolderPath) {
     AcArray<CString> arrDwgPath;
     CFileFind finder;
-    CString path;
-    path.Format(_T("%s\\*.dwg"), szFolderPath);
-    BOOL bWorking = finder.FindFile(path);
-    while (bWorking) {
-        bWorking = finder.FindNextFileW();
-        if (finder.IsDirectory() || finder.IsDots()) continue;
+    CString path{szFolderPath};
+    if (path.GetLength() > 0 && path.Right(1) != _T("\\")) {
+        path += _T("\\");
+    }
+    path += _T("*.dwg");
+
+    bool isWorking = finder.FindFile(path) != FALSE;
+    while (isWorking) {
+        isWorking = finder.FindNextFileW() != FALSE;
+        if (finder.IsDirectory() != FALSE || finder.IsDots() != FALSE) {
+            continue;
+        }
         CString strDwgPath = finder.GetFilePath();
         arrDwgPath.append(strDwgPath);
     }
@@ -34,46 +46,68 @@ AcArray<CString> KTArxUtility::GetAllDwgPath(LPCTSTR szFolderPath) {
 AcArray<CString> KTArxUtility::GetAllDwgName(LPCTSTR szFolderPath) {
     AcArray<CString> arrDwgPath;
     CFileFind finder;
-    CString path;
-    path.Format(_T("%s\\*.dwg"), szFolderPath);
-    BOOL bWorking = finder.FindFile(path);
-    while (bWorking) {
-        bWorking = finder.FindNextFileW();
-        if (finder.IsDirectory() || finder.IsDots()) continue;
+    CString path{szFolderPath};
+    if (path.GetLength() > 0 && path.Right(1) != _T("\\")) {
+        path += _T("\\");
+    }
+    path += _T("*.dwg");
+
+    bool isWorking = finder.FindFile(path) != FALSE;
+    while (isWorking) {
+        isWorking = finder.FindNextFileW() != FALSE;
+        if (finder.IsDirectory() != FALSE || finder.IsDots() != FALSE) {
+            continue;
+        }
         CString strDwgName = finder.GetFileTitle();
         arrDwgPath.append(strDwgName);
     }
     return arrDwgPath;
 }
 
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 bool KTArxUtility::LoadCadMenu(const CString& strMenuFileName, const CString& strMenuGroupName) {
     CString strFilePath = strMenuFileName;
-    CFileStatus st;
-    if (!CFile::GetStatus(strFilePath, st)) return false;
-    if (strMenuGroupName.GetLength() < 1 || strFilePath.GetLength() < 1) return false;
+    CFileStatus fileStatus;
+    if (CFile::GetStatus(strFilePath, fileStatus) == FALSE) {
+        return false;
+    }
+    if (strMenuGroupName.GetLength() < 1 || strFilePath.GetLength() < 1) {
+        return false;
+    }
     CString strCmdLoad;
     strFilePath.Replace(_T("\\"), _T("\\\\"));
-    if (!strMenuGroupName.IsEmpty() && strFilePath.GetLength() > 0)
-        strCmdLoad.Format(_T("(if (null (menugroup \"%s\")) (command \"menuload\" \"%s\"))"), (LPCTSTR)strMenuGroupName, (LPCTSTR)strFilePath);
-    else
-        strCmdLoad.Format(_T("(command \"menuload\" \"%s\")"), (LPCTSTR)strFilePath);
-    int erStat = ads_queueexpr((LPTSTR)(LPCTSTR)strCmdLoad);  // 此函数，相当于程序结束后，给CAD发送一个加载菜单的命令
+    if (!strMenuGroupName.IsEmpty() && strFilePath.GetLength() > 0) {
+        strCmdLoad = _T("(if (null (menugroup \"") + strMenuGroupName + _T("\")) (command \"menuload\" \"") + strFilePath + _T("\"))");
+    } else {
+        strCmdLoad = _T("(command \"menuload\" \"") + strFilePath + _T("\")");
+    }
+
+    LPTSTR cmdBuffer = strCmdLoad.GetBuffer();
+    const int queueStatus = ads_queueexpr(cmdBuffer);  // 此函数，相当于程序结束后，给CAD发送一个加载菜单的命令
+    strCmdLoad.ReleaseBuffer();
+    (void)queueStatus;
     return true;
 }
 
 bool KTArxUtility::UnloadCadMenu(const CString& strMenuGroupName) {
     CString strCmdLoad;
-    strCmdLoad.Format(_T("(command \"menuunload\" \"%s\")"), (LPCTSTR)strMenuGroupName);
-    int erStat = ads_queueexpr((LPTSTR)(LPCTSTR)strCmdLoad);
+    strCmdLoad = _T("(command \"menuunload\" \"") + strMenuGroupName + _T("\")");
+
+    LPTSTR cmdBuffer = strCmdLoad.GetBuffer();
+    const int queueStatus = ads_queueexpr(cmdBuffer);
+    strCmdLoad.ReleaseBuffer();
+    (void)queueStatus;
     return true;
 }
 
 bool KTArxUtility::LoadZrxFile(LPCTSTR szFilePath) {
     bool bRet = false;
-    CFileStatus st;
-    if (!CFile::GetStatus(szFilePath, st)) return false;
+    CFileStatus fileStatus;
+    if (CFile::GetStatus(szFilePath, fileStatus) == FALSE) {
+        return false;
+    }
     try {
-        bRet = acrxLoadModule(st.m_szFullName, true, false);
+        bRet = acrxLoadModule(&fileStatus.m_szFullName[0], true, false);
     } catch (...) {
         bRet = false;
     }
@@ -81,15 +115,23 @@ bool KTArxUtility::LoadZrxFile(LPCTSTR szFilePath) {
 }
 
 bool KTArxUtility::AddSearchPath(LPCTSTR szSearchDir) {
-    CFileStatus st;
-    if (!CFile::GetStatus(szSearchDir, st) || !(st.m_attribute & CFile::directory)) return false;
+    CFileStatus fileStatus;
+    if (CFile::GetStatus(szSearchDir, fileStatus) == FALSE) {
+        return false;
+    }
+    const bool isDirectory = (static_cast<unsigned int>(fileStatus.m_attribute) & static_cast<unsigned int>(CFile::directory)) != 0U;
+    if (!isDirectory) {
+        return false;
+    }
 
     CString strSumPath;
-    TCHAR szValue[1024];
-    memset(szValue, 0, 1024 * sizeof(TCHAR));
-    acedGetEnv(_T("ZWCAD"), szValue);  // ACAD
-    strSumPath = szValue;
-    if (strSumPath.GetAt(strSumPath.GetLength() - 1) != _T(';')) strSumPath += _T(';');
+    constexpr std::size_t kEnvValueCapacity = 1024U;
+    std::array<TCHAR, kEnvValueCapacity> envValue{};
+    acedGetEnv(_T("ZWCAD"), envValue.data(), envValue.size());  // ACAD
+    strSumPath = envValue.data();
+    if (strSumPath.GetLength() < 1 || strSumPath.GetAt(strSumPath.GetLength() - 1) != _T(';')) {
+        strSumPath += _T(';');
+    }
 
     strSumPath = strSumPath + szSearchDir + _T(';');
     acedSetEnv(_T("ZWCAD"), strSumPath);  // ACAD
@@ -98,63 +140,63 @@ bool KTArxUtility::AddSearchPath(LPCTSTR szSearchDir) {
 }
 
 AcDbObjectId KTArxUtility::PostToModelSpace(AcDbEntity* pEnt, AcDbDatabase* pDb /*= acdbCurDwg()*/) {
-    assert(pEnt);
-#if 0
-        AcDbBlockTable *pBlkTbl = nullptr;
-        pDb->getBlockTable(pBlkTbl, AcDb::kForRead);
-        AcDbBlockTableRecord *pBlkTblRcd = nullptr;
-        pBlkTbl->getAt(ACDB_MODEL_SPACE, pBlkTblRcd, AcDb::kForWrite);
-        pBlkTbl->close();
+    assert(pEnt != nullptr);
+    assert(pDb != nullptr);
 
-        AcDbObjectId entId = AcDbObjectId::kNull;
-        Acad::ErrorStatus es = pBlkTblRcd->appendAcDbEntity(entId, pEnt);
-        if (es != Acad::eOk)
-        {
-            pBlkTblRcd->close();
-            acutPrintf(_T("添加失败"));
-            delete pEnt; // 添加失败时，要delete;
-            pEnt = nullptr;
+    std::unique_ptr<AcDbEntity> entOwner{pEnt};
 
-            return AcDbObjectId::kNull;
-        }
-
-        pBlkTblRcd->close();
-        pEnt->close();
-
-        return entId;
-#else
     AcDbBlockTableRecordPointer pBlkTblRec(pDb->currentSpaceId(), AcDb::kForWrite);
-    if (pBlkTblRec.openStatus() != Acad::eOk) return AcDbObjectId::kNull;
-    AcDbObjectId entId = AcDbObjectId::kNull;
-    if (Acad::eOk != pBlkTblRec->appendAcDbEntity(entId, pEnt)) {
-        delete pEnt;
-        pEnt = nullptr;
+    if (pBlkTblRec.openStatus() != Acad::eOk) {
         return AcDbObjectId::kNull;
     }
-    pEnt->close();
+    AcDbObjectId entId = AcDbObjectId::kNull;
+    if (Acad::eOk != pBlkTblRec->appendAcDbEntity(entId, entOwner.get())) {
+        return AcDbObjectId::kNull;
+    }
+    (void)entOwner->close();
+    AcDbEntity* const releasedEnt = entOwner.release();  // ownership transferred to the database
+    (void)releasedEnt;
     return entId;
-#endif
 }
 
 AcGePoint3dArray KTArxUtility::SortPtArr(const AcGePoint3dArray& PointArr, bool bVertical) {
     AcGePoint3dArray tempPointArr = PointArr;
-    if (bVertical)  // 是垂直的
-        std::sort(tempPointArr.asArrayPtr(), tempPointArr.asArrayPtr() + tempPointArr.length(), [](const AcGePoint3d& a, const AcGePoint3d& b) { return a.y < b.y; });
-    else
-        std::sort(tempPointArr.asArrayPtr(), tempPointArr.asArrayPtr() + tempPointArr.length(), [](const AcGePoint3d& a, const AcGePoint3d& b) { return a.x < b.x; });
+    if (tempPointArr.length() <= 1) {
+        return tempPointArr;
+    }
+
+    AcGePoint3d* beginPtr = tempPointArr.asArrayPtr();
+    AcGePoint3d* endPtr = beginPtr;
+    std::advance(endPtr, tempPointArr.length());
+
+    if (bVertical) {  // 是垂直的
+        std::sort(beginPtr, endPtr, [](const AcGePoint3d& lhs, const AcGePoint3d& rhs) { return lhs.y < rhs.y; });
+    } else {
+        std::sort(beginPtr, endPtr, [](const AcGePoint3d& lhs, const AcGePoint3d& rhs) { return lhs.x < rhs.x; });
+    }
 
     return tempPointArr;
 }
 
 void KTArxUtility::ShowProgressBar(const CString& strName, bool bStart) {
-    if (bStart)
-        acedSetStatusBarProgressMeter(strName, 0, 100);  // 显示进度条
-    else
+    constexpr int kProgressMin = 0;
+    constexpr int kProgressMax = 100;
+
+    if (bStart) {
+        acedSetStatusBarProgressMeter(strName, kProgressMin, kProgressMax);  // 显示进度条
+    } else {
         acedRestoreStatusBar();  // 关闭进度条
+    }
 }
 
 void KTArxUtility::SetProgressBar(int nCurIndex, int nSum) {
-    int nNum = (nCurIndex + 1) * 100 / nSum;
+    constexpr int kProgressMax = 100;
+    if (nSum <= 0) {
+        acedSetStatusBarProgressMeterPos(0);
+        return;
+    }
+
+    int nNum = (nCurIndex + 1) * kProgressMax / nSum;
     acedSetStatusBarProgressMeterPos(nNum);  // 设置进度条的进度
 }
 }  // namespace KTArxTool
