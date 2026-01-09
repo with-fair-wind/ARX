@@ -1,53 +1,54 @@
 #pragma once
 
 namespace KTArxTool {
-class KTArxConvert;
 class KT_EXPORTARX_API KTArxEntity {
    public:
     /// @brief 按比例缩放实体
-    bool ModifyEntByScale(AcDbEntity* pEnt, double dScale, const AcGePoint3d& ptBase);
-    bool ModifyEntByScale(const AcDbObjectId& idEnt, double dScale, const AcGePoint3d& ptBase);
-    bool ModifyEntByScale(const AcArray<AcDbEntity*>& arrpEnt, double dScale, const AcGePoint3d& ptBase);
+    static bool ModifyEntByScale(AcDbEntity* entity, double scale, const AcGePoint3d& basePoint);
+    static bool ModifyEntByScale(const AcDbObjectId& entityId, double scale, const AcGePoint3d& basePoint);
+    static bool ModifyEntByScale(const AcArray<AcDbEntity*>& entities, double scale, const AcGePoint3d& basePoint);
 
     /// @brief 分解实体
-    AcArray<AcDbEntity*> ExplodeEnt(AcDbEntity* pEnt);
-    AcArray<AcDbEntity*> ExplodeEnt(const AcDbObjectId& idEnt);
+    static AcArray<AcDbEntity*> ExplodeEnt(AcDbEntity* entity);
+    static AcArray<AcDbEntity*> ExplodeEnt(const AcDbObjectId& entityId);
 
     /// @brief 移动实体
-    bool MoveEnt(AcDbEntity* pEnt, const AcGePoint3d& ptBase, const AcGePoint3d& ptDest);
-    bool MoveEnt(const AcDbObjectIdArray& arrid, const AcGePoint3d& ptBase, const AcGePoint3d& ptDest);
-    bool MoveEnt(const AcDbObjectId& idEnt, const AcGePoint3d& ptBase, const AcGePoint3d& ptDest);
-    bool MoveEnt(const AcArray<AcDbEntity*>& arrEnt, const AcGePoint3d& ptBase, const AcGePoint3d& ptDest);
+    static bool MoveEnt(AcDbEntity* entity, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint);
+    static bool MoveEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint);
+    static bool MoveEnt(const AcDbObjectId& entityId, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint);
+    static bool MoveEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint);
 
     /// @brief 旋转实体(弧度)
-    bool RotateEnt(AcDbEntity* pEnt, const AcGePoint3d& ptBase, double rotation);
-    bool RotateEnt(const AcArray<AcDbEntity*>& arrpEnt, const AcGePoint3d& ptBase, double rotation);
+    static bool RotateEnt(AcDbEntity* entity, const AcGePoint3d& basePoint, double rotation);
+    static bool RotateEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& basePoint, double rotation);
 
     /// @brief 删除实体
-    bool DeleteEnt(const AcDbObjectId& idEnt);
-    void DeleteEnt(AcArray<AcDbEntity*>& arrpEnt);
+    static bool DeleteEnt(const AcDbObjectId& entityId);
+    static void DeleteEnt(AcArray<AcDbEntity*>& entities);
 
     /// @brief 拷贝实体
-    AcArray<AcDbEntity*> CopyEnt(const AcDbObjectIdArray& arrid);
-    AcArray<AcDbEntity*> CopyEnt(const AcArray<AcDbEntity*>& arrp);
-    AcDbEntity* CopyEnt(const AcDbObjectId& idEnt);
+    static AcArray<AcDbEntity*> CopyEnt(const AcDbObjectIdArray& entityIds);
+    static AcArray<AcDbEntity*> CopyEnt(const AcArray<AcDbEntity*>& entities);
+    static AcDbEntity* CopyEnt(const AcDbObjectId& entityId);
 
     /// @brief 镜像实体
-    AcDbEntity* MirrorEnt(AcDbEntity* pEnt, const AcGePoint3d& pt1, const AcGePoint3d& pt2);
-    AcArray<AcDbEntity*> MirrorEnt(const AcDbObjectIdArray& arrid, const AcGePoint3d& pt1, const AcGePoint3d& pt2);
-    AcArray<AcDbEntity*> MirrorEnt(const AcArray<AcDbEntity*>& arrp, const AcGePoint3d& pt1, const AcGePoint3d& pt2);
+    static AcDbEntity* MirrorEnt(AcDbEntity* entity, const AcGePoint3d& point1, const AcGePoint3d& point2);
+    static AcArray<AcDbEntity*> MirrorEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d& point1, const AcGePoint3d& point2);
+    static AcArray<AcDbEntity*> MirrorEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& point1, const AcGePoint3d& point2);
 
     /// @brief 环形矩阵
     /// @param nCurNum 当前需要的数量
     /// @param nSum 总共的数量
-    AcArray<AcDbEntity*> AnnularMatrix(const AcDbObjectIdArray& arrid, const AcGePoint3d& ptBase, int nCurNum, int nSum);
-    AcArray<AcDbEntity*> AnnularMatrix(const AcArray<AcDbEntity*>& arrp, const AcGePoint3d& ptBase, int nCurNum, int nSum);
+    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+    static AcArray<AcDbEntity*> AnnularMatrix(const AcDbObjectIdArray& entityIds, const AcGePoint3d& basePoint, int currentCount, int totalCount);
+    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+    static AcArray<AcDbEntity*> AnnularMatrix(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& basePoint, int currentCount, int totalCount);
 
     /// @brief 设置实体被选中
-    void SetEntSelected(const AcDbObjectIdArray& arridEnt, bool bSeled = true, bool bHighlight = false);
+    static void SetEntSelected(const AcDbObjectIdArray& entityIds, bool selected = true, bool highlight = false);
 
     /// @brief 调整绘图次序
-    bool SetEntToBottom(const AcDbObjectId& id, AcDbDatabase* pDb = acdbCurDwg());
+    static bool SetEntToBottom(const AcDbObjectId& entityId, AcDbDatabase* database = acdbCurDwg());
 
     /// @brief 拉伸实体
     /// @param arrid        输入需要被拉伸的实体id数组
@@ -56,27 +57,25 @@ class KT_EXPORTARX_API KTArxEntity {
     /// @param ptBase       输入基点
     /// @param ptTarget     输入目标点
     /// @return
-    bool StretchEnt(const AcDbObjectIdArray& arrid, const AcGePoint3d& ptCorner1, const AcGePoint3d& ptCorner2, const AcGePoint3d& ptBase, const AcGePoint3d& ptTarget);
+    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+    static bool StretchEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d& cornerPoint1, const AcGePoint3d& cornerPoint2, const AcGePoint3d& basePoint, const AcGePoint3d& targetPoint);
 
     /// @brief 得到经过点坐标上的实体id
-    AcDbObjectIdArray GetEntIdByPt(const AcGePoint3d& pt, bool bAll = false);
+    static AcDbObjectIdArray GetEntIdByPt(const AcGePoint3d& point, bool all = false);
 
     /// @brief 得到实体外包矩形
-    AcDbExtents GetEntExtents(const AcDbObjectId& idEnt);
-    AcDbExtents GetEntExtents(const AcDbObjectIdArray& arrid);
-    AcDbExtents GetEntExtents(const AcArray<AcDbEntity*>& arrEnt);
+    static AcDbExtents GetEntExtents(const AcDbObjectId& entityId);
+    static AcDbExtents GetEntExtents(const AcDbObjectIdArray& entityIds);
+    static AcDbExtents GetEntExtents(const AcArray<AcDbEntity*>& entities);
 
     /// @brief 得到实体外包矩形的最大点和最小点
-    bool GetExtentsPt(const AcDbObjectId& idEnt, AcGePoint3d& ptMax, AcGePoint3d& ptMin);
-    bool GetExtentsPt(AcDbEntity* pEnt, AcGePoint3d& ptMax, AcGePoint3d& ptMin);
-    bool GetExtentsPt(const AcDbObjectIdArray& arrid, AcGePoint3d& ptMax, AcGePoint3d& ptMin);
+    static bool GetExtentsPt(const AcDbObjectId& entityId, AcGePoint3d& maxPoint, AcGePoint3d& minPoint);
+    static bool GetExtentsPt(AcDbEntity* entity, AcGePoint3d& maxPoint, AcGePoint3d& minPoint);
+    static bool GetExtentsPt(const AcDbObjectIdArray& entityIds, AcGePoint3d& maxPoint, AcGePoint3d& minPoint);
 
 #pragma region polyline
     /// @brief 判断该多段线是否是闭合多段线
-    bool IsClosedPline(AcDbPolyline* pPline);
+    static bool IsClosedPline(AcDbPolyline* polyline);
 #pragma endregion
-
-   private:
-    std::shared_ptr<KTArxConvert> m_pArxConvert;
 };
 }  // namespace KTArxTool
