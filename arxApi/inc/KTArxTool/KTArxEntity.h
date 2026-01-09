@@ -4,75 +4,75 @@ namespace KTArxTool {
 class KT_EXPORTARX_API KTArxConvert;
 class KT_EXPORTARX_API KTArxEntity {
    public:
-    /// @brief °´±ÈÀıËõ·ÅÊµÌå
+    /// @brief æŒ‰æ¯”ä¾‹ç¼©æ”¾å®ä½“
     bool ModifyEntByScale(AcDbEntity* pEnt, double dScale, const AcGePoint3d& ptBase);
     bool ModifyEntByScale(const AcDbObjectId& idEnt, double dScale, const AcGePoint3d& ptBase);
     bool ModifyEntByScale(const AcArray<AcDbEntity*>& arrpEnt, double dScale, const AcGePoint3d& ptBase);
 
-    /// @brief ·Ö½âÊµÌå
+    /// @brief åˆ†è§£å®ä½“
     AcArray<AcDbEntity*> ExplodeEnt(AcDbEntity* pEnt);
     AcArray<AcDbEntity*> ExplodeEnt(const AcDbObjectId& idEnt);
 
-    /// @brief ÒÆ¶¯ÊµÌå
+    /// @brief ç§»åŠ¨å®ä½“
     bool MoveEnt(AcDbEntity* pEnt, const AcGePoint3d& ptBase, const AcGePoint3d& ptDest);
     bool MoveEnt(const AcDbObjectIdArray& arrid, const AcGePoint3d& ptBase, const AcGePoint3d& ptDest);
     bool MoveEnt(const AcDbObjectId& idEnt, const AcGePoint3d& ptBase, const AcGePoint3d& ptDest);
     bool MoveEnt(const AcArray<AcDbEntity*>& arrEnt, const AcGePoint3d& ptBase, const AcGePoint3d& ptDest);
 
-    /// @brief Ğı×ªÊµÌå(»¡¶È)
+    /// @brief æ—‹è½¬å®ä½“(å¼§åº¦)
     bool RotateEnt(AcDbEntity* pEnt, const AcGePoint3d& ptBase, double rotation);
     bool RotateEnt(const AcArray<AcDbEntity*>& arrpEnt, const AcGePoint3d& ptBase, double rotation);
 
-    /// @brief É¾³ıÊµÌå
+    /// @brief åˆ é™¤å®ä½“
     bool DeleteEnt(const AcDbObjectId& idEnt);
     void DeleteEnt(AcArray<AcDbEntity*>& arrpEnt);
 
-    /// @brief ¿½±´ÊµÌå
+    /// @brief æ‹·è´å®ä½“
     AcArray<AcDbEntity*> CopyEnt(const AcDbObjectIdArray& arrid);
     AcArray<AcDbEntity*> CopyEnt(const AcArray<AcDbEntity*>& arrp);
     AcDbEntity* CopyEnt(const AcDbObjectId& idEnt);
 
-    /// @brief ¾µÏñÊµÌå
+    /// @brief é•œåƒå®ä½“
     AcDbEntity* MirrorEnt(AcDbEntity* pEnt, const AcGePoint3d& pt1, const AcGePoint3d& pt2);
     AcArray<AcDbEntity*> MirrorEnt(const AcDbObjectIdArray& arrid, const AcGePoint3d& pt1, const AcGePoint3d& pt2);
     AcArray<AcDbEntity*> MirrorEnt(const AcArray<AcDbEntity*>& arrp, const AcGePoint3d& pt1, const AcGePoint3d& pt2);
 
-    /// @brief »·ĞÎ¾ØÕó
-    /// @param nCurNum µ±Ç°ĞèÒªµÄÊıÁ¿
-    /// @param nSum ×Ü¹²µÄÊıÁ¿
+    /// @brief ç¯å½¢çŸ©é˜µ
+    /// @param nCurNum å½“å‰éœ€è¦çš„æ•°é‡
+    /// @param nSum æ€»å…±çš„æ•°é‡
     AcArray<AcDbEntity*> AnnularMatrix(const AcDbObjectIdArray& arrid, const AcGePoint3d& ptBase, int nCurNum, int nSum);
     AcArray<AcDbEntity*> AnnularMatrix(const AcArray<AcDbEntity*>& arrp, const AcGePoint3d& ptBase, int nCurNum, int nSum);
 
-    /// @brief ÉèÖÃÊµÌå±»Ñ¡ÖĞ
+    /// @brief è®¾ç½®å®ä½“è¢«é€‰ä¸­
     void SetEntSelected(const AcDbObjectIdArray& arridEnt, bool bSeled = true, bool bHighlight = false);
 
-    /// @brief µ÷Õû»æÍ¼´ÎĞò
+    /// @brief è°ƒæ•´ç»˜å›¾æ¬¡åº
     bool SetEntToBottom(const AcDbObjectId& id, AcDbDatabase* pDb = acdbCurDwg());
 
-    /// @brief À­ÉìÊµÌå
-    /// @param arrid        ÊäÈëĞèÒª±»À­ÉìµÄÊµÌåidÊı×é
-    /// @param ptCorner1    ÊäÈë±»À­ÉìµÄ½Çµã1
-    /// @param ptCorner2    ÊäÈë±»À­ÉìµÄ½Çµã2
-    /// @param ptBase       ÊäÈë»ùµã
-    /// @param ptTarget     ÊäÈëÄ¿±êµã
+    /// @brief æ‹‰ä¼¸å®ä½“
+    /// @param arrid        è¾“å…¥éœ€è¦è¢«æ‹‰ä¼¸çš„å®ä½“idæ•°ç»„
+    /// @param ptCorner1    è¾“å…¥è¢«æ‹‰ä¼¸çš„è§’ç‚¹1
+    /// @param ptCorner2    è¾“å…¥è¢«æ‹‰ä¼¸çš„è§’ç‚¹2
+    /// @param ptBase       è¾“å…¥åŸºç‚¹
+    /// @param ptTarget     è¾“å…¥ç›®æ ‡ç‚¹
     /// @return
     bool StretchEnt(const AcDbObjectIdArray& arrid, const AcGePoint3d& ptCorner1, const AcGePoint3d& ptCorner2, const AcGePoint3d& ptBase, const AcGePoint3d& ptTarget);
 
-    /// @brief µÃµ½¾­¹ıµã×ø±êÉÏµÄÊµÌåid
+    /// @brief å¾—åˆ°ç»è¿‡ç‚¹åæ ‡ä¸Šçš„å®ä½“id
     AcDbObjectIdArray GetEntIdByPt(const AcGePoint3d& pt, bool bAll = false);
 
-    /// @brief µÃµ½ÊµÌåÍâ°ü¾ØĞÎ
+    /// @brief å¾—åˆ°å®ä½“å¤–åŒ…çŸ©å½¢
     AcDbExtents GetEntExtents(const AcDbObjectId& idEnt);
     AcDbExtents GetEntExtents(const AcDbObjectIdArray& arrid);
     AcDbExtents GetEntExtents(const AcArray<AcDbEntity*>& arrEnt);
 
-    /// @brief µÃµ½ÊµÌåÍâ°ü¾ØĞÎµÄ×î´óµãºÍ×îĞ¡µã
+    /// @brief å¾—åˆ°å®ä½“å¤–åŒ…çŸ©å½¢çš„æœ€å¤§ç‚¹å’Œæœ€å°ç‚¹
     bool GetExtentsPt(const AcDbObjectId& idEnt, AcGePoint3d& ptMax, AcGePoint3d& ptMin);
     bool GetExtentsPt(AcDbEntity* pEnt, AcGePoint3d& ptMax, AcGePoint3d& ptMin);
     bool GetExtentsPt(const AcDbObjectIdArray& arrid, AcGePoint3d& ptMax, AcGePoint3d& ptMin);
 
 #pragma region polyline
-    /// @brief ÅĞ¶Ï¸Ã¶à¶ÎÏßÊÇ·ñÊÇ±ÕºÏ¶à¶ÎÏß
+    /// @brief åˆ¤æ–­è¯¥å¤šæ®µçº¿æ˜¯å¦æ˜¯é—­åˆå¤šæ®µçº¿
     bool IsClosedPline(AcDbPolyline* pPline);
 #pragma endregion
 

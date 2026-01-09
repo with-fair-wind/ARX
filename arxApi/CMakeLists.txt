@@ -1,15 +1,28 @@
 project(arxApi)
 
+# Determine target SDK platform directory suffix (works for Ninja or MSVC generators)
+# Prefer CMAKE_VS_PLATFORM_NAME if provided (Visual Studio), otherwise detect pointer size.
+if(DEFINED CMAKE_VS_PLATFORM_NAME AND NOT CMAKE_VS_PLATFORM_NAME STREQUAL "")
+    set(_ZRXSDK_ARCH "${CMAKE_VS_PLATFORM_NAME}")
+else()
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        set(_ZRXSDK_ARCH "x64")
+    else()
+        set(_ZRXSDK_ARCH "x86")
+    endif()
+endif()
+
+# File lists
 file(GLOB_RECURSE INCS CONFIGURE_DEPENDS inc/*.h)
 file(GLOB_RECURSE SRCS CONFIGURE_DEPENDS src/*.cpp src/*.def)
-file(GLOB_RECURSE LIBS CONFIGURE_DEPENDS ${zrxsdk_dir}/lib-${CMAKE_VS_PLATFORM_NAME}/*.lib)
+file(GLOB_RECURSE LIBS CONFIGURE_DEPENDS ${zrxsdk_dir}/lib-${_ZRXSDK_ARCH}/*.lib)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRCS} ${INCS})
 
 add_library(${PROJECT_NAME} SHARED ${INCS} ${SRCS})
 
 target_compile_options(${PROJECT_NAME} PUBLIC
-    $<$<CXX_COMPILER_ID:MSVC>:/Zc:wchar_t /MD>
+    $<$<CXX_COMPILER_ID:MSVC>:/Zc:wchar_t /MD /utf-8>
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC UNICODE _UNICODE)
@@ -19,18 +32,19 @@ if(MSVC)
     target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _AFXEXT _WIN32_WINNT=0x0600 KT_EXPORTARX)
 endif()
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-
-    ${zrxsdk_dir}/inc
-    ${zrxsdk_dir}/arxport/inc
-    ${zrxsdk_dir}/arxport/inc-x64
-
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc> # 构建时使用源码目录
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+    $<BUILD_INTERFACE:${zrxsdk_dir}/inc>
+    $<BUILD_INTERFACE:${zrxsdk_dir}/arxport/inc>
+    $<BUILD_INTERFACE:${zrxsdk_dir}/arxport/inc-x64>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+    PUBLIC
     $<INSTALL_INTERFACE:include>
 )
 
-target_link_directories(${PROJECT_NAME} PUBLIC ${zrxsdk_dir}/lib-${CMAKE_VS_PLATFORM_NAME})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBS})
+# 链接目录与库仅在构建时使用，避免把源码目录前缀的绝对路径导出到 INTERFACE 属性
+target_link_directories(${PROJECT_NAME} PRIVATE $<BUILD_INTERFACE:${zrxsdk_dir}/lib-${CMAKE_VS_PLATFORM_NAME}>)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     FOLDER "Api"

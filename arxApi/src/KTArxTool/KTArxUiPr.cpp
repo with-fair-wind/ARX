@@ -2,7 +2,7 @@
 namespace KTArxTool {
 bool KTArxUiPr::SelEnt(LPCTSTR szPrompt, AcRxClass* classType, AcDbObjectId& id, AcGePoint3d& pt) {
     CString strPrompt;
-    strPrompt.Format(_T("\n%s£º"), szPrompt);
+    strPrompt.Format(_T("\n%sï¼š"), szPrompt);
     while (true) {
         ads_name ent;
         ads_point adsPt;
@@ -16,7 +16,7 @@ bool KTArxUiPr::SelEnt(LPCTSTR szPrompt, AcRxClass* classType, AcDbObjectId& id,
         AcDbEntity* pEnt = nullptr;
         if (Acad::ErrorStatus es = acdbOpenAcDbEntity(pEnt, tmpId, AcDb::kForRead); Acad::eOk != es) return false;
         AcRxClass* rxClass = static_cast<AcRxClass*>(classType);
-        if (pEnt->isKindOf(rxClass))  // Èç¹û¡°this¡±¶ÔÏóÊÇÓÉaClass±íÊ¾µÄÀàµÄ³ÉÔ±£¬»òÕßÊÇ´ÓaClassÅÉÉúµÄÀàµÄ³ÉÔ±£¬Ôò·µ»Øtrue¡£
+        if (pEnt->isKindOf(rxClass))  // å¦‚æžœâ€œthisâ€å¯¹è±¡æ˜¯ç”±aClassè¡¨ç¤ºçš„ç±»çš„æˆå‘˜ï¼Œæˆ–è€…æ˜¯ä»ŽaClassæ´¾ç”Ÿçš„ç±»çš„æˆå‘˜ï¼Œåˆ™è¿”å›žtrueã€‚
         {
             pEnt->close();
             pt = asPnt3d(adsPt);

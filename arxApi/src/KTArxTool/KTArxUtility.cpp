@@ -52,16 +52,16 @@ bool KTArxUtility::LoadCadMenu(const CString& strMenuFileName, const CString& st
     CString strCmdLoad;
     strFilePath.Replace(_T("\\"), _T("\\\\"));
     if (!strMenuGroupName.IsEmpty() && strFilePath.GetLength() > 0)
-        strCmdLoad.Format(_T("(if (null (menugroup \"%s\")) (command \"menuload\" \"%s\"))"), strMenuGroupName, strFilePath);
+        strCmdLoad.Format(_T("(if (null (menugroup \"%s\")) (command \"menuload\" \"%s\"))"), (LPCTSTR)strMenuGroupName, (LPCTSTR)strFilePath);
     else
-        strCmdLoad.Format(_T("(command \"menuload\" \"%s\")"), strFilePath);
-    int erStat = ads_queueexpr((LPTSTR)(LPCTSTR)strCmdLoad);  // ´Ëº¯Êı£¬Ïàµ±ÓÚ³ÌĞò½áÊøºó£¬¸øCAD·¢ËÍÒ»¸ö¼ÓÔØ²Ëµ¥µÄÃüÁî
+        strCmdLoad.Format(_T("(command \"menuload\" \"%s\")"), (LPCTSTR)strFilePath);
+    int erStat = ads_queueexpr((LPTSTR)(LPCTSTR)strCmdLoad);  // æ­¤å‡½æ•°ï¼Œç›¸å½“äºç¨‹åºç»“æŸåï¼Œç»™CADå‘é€ä¸€ä¸ªåŠ è½½èœå•çš„å‘½ä»¤
     return true;
 }
 
 bool KTArxUtility::UnloadCadMenu(const CString& strMenuGroupName) {
     CString strCmdLoad;
-    strCmdLoad.Format(_T("(command \"menuunload\" \"%s\")"), strMenuGroupName);
+    strCmdLoad.Format(_T("(command \"menuunload\" \"%s\")"), (LPCTSTR)strMenuGroupName);
     int erStat = ads_queueexpr((LPTSTR)(LPCTSTR)strCmdLoad);
     return true;
 }
@@ -109,8 +109,8 @@ AcDbObjectId KTArxUtility::PostToModelSpace(AcDbEntity* pEnt, AcDbDatabase* pDb 
         if (es != Acad::eOk)
         {
             pBlkTblRcd->close();
-            acutPrintf(_T("Ìí¼ÓÊ§°Ü"));
-            delete pEnt; // Ìí¼ÓÊ§°ÜÊ±£¬Òªdelete;
+            acutPrintf(_T("æ·»åŠ å¤±è´¥"));
+            delete pEnt; // æ·»åŠ å¤±è´¥æ—¶ï¼Œè¦delete;
             pEnt = nullptr;
 
             return AcDbObjectId::kNull;
@@ -136,7 +136,7 @@ AcDbObjectId KTArxUtility::PostToModelSpace(AcDbEntity* pEnt, AcDbDatabase* pDb 
 
 AcGePoint3dArray KTArxUtility::SortPtArr(const AcGePoint3dArray& PointArr, bool bVertical) {
     AcGePoint3dArray tempPointArr = PointArr;
-    if (bVertical)  // ÊÇ´¹Ö±µÄ
+    if (bVertical)  // æ˜¯å‚ç›´çš„
         std::sort(tempPointArr.asArrayPtr(), tempPointArr.asArrayPtr() + tempPointArr.length(), [](const AcGePoint3d& a, const AcGePoint3d& b) { return a.y < b.y; });
     else
         std::sort(tempPointArr.asArrayPtr(), tempPointArr.asArrayPtr() + tempPointArr.length(), [](const AcGePoint3d& a, const AcGePoint3d& b) { return a.x < b.x; });
@@ -146,13 +146,13 @@ AcGePoint3dArray KTArxUtility::SortPtArr(const AcGePoint3dArray& PointArr, bool 
 
 void KTArxUtility::ShowProgressBar(const CString& strName, bool bStart) {
     if (bStart)
-        acedSetStatusBarProgressMeter(strName, 0, 100);  // ÏÔÊ¾½ø¶ÈÌõ
+        acedSetStatusBarProgressMeter(strName, 0, 100);  // æ˜¾ç¤ºè¿›åº¦æ¡
     else
-        acedRestoreStatusBar();  // ¹Ø±Õ½ø¶ÈÌõ
+        acedRestoreStatusBar();  // å…³é—­è¿›åº¦æ¡
 }
 
 void KTArxUtility::SetProgressBar(int nCurIndex, int nSum) {
     int nNum = (nCurIndex + 1) * 100 / nSum;
-    acedSetStatusBarProgressMeterPos(nNum);  // ÉèÖÃ½ø¶ÈÌõµÄ½ø¶È
+    acedSetStatusBarProgressMeterPos(nNum);  // è®¾ç½®è¿›åº¦æ¡çš„è¿›åº¦
 }
 }  // namespace KTArxTool

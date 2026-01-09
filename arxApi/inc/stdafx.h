@@ -43,8 +43,7 @@
 #include <afxcmn.h>  //- MFC support for Windows Common Controls
 #endif               // _AFX_NO_AFXCMN_SUPPORT
 
-// dllex header
-#include <afxdllx.h>
+// dllex header (moved to the main module source to avoid duplicate symbol definitions)
 
 //- ObjectARX and OMF headers needs this
 #include <map>
@@ -60,7 +59,7 @@
 // #define _INC_LEAGACY_HEADERS_			//- Include legacy headers in this project
 #include "arxHeaders.h"
 
-// TODO: 其他系统库include
+// TODO: 鍏朵粬绯荤粺搴搃nclude
 #include <memory>
 #include <thread>
 #include <unordered_map>

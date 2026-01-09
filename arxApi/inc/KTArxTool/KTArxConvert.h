@@ -3,10 +3,10 @@
 namespace KTArxTool {
 class KT_EXPORTARX_API KTArxConvert {
    public:
-    // 功能：转为三维点
+    // 鍔熻兘锛氳浆涓轰笁缁寸偣
     AcGePoint3d ToPt3d(const AcGePoint2d& pt, double z = 0.) { return AcGePoint3d(pt.x, pt.y, z); }
 
-    // 功能：角度转换为弧度
+    // 鍔熻兘锛氳搴﹁浆鎹负寮у害
     double ToRadian(double dAngle) { return (dAngle * (M_PI / 180.0)); }
 };
 }  // namespace KTArxTool

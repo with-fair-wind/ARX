@@ -33,6 +33,6 @@
 #include <KTArxTool/KTArxUtility.h>
 
 #ifndef KT_EXPORTARX
-// Ïàµ±ÓÚÔÚvsÅäÖÃÖĞÌí¼Ó ¸½¼ÓÒÀÀµÏî
+// ç›¸å½“äºåœ¨vsé…ç½®ä¸­æ·»åŠ  é™„åŠ ä¾èµ–é¡¹
 #pragma comment(lib, "arxApi.lib")
 #endif

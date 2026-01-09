@@ -3,25 +3,25 @@ bool KTArxCurve::GetPosAngNegValue(AcDbCurve* pCurve, const AcGePoint3d& ptBase,
     AcGePoint3d ptNew = ptBase + vecDir;
     bool bFlag = true;
 
-    // À„≥ˆ µÃÂ∆Ω√Ê∑®œÚ¡ø
+    // ÁÆóÂá∫ÂÆû‰ΩìÂπ≥Èù¢Ê≥ïÂêëÈáè
     AcGePlane plane;
     AcDb::Planarity type;
     pCurve->getPlane(plane, type);
     AcGeVector3d vecNormalNew = plane.normal();
-    // ∏˘æ›∆´“∆µ„£® Û±Íµ„£©£¨’“≥ˆæÿ–Œ…œæ‡¿Î∏√µ„◊ÓΩ¸µƒµ„ptClosed
+    // Ê†πÊçÆÂÅèÁßªÁÇπÔºàÈº†Ê†áÁÇπÔºâÔºåÊâæÂá∫Áü©ÂΩ¢‰∏äË∑ùÁ¶ªËØ•ÁÇπÊúÄËøëÁöÑÁÇπptClosed
     AcGePoint3d ptClosed;
     pCurve->getClosestPointTo(ptNew, ptClosed);
-    // À„≥ˆæÿ–Œ…œæ≠π˝ptClosedµƒ«–œﬂ£¨º¥æ≠π˝∏√µ„µƒƒ«Ãı±ﬂvecDerive
+    // ÁÆóÂá∫Áü©ÂΩ¢‰∏äÁªèËøáptClosedÁöÑÂàáÁ∫øÔºåÂç≥ÁªèËøáËØ•ÁÇπÁöÑÈÇ£Êù°ËæπvecDerive
     AcGeVector3d vecDerive;
     pCurve->getFirstDeriv(ptClosed, vecDerive);
-    //  π”√ptClosedµ√µΩ“ª∏ˆ∆´“∆œÚ¡øvecOffsetdir
+    // ‰ΩøÁî®ptClosedÂæóÂà∞‰∏Ä‰∏™ÂÅèÁßªÂêëÈáèvecOffsetdir
     AcGeVector3d vecOffsetdir = ptNew - ptClosed;
-    // vecOffset∫ÕvecDerive◊ˆ≤Ê≥À£¨À„≥ˆ∑®œÚ¡øvecOffsetNormal£¨ø¥vecOffsetNormal∫Õ
-    // vecNormal «∑ÒÕ¨œÚ£¨»Áπ˚Õ¨œÚ∆´“∆æ‡¿ÎŒ™dOffset£¨»Áπ˚≤ªÕ¨œÚ∆´“∆æ‡¿ÎŒ™-dOffset
+    // vecOffsetÂíåvecDeriveÂÅöÂèâ‰πòÔºåÁÆóÂá∫Ê≥ïÂêëÈáèvecOffsetNormalÔºåÁúãvecOffsetNormalÂíå
+    // vecNormalÊòØÂê¶ÂêåÂêëÔºåÂ¶ÇÊûúÂêåÂêëÂÅèÁßªË∑ùÁ¶ª‰∏∫dOffsetÔºåÂ¶ÇÊûú‰∏çÂêåÂêëÂÅèÁßªË∑ùÁ¶ª‰∏∫-dOffset
     AcGeVector3d vecOffsetNormal = vecOffsetdir.crossProduct(vecDerive);
     bool bCodirectional = vecOffsetNormal.isCodirectionalTo(vecNormalNew);
     if (!bCodirectional) bFlag = !bFlag;
-    // »Áπ˚ «÷±œﬂ£¨»°∑¥
+    // Â¶ÇÊûúÊòØÁõ¥Á∫øÔºåÂèñÂèç
     if (pCurve->isKindOf(AcDbLine::desc())) bFlag = !bFlag;
 
     return bFlag;
@@ -37,28 +37,28 @@ AcArray<AcDbCurve*> KTArxCurve::OffsetCurve(AcDbCurve* pCurve, double dOffset) {
 }
 
 AcArray<AcDbCurve*> KTArxCurve::OffsetCurve(AcDbCurve* pCurve, double dOffset, const AcGePoint3d& pt, bool bOpposite /*= false*/) {
-    dOffset = std::fabs(dOffset);  // æ¯∂‘÷µ
-    // À„≥ˆ µÃÂ∆Ω√Ê∑®œÚ¡ø
+    dOffset = std::fabs(dOffset);  // ÁªùÂØπÂÄº
+    // ÁÆóÂá∫ÂÆû‰ΩìÂπ≥Èù¢Ê≥ïÂêëÈáè
     AcGePlane plane;
     AcDb::Planarity type;
     pCurve->getPlane(plane, type);
     AcGeVector3d vecNormal = plane.normal();
-    // ∏˘æ›∆´“∆µ„£® Û±Íµ„£©£¨’“≥ˆæÿ–Œ…œæ‡¿Î∏√µ„◊ÓΩ¸µƒµ„ptClosed
+    // Ê†πÊçÆÂÅèÁßªÁÇπÔºàÈº†Ê†áÁÇπÔºâÔºåÊâæÂá∫Áü©ÂΩ¢‰∏äË∑ùÁ¶ªËØ•ÁÇπÊúÄËøëÁöÑÁÇπptClosed
     AcGePoint3d ptClosed = GetClosedPtInCurve(pCurve, pt);
-    // À„≥ˆæÿ–Œ…œæ≠π˝ptClosedµƒ«–œﬂ£¨º¥æ≠π˝∏√µ„µƒƒ«Ãı±ﬂvecDerive
+    // ÁÆóÂá∫Áü©ÂΩ¢‰∏äÁªèËøáptClosedÁöÑÂàáÁ∫øÔºåÂç≥ÁªèËøáËØ•ÁÇπÁöÑÈÇ£Êù°ËæπvecDerive
     AcGeVector3d vecDerive;
     pCurve->getFirstDeriv(ptClosed, vecDerive);
-    //  π”√ptClosedµ√µΩ“ª∏ˆ∆´“∆œÚ¡øvecOffsetdir
+    // ‰ΩøÁî®ptClosedÂæóÂà∞‰∏Ä‰∏™ÂÅèÁßªÂêëÈáèvecOffsetdir
     AcGeVector3d vecOffsetdir = pt - ptClosed;
-    // vecOffset∫ÕvecDerive◊ˆ≤Ê≥À£¨À„≥ˆ∑®œÚ¡øvecOffsetNormal£¨ø¥vecOffsetNormal∫Õ
-    // vecNormal «∑ÒÕ¨œÚ£¨»Áπ˚Õ¨œÚ∆´“∆æ‡¿ÎŒ™dOffset£¨»Áπ˚≤ªÕ¨œÚ∆´“∆æ‡¿ÎŒ™-dOffset
+    // vecOffsetÂíåvecDeriveÂÅöÂèâ‰πòÔºåÁÆóÂá∫Ê≥ïÂêëÈáèvecOffsetNormalÔºåÁúãvecOffsetNormalÂíå
+    // vecNormalÊòØÂê¶ÂêåÂêëÔºåÂ¶ÇÊûúÂêåÂêëÂÅèÁßªË∑ùÁ¶ª‰∏∫dOffsetÔºåÂ¶ÇÊûú‰∏çÂêåÂêëÂÅèÁßªË∑ùÁ¶ª‰∏∫-dOffset
     AcGeVector3d vecOffsetNormal = vecOffsetdir.crossProduct(vecDerive);
     bool bCodirectional = vecOffsetNormal.isCodirectionalTo(vecNormal);
     if (!bCodirectional) dOffset = -dOffset;
-    // »Áπ˚ «÷±œﬂ£¨»°∑¥
+    // Â¶ÇÊûúÊòØÁõ¥Á∫øÔºåÂèñÂèç
     if (pCurve->isKindOf(AcDbLine::desc())) dOffset = -dOffset;
     if (bOpposite) dOffset = -dOffset;
-    // ∆´“∆ µÃÂ
+    // ÂÅèÁßªÂÆû‰Ωì
     return OffsetCurve(pCurve, dOffset);
 }
 
@@ -186,7 +186,7 @@ double KTArxCurve::GetArcBulge(AcDbArc* pArc) { return GetArcBulge(pArc->startAn
 
 double KTArxCurve::GetArcBulge(double dAngleStart, double dAngleEnd) {
     double dAlfa = dAngleEnd - dAngleStart;
-    if (dAlfa < 0.0)  // »Áπ˚÷’µ„Ω«∂»–°”⁄∆µ„Ω«∂»;
+    if (dAlfa < 0.0)  // Â¶ÇÊûúÁªàÁÇπËßíÂ∫¶Â∞è‰∫éËµ∑ÁÇπËßíÂ∫¶;
         dAlfa = 2 * (atan(1.0) * 4) + dAlfa;
     return tan((dAlfa) / 4.0);
 }
@@ -349,8 +349,8 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
     int nCountVerts = pPline->numVerts();
     if (nCountVerts < 2) return false;
 
-    AcGePoint3dArray arrVertex;  // ∂•µ„ºØ∫œ
-    AcArray<double> arrBulge;    // Õπ∂»ºØ∫œ
+    AcGePoint3dArray arrVertex;  // È°∂ÁÇπÈõÜÂêà
+    AcArray<double> arrBulge;    // Âá∏Â∫¶ÈõÜÂêà
     bool bClosed = m_pArxEntity->IsClosedPline(pPline);
     bool bClosedFlag = pPline->isClosed();
     for (int i = 0; i < nCountVerts; i++) {
@@ -364,8 +364,8 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
         arrBulge.append(dBugle);
     }
 
-    bool bIsVertex = false;  //  «∑Ò «∂Àµ„
-    int nIndexVertex = -1;   // ∂Àµ„À˜“˝
+    bool bIsVertex = false;  // ÊòØÂê¶ÊòØÁ´ØÁÇπ
+    int nIndexVertex = -1;   // Á´ØÁÇπÁ¥¢Âºï
     for (int i = 0; i < arrVertex.length(); i++) {
         if (ptOnCurve.isEqualTo(arrVertex[i])) {
             bIsVertex = true;
@@ -380,16 +380,16 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
         arrvec.append(vecDeriv.negate());
         return true;
     } else {
-        if (bClosed)  // ±’∫œœﬂ∂Œ
+        if (bClosed)  // Èó≠ÂêàÁ∫øÊÆµ
         {
-            if (nIndexVertex == 0)  // œﬂ∂Œµ⁄“ªµ„
+            if (nIndexVertex == 0)  // Á∫øÊÆµÁ¨¨‰∏ÄÁÇπ
             {
-                // µ⁄“ªÃı∑ΩœÚ
-                if (arrBulge[nIndexVertex] == 0)  //  «÷±œﬂ
+                // Á¨¨‰∏ÄÊù°ÊñπÂêë
+                if (arrBulge[nIndexVertex] == 0)  // ÊòØÁõ¥Á∫ø
                 {
                     AcGeVector3d vecDeriv = arrVertex[1] - arrVertex[0];
                     arrvec.append(vecDeriv);
-                } else  // ≤ª «÷±œﬂ
+                } else  // ‰∏çÊòØÁõ¥Á∫ø
                 {
                     AcGeCircArc2d segArc;
                     pPline->getArcSegAt(nIndexVertex, segArc);
@@ -397,12 +397,12 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
                     AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                     AcGeVector3d vecDeriv;
                     if (arrBulge[nIndexVertex] > 0)
-                        vecDeriv = vec.perpVector();  // ƒÊ ±’Î
+                        vecDeriv = vec.perpVector();  // ÈÄÜÊó∂Èíà
                     else
-                        vecDeriv = vec.perpVector().negate();  // À≥ ±’Î
+                        vecDeriv = vec.perpVector().negate();  // È°∫Êó∂Èíà
                     arrvec.append(vecDeriv);
                 }
-                // µ⁄∂˛Ãı∑ΩœÚ
+                // Á¨¨‰∫åÊù°ÊñπÂêë
                 int nEndIndex = arrBulge.length() - 1;
                 if (arrBulge[nEndIndex] == 0) {
                     AcGeVector3d vecDeriv = arrVertex[nEndIndex] - arrVertex[0];
@@ -414,14 +414,14 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
                     AcGeVector3d vec = arrVertex[0] - ptCenter;
                     AcGeVector3d vecDeriv;
                     if (arrBulge[nEndIndex] > 0)
-                        vecDeriv = vec.perpVector().negate();  // ƒÊ ±’Î
+                        vecDeriv = vec.perpVector().negate();  // ÈÄÜÊó∂Èíà
                     else
-                        vecDeriv = vec.perpVector();  // À≥ ±’Î
+                        vecDeriv = vec.perpVector();  // È°∫Êó∂Èíà
                     arrvec.append(vecDeriv);
                 }
                 return true;
             } else {
-                // µ⁄“ªÃı∑ΩœÚ
+                // Á¨¨‰∏ÄÊù°ÊñπÂêë
                 if (arrBulge[nIndexVertex] == 0) {
                     AcGeVector3d vecDeriv = arrVertex[nIndexVertex + 1] - arrVertex[nIndexVertex];
                     arrvec.append(vecDeriv);
@@ -432,12 +432,12 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
                     AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                     AcGeVector3d vecDeriv;
                     if (arrBulge[nIndexVertex] > 0)
-                        vecDeriv = vec.perpVector();  // ƒÊ ±’Î
+                        vecDeriv = vec.perpVector();  // ÈÄÜÊó∂Èíà
                     else
-                        vecDeriv = vec.perpVector().negate();  // À≥ ±’Î
+                        vecDeriv = vec.perpVector().negate();  // È°∫Êó∂Èíà
                     arrvec.append(vecDeriv);
                 }
-                // µ⁄∂˛Ãı∑ΩœÚ
+                // Á¨¨‰∫åÊù°ÊñπÂêë
                 if (arrBulge[nIndexVertex - 1] == 0) {
                     AcGeVector3d vecDeriv = arrVertex[nIndexVertex - 1] - arrVertex[nIndexVertex];
                     arrvec.append(vecDeriv);
@@ -448,14 +448,14 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
                     AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                     AcGeVector3d vecDeriv;
                     if (arrBulge[nIndexVertex - 1] > 0)
-                        vecDeriv = vec.perpVector().negate();  // ƒÊ ±’Î
+                        vecDeriv = vec.perpVector().negate();  // ÈÄÜÊó∂Èíà
                     else
-                        vecDeriv = vec.perpVector();  // À≥ ±’Î
+                        vecDeriv = vec.perpVector();  // È°∫Êó∂Èíà
                     arrvec.append(vecDeriv);
                 }
                 return true;
             }
-        } else  // ∑«±’∫œœﬂ∂Œ
+        } else  // ÈùûÈó≠ÂêàÁ∫øÊÆµ
         {
             if (nIndexVertex == 0) {
                 if (arrBulge[nIndexVertex] == 0) {
@@ -468,9 +468,9 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
                     AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                     AcGeVector3d vecDeriv;
                     if (arrBulge[nIndexVertex] > 0)
-                        vecDeriv = vec.perpVector();  // ƒÊ ±’Î
+                        vecDeriv = vec.perpVector();  // ÈÄÜÊó∂Èíà
                     else
-                        vecDeriv = vec.perpVector().negate();  // À≥ ±’Î
+                        vecDeriv = vec.perpVector().negate();  // È°∫Êó∂Èíà
                     arrvec.append(vecDeriv);
                 }
                 return true;
@@ -485,14 +485,14 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
                     AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                     AcGeVector3d vecDeriv;
                     if (arrBulge[nIndexVertex - 1] > 0)
-                        vecDeriv = vec.perpVector().negate();  // ƒÊ ±’Î
+                        vecDeriv = vec.perpVector().negate();  // ÈÄÜÊó∂Èíà
                     else
-                        vecDeriv = vec.perpVector();  // À≥ ±’Î
+                        vecDeriv = vec.perpVector();  // È°∫Êó∂Èíà
                     arrvec.append(vecDeriv);
                 }
                 return true;
             } else {
-                // µ⁄“ªÃı∑ΩœÚ
+                // Á¨¨‰∏ÄÊù°ÊñπÂêë
                 if (arrBulge[nIndexVertex] == 0) {
                     AcGeVector3d vecDeriv = arrVertex[nIndexVertex + 1] - arrVertex[nIndexVertex];
                     arrvec.append(vecDeriv);
@@ -503,12 +503,12 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
                     AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                     AcGeVector3d vecDeriv;
                     if (arrBulge[nIndexVertex] > 0)
-                        vecDeriv = vec.perpVector();  // ƒÊ ±’Î
+                        vecDeriv = vec.perpVector();  // ÈÄÜÊó∂Èíà
                     else
-                        vecDeriv = vec.perpVector().negate();  // À≥ ±’Î
+                        vecDeriv = vec.perpVector().negate();  // È°∫Êó∂Èíà
                     arrvec.append(vecDeriv);
                 }
-                // µ⁄∂˛Ãı∑ΩœÚ
+                // Á¨¨‰∫åÊù°ÊñπÂêë
                 if (arrBulge[nIndexVertex - 1] == 0) {
                     AcGeVector3d vecDeriv = arrVertex[nIndexVertex - 1] - arrVertex[nIndexVertex];
                     arrvec.append(vecDeriv);
@@ -519,9 +519,9 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
                     AcGeVector3d vec = arrVertex[nIndexVertex] - ptCenter;
                     AcGeVector3d vecDeriv;
                     if (arrBulge[nIndexVertex - 1] > 0)
-                        vecDeriv = vec.perpVector().negate();  // ƒÊ ±’Î
+                        vecDeriv = vec.perpVector().negate();  // ÈÄÜÊó∂Èíà
                     else
-                        vecDeriv = vec.perpVector();  // À≥ ±’Î
+                        vecDeriv = vec.perpVector();  // È°∫Êó∂Èíà
                     arrvec.append(vecDeriv);
                 }
                 return true;
@@ -531,7 +531,7 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcG
 }
 
 AcGeVector3dArray KTArxCurve::GetTangentLineVecArr(const AcGePoint3d& pt, AcDbCurve* pCurve) {
-    // π´≤Ó
+    // ÂÖ¨Â∑Æ
     double dTol = 0.01;
     AcGeTol tol;
     tol.setEqualPoint(dTol);
@@ -541,13 +541,13 @@ AcGeVector3dArray KTArxCurve::GetTangentLineVecArr(const AcGePoint3d& pt, AcDbCu
     // pCurve->getClosestPointTo(pt, ptOnCurve);
     ptOnCurve = GetClosedPtInCurve(pCurve, pt);
 
-    if (pCurve->isKindOf(AcDbCircle::desc()) || pCurve->isKindOf(AcDbEllipse::desc())) {  // ‘≤°¢Õ÷‘≤
+    if (pCurve->isKindOf(AcDbCircle::desc()) || pCurve->isKindOf(AcDbEllipse::desc())) {  // ÂúÜ„ÄÅÊ§≠ÂúÜ
         AcGeVector3d vecDeriv;
         pCurve->getFirstDeriv(ptOnCurve, vecDeriv);
         arrvec.append(vecDeriv);
         arrvec.append(vecDeriv.negate());
         return arrvec;
-    } else if (pCurve->isKindOf(AcDbLine::desc()) || pCurve->isKindOf(AcDbArc::desc())) {  // ÷±œﬂ°¢‘≤ª°
+    } else if (pCurve->isKindOf(AcDbLine::desc()) || pCurve->isKindOf(AcDbArc::desc())) {  // Áõ¥Á∫ø„ÄÅÂúÜÂºß
         AcGeVector3d vecDeriv;
         pCurve->getFirstDeriv(ptOnCurve, vecDeriv);
         AcGePoint3d ptStart, ptEnd;

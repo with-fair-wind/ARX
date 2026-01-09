@@ -70,7 +70,7 @@ bool KTArxEntity::MoveEnt(const AcDbObjectIdArray& arrid, const AcGePoint3d& ptB
 bool KTArxEntity::RotateEnt(AcDbEntity* pEnt, const AcGePoint3d& ptBase, double rotation) {
     assert(pEnt);
     AcGeMatrix3d xform;
-    xform.setToRotation(rotation, AcGeVector3d::kZAxis, ptBase);  // ²ÎÊı¶şÊÇÊäÈëĞı×ªÖáÏòÁ¿
+    xform.setToRotation(rotation, AcGeVector3d::kZAxis, ptBase);  // å‚æ•°äºŒæ˜¯è¾“å…¥æ—‹è½¬è½´å‘é‡
     return pEnt->transformBy(xform) == Acad::eOk;
 }
 
@@ -209,24 +209,24 @@ bool KTArxEntity::IsClosedPline(AcDbPolyline* pPline) {
 }
 
 void KTArxEntity::SetEntSelected(const AcDbObjectIdArray& arridEnt, bool bSeled /*= true*/, bool bHighlight /*= false*/) {
-    //	acedSSDel(ent, ssname);		//½«ÊµÌå´Ó¼¯ºÏÖĞÉ¾³ıµô
-    acedSSSetFirst(NULL, NULL);  // ½«Ñ¡ÖĞ×´Ì¬Çå³ı
+    //	acedSSDel(ent, ssname);		//å°†å®ä½“ä»é›†åˆä¸­åˆ é™¤æ‰
+    acedSSSetFirst(NULL, NULL);  // å°†é€‰ä¸­çŠ¶æ€æ¸…é™¤
     if (bSeled) {
-        // Ê¹ÊµÌå±»Ñ¡ÖĞ
+        // ä½¿å®ä½“è¢«é€‰ä¸­
         ads_name ssname, ent;
         acdbNameClear(ssname);
         for (int i = 0; i < arridEnt.length(); ++i) {
             acdbGetAdsName(ent, arridEnt.at(i));
-            acedSSAdd(ent, ssname, ssname);  // ½«ÊµÌåÔö¼Óµ½¼¯ºÏÖĞ
+            acedSSAdd(ent, ssname, ssname);  // å°†å®ä½“å¢åŠ åˆ°é›†åˆä¸­
         }
-        acedSSSetFirst(ssname, NULL);  // °ÑÊµÌå±äÎªÑ¡ÖĞ×´Ì¬
+        acedSSSetFirst(ssname, NULL);  // æŠŠå®ä½“å˜ä¸ºé€‰ä¸­çŠ¶æ€
     }
 
     if (bHighlight) {
         for (int i = 0; i < arridEnt.length(); ++i) {
             AcDbEntityPointer pEnt(arridEnt.at(i), AcDb::kForWrite);
             if (pEnt.openStatus() != Acad::eOk) continue;
-            pEnt->highlight();  // ÉèÖÃÊµÌåÎª¸ßÁÁ×´Ì¬
+            pEnt->highlight();  // è®¾ç½®å®ä½“ä¸ºé«˜äº®çŠ¶æ€
         }
     }
 }
@@ -246,7 +246,7 @@ bool KTArxEntity::SetEntToBottom(const AcDbObjectId& id, AcDbDatabase* pDb /*= a
 }
 
 bool KTArxEntity::StretchEnt(const AcDbObjectIdArray& arrid, const AcGePoint3d& ptCorner1, const AcGePoint3d& ptCorner2, const AcGePoint3d& ptBase, const AcGePoint3d& ptTarget) {
-    AcGeVector3d stretchVec = ptTarget - ptBase;  // À­Éì¾àÀë
+    AcGeVector3d stretchVec = ptTarget - ptBase;  // æ‹‰ä¼¸è·ç¦»
     AcGeBoundBlock3d box;
     box.set(ptCorner1, AcGeVector3d((ptCorner2 - ptCorner1).x, 0, 0), AcGeVector3d(0, (ptCorner2 - ptCorner1).y, 0), AcGeVector3d(0, 0, (ptCorner2 - ptCorner1).z));
     for (int i = 0; i < arrid.length(); ++i) {
@@ -273,13 +273,13 @@ AcDbObjectIdArray KTArxEntity::GetEntIdByPt(const AcGePoint3d& pt, bool bAll /*=
     ads_name ssname;
 
     if (bAll) {
-        // µÃµ½Í¨¹ı¸ÃµãµÄËùÓĞÊµÌå
+        // å¾—åˆ°é€šè¿‡è¯¥ç‚¹çš„æ‰€æœ‰å®ä½“
         if (RTNORM != acedSSGet(_T("C"), asDblArray(pt), asDblArray(pt), NULL, ssname)) return arrid;
     } else {
-        // µÃµ½Î»ÓÚ¸Ãµã×îÉÏÃæµÄÊµÌå
+        // å¾—åˆ°ä½äºè¯¥ç‚¹æœ€ä¸Šé¢çš„å®ä½“
         if (RTNORM != acedSSGet(NULL, asDblArray(pt), NULL, NULL, ssname)) return arrid;
     }
-    // ±éÀúÑ¡Ôñ¼¯
+    // éå†é€‰æ‹©é›†
     int lLength = 0;
     acedSSLength(ssname, &lLength);
     for (int i = 0; i < lLength; i++) {

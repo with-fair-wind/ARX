@@ -1,3 +1,6 @@
+// Ensure MFC extension DLL symbols are defined in a single TU
+#include <afxdllx.h>
+
 #define szRDS _RXST("")
 
 class CObjectArxApp : public AcRxArxApp {
@@ -5,23 +8,23 @@ class CObjectArxApp : public AcRxArxApp {
     CObjectArxApp() : AcRxArxApp() {}
 
     virtual AcRx::AppRetCode On_kInitAppMsg(void* pkt) override {
-        // TODO: Èç¹ûÓĞÆäËûÒÀÀµÏî£¬ÇëÔÚÕâÀï¼ÓÔØ
+        // TODO: å¦‚æœæœ‰å…¶ä»–ä¾èµ–é¡¹ï¼Œè¯·åœ¨è¿™é‡ŒåŠ è½½
 
         // You *must* call On_kInitAppMsg here
         AcRx::AppRetCode retCode = AcRxArxApp::On_kInitAppMsg(pkt);
 
-        // TODO: ³õÊ¼»¯
+        // TODO: åˆå§‹åŒ–
 
         return (retCode);
     }
 
     virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt) override {
-        // TODO: ÍË³ö
+        // TODO: é€€å‡º
 
         // You *must* call On_kUnloadAppMsg here
         AcRx::AppRetCode retCode = AcRxArxApp::On_kUnloadAppMsg(pkt);
 
-        // TODO: Ğ¶ÔØÒÀÀµ
+        // TODO: å¸è½½ä¾èµ–
 
         return (retCode);
     }

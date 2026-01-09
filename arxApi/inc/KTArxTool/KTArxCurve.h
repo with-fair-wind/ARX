@@ -1,48 +1,50 @@
 #pragma once
 
 namespace KTArxTool {
+class KT_EXPORTARX_API KTArxEntity;
+class KT_EXPORTARX_API KTArxConvert;
 class KT_EXPORTARX_API KTArxCurve {
    public:
-    /// @brief   µÃµ½ÏòÁ¿·½ÏòÔÚÏß¶Î×óÓÒµÄÕı¸ºÖµ
-    /// @details ptBase ÑØ vecDir Æ«ÒÆºó£¬ÊÇ·ñÊôÓÚÇúÏßµÄ¡°ÕıÏò¡±
+    /// @brief   å¾—åˆ°å‘é‡æ–¹å‘åœ¨çº¿æ®µå·¦å³çš„æ­£è´Ÿå€¼
+    /// @details ptBase æ²¿ vecDir åç§»åï¼Œæ˜¯å¦å±äºæ›²çº¿çš„â€œæ­£å‘â€
     bool GetPosAngNegValue(AcDbCurve* pCurve, const AcGePoint3d& ptBase, const AcGeVector3d& vecDir);
 
-    /// @brief Æ«ÒÆÏß¶Î
+    /// @brief åç§»çº¿æ®µ
     AcArray<AcDbCurve*> OffsetCurve(AcDbCurve* pCurve, double dOffset);
-    /// @details Í¨¹ı pt ×Ô¶¯¼ÆËãÆ«ÒÆ·½Ïò
+    /// @details é€šè¿‡ pt è‡ªåŠ¨è®¡ç®—åç§»æ–¹å‘
     AcArray<AcDbCurve*> OffsetCurve(AcDbCurve* pCurve, double dOffset, const AcGePoint3d& pt, bool bOpposite = false);
 
-    /// @brief µÃµ½Ïß¶ÎÉÏ¾àÀë¸Ãµã×î½üµÄµã
+    /// @brief å¾—åˆ°çº¿æ®µä¸Šè·ç¦»è¯¥ç‚¹æœ€è¿‘çš„ç‚¹
     AcGePoint3d GetClosedPtInCurve(AcDbCurve* pCurve, const AcGePoint3d& pt);
     bool GetClosedPtInCurve(const AcDbObjectId& idCurve, const AcGePoint3d& pt, AcGePoint3d& ptClosed);
 
-    /// @brief ´ò¶ÏÏß¶Î
-    /// @details ÊäÈëµÄµã±ØĞëÒªÓÃgetClosestPointToº¯ÊıÖØĞÂ»ñµÃ
+    /// @brief æ‰“æ–­çº¿æ®µ
+    /// @details è¾“å…¥çš„ç‚¹å¿…é¡»è¦ç”¨getClosestPointToå‡½æ•°é‡æ–°è·å¾—
     AcArray<AcDbCurve*> SplitCurve(AcDbCurve* pCurve, const AcGePoint3dArray& arrSplitPt);
     AcArray<AcDbCurve*> SplitCurve(const AcDbObjectId& idCurve, const AcGePoint3dArray& arrSplitPt);
     AcArray<AcDbCurve*> SplitCurve(AcDbCurve* pCurve, const AcGePoint3d& ptSplit);
 
-    /// @brief Í¨¹ı¾àÀëÑÓÉìÏß¶Î
+    /// @brief é€šè¿‡è·ç¦»å»¶ä¼¸çº¿æ®µ
     bool ExtendCurveByDist(AcDbPolyline* pPline, bool isStartPt, double dDist);
-    /// @brief ÑÓÉìÏß¶Î
-    /// @details À©Õ¹Ò»ÌõÇúÏß(pExtend), Ê¹ÆäÓëÁíÒ»Ìõ±ß½çÇúÏß(pBorder)Ïà½»
+    /// @brief å»¶ä¼¸çº¿æ®µ
+    /// @details æ‰©å±•ä¸€æ¡æ›²çº¿(pExtend), ä½¿å…¶ä¸å¦ä¸€æ¡è¾¹ç•Œæ›²çº¿(pBorder)ç›¸äº¤
     bool ExtendCurve(AcDbCurve* pBorder, AcDbCurve* pExtend, const AcGePoint3d& ptExtend);
 
-    /// @brief ĞŞ¼ôÏß¶Î
-    /// @details ĞŞ¼ôÒ»ÌõÇúÏß(pTrim), Ê¹ÆäÓëÁíÒ»Ìõ±ß½çÇúÏß(pBorder)Ïà½», ĞŞ¼ôµã ptTrim, ĞŞ¼ôºóµÄĞÂÇúÏß pNewTrim
+    /// @brief ä¿®å‰ªçº¿æ®µ
+    /// @details ä¿®å‰ªä¸€æ¡æ›²çº¿(pTrim), ä½¿å…¶ä¸å¦ä¸€æ¡è¾¹ç•Œæ›²çº¿(pBorder)ç›¸äº¤, ä¿®å‰ªç‚¹ ptTrim, ä¿®å‰ªåçš„æ–°æ›²çº¿ pNewTrim
     bool TrimCurve(AcDbCurve* pBorder, AcDbCurve* pTrim, const AcGePoint3d& ptTrim, AcDbCurve*& pNewTrim);
 
-    /// @brief ÅĞ¶ÏµãÊÇ·ñÔÚÏß¶ÎÉÏ
+    /// @brief åˆ¤æ–­ç‚¹æ˜¯å¦åœ¨çº¿æ®µä¸Š
     bool IsPtOnCurve(const AcGePoint3d& pt, AcDbCurve* pCurve, double dTol = 0);
 
-    /// @brief µÃµ½Ô²»¡Í¹¶È
+    /// @brief å¾—åˆ°åœ†å¼§å‡¸åº¦
     double GetArcBulge(AcDbArc* pArc);
     double GetArcBulge(double dAngleStart, double dAngleEnd);
     double GetArcBulge(const AcDbObjectId& idArc);
     double GetArcBulge(AcDbCurve* pCurve);
     double GetArcBulge(const AcGeCircArc2d& geArc);
 
-    /// @brief µÃµ½¼¸ºÎÀà¶ÔÏó
+    /// @brief å¾—åˆ°å‡ ä½•ç±»å¯¹è±¡
     AcGeLine2d GetGeLine2d(AcDbLine* pLine);
     AcGeLineSeg2d GetGeLineSeg2d(AcDbLine* pLine);
     AcGeLineSeg2d GetGeLineSeg2d(const AcDbObjectId& idLine);
@@ -51,7 +53,7 @@ class KT_EXPORTARX_API KTArxCurve {
     AcGeCircArc2d GetGeCircArc2d(AcDbCircle* pCircle);
     AcGeCircArc2d GetGeCircArc2d(AcDbPolyline* pPolyline, unsigned int unIndex);
 
-    /// @brief µÃµ½½»µã
+    /// @brief å¾—åˆ°äº¤ç‚¹
     bool GetIntersectPoint(const AcGeLine2d& geLine1, const AcGeLine2d& geLine2, AcGePoint3d& ptIntersect);
     bool GetIntersectPoint(const AcGeLineSeg2d& geLine1, const AcGeLineSeg2d& geLine2, AcGePoint3d& ptIntersect);
     bool GetIntersectPoint(const AcGeLineSeg2d& geLine1, const AcGeLine2d& geLine2, AcGePoint3d& ptIntersect);
@@ -59,32 +61,32 @@ class KT_EXPORTARX_API KTArxCurve {
     bool GetIntersectPoint(const AcGeLine2d& geLine, const AcGeCircArc2d& geCircArc, int& nNum, AcGePoint3dArray& arrptIntersect);
     bool GetIntersectPoint(const AcGeLineSeg2d& geLine, const AcGeCircArc2d& geCircArc, int& nNum, AcGePoint3dArray& arrptIntersect);
 
-    /// @brief µÃµ½ÏòÁ¿ÔÚÁíÒ»ÏòÁ¿ÉÏµÄÍ¶Ó°ÏòÁ¿
-    /// @param ptBase 	    ÊäÈë»ùµã
-    /// @param vctOffset    ÊäÈë±»Í¶Ó°µÄÏòÁ¿
-    /// @param vctDirection ÊäÈë·½ÏòÏòÁ¿
+    /// @brief å¾—åˆ°å‘é‡åœ¨å¦ä¸€å‘é‡ä¸Šçš„æŠ•å½±å‘é‡
+    /// @param ptBase 	    è¾“å…¥åŸºç‚¹
+    /// @param vctOffset    è¾“å…¥è¢«æŠ•å½±çš„å‘é‡
+    /// @param vctDirection è¾“å…¥æ–¹å‘å‘é‡
     /// @return
     AcGeVector3d GetProjectVector(const AcGePoint3d& ptBase, const AcGeVector3d& vctOffset, const AcGeVector3d& vctDirection);
 
-    /// @brief µÃµ½Ïß¶ÎÄ³µãµÄÇĞÏßÏòÁ¿
+    /// @brief å¾—åˆ°çº¿æ®µæŸç‚¹çš„åˆ‡çº¿å‘é‡
     AcGeVector3d GetTangentLineVec(const AcGePoint3d& ptOnCurve, const AcDbObjectId& idCurve);
     bool GetTangentLineVecArrForPolyline(AcDbPolyline* pPline, const AcGePoint3d& pt, AcGeVector3dArray& arrvec);
     AcGeVector3dArray GetTangentLineVecArr(const AcGePoint3d& pt, AcDbCurve* pCurve);
     AcGeVector3dArray GetTangentLineVecArr(const AcGePoint3d& pt, const AcDbObjectId& idCurve);
 
-    /// @brief µÃµ½Á½Ö±ÏßµÄ½ÇÆ½·ÖÏßÏòÁ¿
-    /// @param pLine1 ÊäÈëÖ±Ïß1µÄid
-    /// @param pLine2 ÊäÈëÖ±Ïß2µÄid
-    /// @return Êä³ö½ÇÆ½·ÖÏßÏòÁ¿
+    /// @brief å¾—åˆ°ä¸¤ç›´çº¿çš„è§’å¹³åˆ†çº¿å‘é‡
+    /// @param pLine1 è¾“å…¥ç›´çº¿1çš„id
+    /// @param pLine2 è¾“å…¥ç›´çº¿2çš„id
+    /// @return è¾“å‡ºè§’å¹³åˆ†çº¿å‘é‡
     AcGeVector2d GetMidVectorOfLines(AcDbLine* pLine1, AcDbLine* pLine2);
 
-    /// @brief Í¨¹ıÏòÁ¿ºÍµãµÃµ½ºÍXÖáµÄ½Ç¶È(0~2¦Ğ)
+    /// @brief é€šè¿‡å‘é‡å’Œç‚¹å¾—åˆ°å’ŒXè½´çš„è§’åº¦(0~2Ï€)
     double GetAngle(const AcGeVector3d& vec);
 
-    /// @brief µÃµ½Ïß¶Î³¤¶È
+    /// @brief å¾—åˆ°çº¿æ®µé•¿åº¦
     double GetCurveLength(AcDbCurve* pCurve);
 
-    /// @brief µÃµ½Á½Ö±ÏßµÄ¼Ğ½Ç
+    /// @brief å¾—åˆ°ä¸¤ç›´çº¿çš„å¤¹è§’
     double GetAngleOfLines(AcDbLine* pLine1, AcDbLine* pLine2);
 
    private:

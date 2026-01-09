@@ -3,44 +3,44 @@
 namespace KTArxTool {
 class KT_EXPORTARX_API KTArxUtility {
    public:
-    /// @brief µÃµ½µ±Ç°ÏîÄ¿zrxÎÄ¼şÂ·¾¶
+    /// @brief å¾—åˆ°å½“å‰é¡¹ç›®zrxæ–‡ä»¶è·¯å¾„
     CString GetCurZrxFilePath();
 
-    /// @brief µÃµ½µ±Ç°ÏîÄ¿zrxÎÄ¼şËùÔÚÄ¿Â¼Â·¾¶
-    /// @details ·µ»ØµÄÄ¿Â¼Â·¾¶º¬´ø'\\'
+    /// @brief å¾—åˆ°å½“å‰é¡¹ç›®zrxæ–‡ä»¶æ‰€åœ¨ç›®å½•è·¯å¾„
+    /// @details è¿”å›çš„ç›®å½•è·¯å¾„å«å¸¦'\\'
     CString GetCurZrxFolderPath();
 
-    /// @brief µÃµ½Ä¿Â¼ÏÂËùÓĞµÄdwgÍ¼Ö½Â·¾¶
+    /// @brief å¾—åˆ°ç›®å½•ä¸‹æ‰€æœ‰çš„dwgå›¾çº¸è·¯å¾„
     AcArray<CString> GetAllDwgPath(LPCTSTR szFolderPath);
 
-    /// @brief µÃµ½Ä¿Â¼ÏÂËùÓĞµÄdwgÍ¼Ö½Ãû
+    /// @brief å¾—åˆ°ç›®å½•ä¸‹æ‰€æœ‰çš„dwgå›¾çº¸å
     AcArray<CString> GetAllDwgName(LPCTSTR szFolderPath);
 
-    /// @brief ¼ÓÔØcad²Ëµ¥ÎÄ¼ş
+    /// @brief åŠ è½½cadèœå•æ–‡ä»¶
     bool LoadCadMenu(const CString& strMenuFileName, const CString& strMenuGroupName);
 
-    /// @brief Ğ¶ÔØcad²Ëµ¥
+    /// @brief å¸è½½cadèœå•
     bool UnloadCadMenu(const CString& strMenuGroupName);
 
-    /// @brief ¼ÓÔØzrxÎÄ¼ş
+    /// @brief åŠ è½½zrxæ–‡ä»¶
     bool LoadZrxFile(LPCTSTR szFilePath);
 
-    /// @brief Ìí¼ÓËÑË÷Â·¾¶
+    /// @brief æ·»åŠ æœç´¢è·¯å¾„
     bool AddSearchPath(LPCTSTR szSearchDir);
 
-    /// @brief ½«ÊµÌåÌí¼Óµ½Ä£ĞÍ¿Õ¼ä
+    /// @brief å°†å®ä½“æ·»åŠ åˆ°æ¨¡å‹ç©ºé—´
     AcDbObjectId PostToModelSpace(AcDbEntity* pEnt, AcDbDatabase* pDb = acdbCurDwg());
 
-    /// @brief ¶ÔµãµÄÊı×é½øĞĞÅÅĞò
-    /// @param bVertical ÊäÈëÅÅĞò±êÊ¶	false:°´Ë®Æ½ÅÅĞò	true:°´´¹Ö±ÅÅĞò
+    /// @brief å¯¹ç‚¹çš„æ•°ç»„è¿›è¡Œæ’åº
+    /// @param bVertical è¾“å…¥æ’åºæ ‡è¯†	false:æŒ‰æ°´å¹³æ’åº	true:æŒ‰å‚ç›´æ’åº
     AcGePoint3dArray SortPtArr(const AcGePoint3dArray& PointArr, bool bVertical = false);
 
-    /// @brief ÏÔÊ¾/¹Ø±Õ½ø¶ÈÌõ
+    /// @brief æ˜¾ç¤º/å…³é—­è¿›åº¦æ¡
     void ShowProgressBar(const CString& strName, bool bStart);
 
-    /// @brief ÉèÖÃ½ø¶ÈÌõ
-    /// @param nCurIndex µ±Ç°ÏÂ±ê
-    /// @param nSum ×ÜµÄÏÂ±êÊıÁ¿
+    /// @brief è®¾ç½®è¿›åº¦æ¡
+    /// @param nCurIndex å½“å‰ä¸‹æ ‡
+    /// @param nSum æ€»çš„ä¸‹æ ‡æ•°é‡
     void SetProgressBar(int nCurIndex, int nSum);
 };
 }  // namespace KTArxTool
