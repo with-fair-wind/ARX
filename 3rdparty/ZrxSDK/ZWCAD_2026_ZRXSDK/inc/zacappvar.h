@@ -69,7 +69,7 @@ ZcDbAppSystemVariables::ZcDbAppSystemVariables()
 	: m_attdia(true),
 	m_attreq(true),
 	m_blipmode(false),
-	m_delobj(1),
+	m_delobj(3),
 	m_coords(1),
 	m_statusbar(1),
 	m_menubar(false),

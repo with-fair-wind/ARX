@@ -2490,21 +2490,21 @@ extern "C"{
 #ifndef __ZWCAD_LIBRARY_DEFINED__
 #define __ZWCAD_LIBRARY_DEFINED__
 
-typedef   DECLSPEC_UUID("EC9231C7-5A21-11E7-B72E-BC5FF42AC839") 
+typedef   DECLSPEC_UUID("EF920392-5A25-11E7-B72E-BC5FF42AC839") 
 enum ZcBoolean
     {
         zcFalse	= 0,
         zcTrue	= 1
     } 	ZcBoolean;
 
-typedef   DECLSPEC_UUID("EC9230BD-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920191-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcOnOff
     {
         zcOff	= 0,
         zcOn	= 1
     } 	ZcOnOff;
 
-typedef   DECLSPEC_UUID("EC923190-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920350-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcEntityName
     {
         zc3dFace	= 1,
@@ -2558,28 +2558,28 @@ enum ZcEntityName
         zcNurbSurface	= 51
     } 	ZcEntityName;
 
-typedef   DECLSPEC_UUID("EC92310A-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920252-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcActiveSpace
     {
         zcPaperSpace	= 0,
         zcModelSpace	= 1
     } 	ZcActiveSpace;
 
-typedef   DECLSPEC_UUID("EC923122-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920270-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcKeyboardAccelerator
     {
         zcPreferenceClassic	= 0,
         zcPreferenceCustom	= 1
     } 	ZcKeyboardAccelerator;
 
-typedef   DECLSPEC_UUID("EC923074-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920139-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPlotOrientation
     {
         zcPlotOrientationPortrait	= 0,
         zcPlotOrientationLandscape	= 1
     } 	ZcPlotOrientation;
 
-typedef   DECLSPEC_UUID("EC923109-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920251-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcColor
     {
         zcByBlock	= 0,
@@ -2593,7 +2593,7 @@ enum ZcColor
         zcByLayer	= 256
     } 	ZcColor;
 
-typedef   DECLSPEC_UUID("EC9230A2-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920170-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcAttachmentPoint
     {
         zcAttachmentPointTopLeft	= 1,
@@ -2607,7 +2607,7 @@ enum ZcAttachmentPoint
         zcAttachmentPointBottomRight	= 9
     } 	ZcAttachmentPoint;
 
-typedef   DECLSPEC_UUID("EC923021-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920076-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDrawingDirection
     {
         zcLeftToRight	= 1,
@@ -2617,7 +2617,7 @@ enum ZcDrawingDirection
         zcByStyle	= 5
     } 	ZcDrawingDirection;
 
-typedef   DECLSPEC_UUID("EC9230CE-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920205-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcLeaderType
     {
         zcLineNoArrow	= 0,
@@ -2626,7 +2626,7 @@ enum ZcLeaderType
         zcSplineWithArrow	= 3
     } 	ZcLeaderType;
 
-typedef   DECLSPEC_UUID("EC92306F-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920134-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcAttributeMode
     {
         zcAttributeModeNormal	= 0,
@@ -2638,7 +2638,7 @@ enum ZcAttributeMode
         zcAttributeModeMultipleLine	= 32
     } 	ZcAttributeMode;
 
-typedef   DECLSPEC_UUID("EC923025-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920079-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcHorizontalAlignment
     {
         zcHorizontalAlignmentLeft	= 0,
@@ -2649,7 +2649,7 @@ enum ZcHorizontalAlignment
         zcHorizontalAlignmentFit	= 5
     } 	ZcHorizontalAlignment;
 
-typedef   DECLSPEC_UUID("EC9230AE-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920179-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcVerticalAlignment
     {
         zcVerticalAlignmentBaseline	= 0,
@@ -2658,14 +2658,14 @@ enum ZcVerticalAlignment
         zcVerticalAlignmentTop	= 3
     } 	ZcVerticalAlignment;
 
-typedef   DECLSPEC_UUID("EC923134-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920283-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcTextGenerationFlag
     {
         zcTextFlagBackward	= 2,
         zcTextFlagUpsideDown	= 4
     } 	ZcTextGenerationFlag;
 
-typedef   DECLSPEC_UUID("EC9231E1-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920412-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSelect
     {
         zcSelectionSetWindow	= 0,
@@ -2678,7 +2678,7 @@ enum ZcSelect
         zcSelectionSetCrossingPolygon	= 7
     } 	ZcSelect;
 
-typedef   DECLSPEC_UUID("EC92307F-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920146-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPatternType
     {
         zcHatchPatternTypeUserDefined	= 0,
@@ -2686,7 +2686,7 @@ enum ZcPatternType
         zcHatchPatternTypeCustomDefined	= 2
     } 	ZcPatternType;
 
-typedef   DECLSPEC_UUID("EC923049-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920107-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcLoopType
     {
         zcHatchLoopTypeDefault	= 0,
@@ -2696,7 +2696,7 @@ enum ZcLoopType
         zcHatchLoopTypeTextbox	= 8
     } 	ZcLoopType;
 
-typedef   DECLSPEC_UUID("EC9230AA-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920175-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcHatchStyle
     {
         zcHatchStyleNormal	= 0,
@@ -2704,7 +2704,7 @@ enum ZcHatchStyle
         zcHatchStyleIgnore	= 2
     } 	ZcHatchStyle;
 
-typedef   DECLSPEC_UUID("EC9230C8-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920201-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPolylineType
     {
         zcSimplePoly	= 0,
@@ -2713,7 +2713,7 @@ enum ZcPolylineType
         zcCubicSplinePoly	= 3
     } 	ZcPolylineType;
 
-typedef   DECLSPEC_UUID("EC922FD7-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920018-5A25-11E7-B72E-BC5FF42AC839")
 enum Zc3DPolylineType
     {
         zcSimple3DPoly	= 0,
@@ -2721,7 +2721,7 @@ enum Zc3DPolylineType
         zcCubicSpline3DPoly	= 2
     } 	Zc3DPolylineType;
 
-typedef   DECLSPEC_UUID("EC92301A-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920070-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcViewportSplitType
     {
         zcViewport2Horizontal	= 0,
@@ -2735,14 +2735,14 @@ enum ZcViewportSplitType
         zcViewport4	= 8
     } 	ZcViewportSplitType;
 
-typedef   DECLSPEC_UUID("EC9231E2-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920413-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcRegenType
     {
         zcActiveViewport	= 0,
         zcAllViewports	= 1
     } 	ZcRegenType;
 
-typedef   DECLSPEC_UUID("EC923011-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920062-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcBooleanType
     {
         zcUnion	= 0,
@@ -2750,7 +2750,7 @@ enum ZcBooleanType
         zcSubtraction	= 2
     } 	ZcBooleanType;
 
-typedef   DECLSPEC_UUID("EC92311C-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920265-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcExtendOption
     {
         zcExtendNone	= 0,
@@ -2759,7 +2759,7 @@ enum ZcExtendOption
         zcExtendBoth	= 3
     } 	ZcExtendOption;
 
-typedef   DECLSPEC_UUID("EC9231C1-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920386-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcAngleUnits
     {
         zcDegrees	= 0,
@@ -2768,7 +2768,7 @@ enum ZcAngleUnits
         zcRadians	= 3
     } 	ZcAngleUnits;
 
-typedef   DECLSPEC_UUID("EC923178-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920331-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcUnits
     {
         zcDefaultUnits	= -1,
@@ -2779,7 +2779,7 @@ enum ZcUnits
         zcFractional	= 5
     } 	ZcUnits;
 
-typedef   DECLSPEC_UUID("EC922FC8-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920010-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCoordinateSystem
     {
         zcWorld	= 0,
@@ -2789,14 +2789,14 @@ enum ZcCoordinateSystem
         zcOCS	= 4
     } 	ZcCoordinateSystem;
 
-typedef   DECLSPEC_UUID("EC92317C-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920335-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcMeasurementUnits
     {
         zcEnglish	= 0,
         zcMetric	= 1
     } 	ZcMeasurementUnits;
 
-typedef   DECLSPEC_UUID("EC923170-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920325-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcXRefDemandLoad
     {
         zcDemandLoadDisabled	= 0,
@@ -2804,14 +2804,14 @@ enum ZcXRefDemandLoad
         zcDemandLoadEnabledWithCopy	= 2
     } 	ZcXRefDemandLoad;
 
-typedef   DECLSPEC_UUID("EC922FCF-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920014-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPreviewMode
     {
         zcPartialPreview	= 0,
         zcFullPreview	= 1
     } 	ZcPreviewMode;
 
-typedef   DECLSPEC_UUID("EC9230D3-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920208-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPolymeshType
     {
         zcSimpleMesh	= 0,
@@ -2820,7 +2820,7 @@ enum ZcPolymeshType
         zcBezierSurfaceMesh	= 8
     } 	ZcPolymeshType;
 
-typedef   DECLSPEC_UUID("EC9231A9-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920371-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcZoomScaleType
     {
         zcZoomScaledAbsolute	= 0,
@@ -2828,7 +2828,7 @@ enum ZcZoomScaleType
         zcZoomScaledRelativePSpace	= 2
     } 	ZcZoomScaleType;
 
-typedef   DECLSPEC_UUID("EC92305D-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920124-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDragDisplayMode
     {
         zcDragDoNotDisplay	= 0,
@@ -2836,7 +2836,7 @@ enum ZcDragDisplayMode
         zcDragDisplayAutomatically	= 2
     } 	ZcDragDisplayMode;
 
-typedef   DECLSPEC_UUID("EC923163-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920317-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcZRXDemandLoad
     {
         zcDemanLoadDisable	= 0,
@@ -2844,7 +2844,7 @@ enum ZcZRXDemandLoad
         zcDemandLoadCmdInvoke	= 2
     } 	ZcZRXDemandLoad;
 
-typedef   DECLSPEC_UUID("EC9231BC-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920384-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcTextFontStyle
     {
         zcFontRegular	= 0,
@@ -2853,7 +2853,7 @@ enum ZcTextFontStyle
         zcFontBoldItalic	= 3
     } 	ZcTextFontStyle;
 
-typedef   DECLSPEC_UUID("EC9230F9-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920240-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcProxyImage
     {
         zcProxyNotShow	= 0,
@@ -2861,7 +2861,7 @@ enum ZcProxyImage
         zcProxyBoundingBox	= 2
     } 	ZcProxyImage;
 
-typedef   DECLSPEC_UUID("EC9230D9-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920214-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcKeyboardPriority
     {
         zcKeyboardRunningObjSnap	= 0,
@@ -2917,21 +2917,21 @@ enum ZcKeyboardPriority
 
 #define	zcSwedish	( "sv" )
 
-typedef   DECLSPEC_UUID("EC923059-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920120-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcMenuGroupType
     {
         zcBaseMenuGroup	= 0,
         zcPartialMenuGroup	= 1
     } 	ZcMenuGroupType;
 
-typedef   DECLSPEC_UUID("EC923183-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920339-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcMenuFileType
     {
         zcMenuFileCompiled	= 0,
         zcMenuFileSource	= 1
     } 	ZcMenuFileType;
 
-typedef   DECLSPEC_UUID("EC9230FF-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920244-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcMenuItemType
     {
         zcMenuItem	= 0,
@@ -2939,7 +2939,7 @@ enum ZcMenuItemType
         zcMenuSubMenu	= 2
     } 	ZcMenuItemType;
 
-typedef   DECLSPEC_UUID("EC923184-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920340-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcToolbarItemType
     {
         zcToolbarButton	= 0,
@@ -2948,7 +2948,7 @@ enum ZcToolbarItemType
         zcToolbarFlyout	= 3
     } 	ZcToolbarItemType;
 
-typedef   DECLSPEC_UUID("EC9230CB-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920203-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcToolbarDockStatus
     {
         zcToolbarDockTop	= 0,
@@ -2958,7 +2958,7 @@ enum ZcToolbarDockStatus
         zcToolbarFloating	= 4
     } 	ZcToolbarDockStatus;
 
-typedef   DECLSPEC_UUID("EC92305F-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920126-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcLineWeight
     {
         zcLnWt000	= 0,
@@ -2990,7 +2990,7 @@ enum ZcLineWeight
         zcLnWtByLwDefault	= -3
     } 	ZcLineWeight;
 
-typedef   DECLSPEC_UUID("EC9231EF-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920424-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcWindowState
     {
         zcNorm	= 1,
@@ -2998,7 +2998,7 @@ enum ZcWindowState
         zcMax	= ( zcMin + 1 )
     } 	ZcWindowState;
 
-typedef   DECLSPEC_UUID("EC923141-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920290-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPlotPaperUnits
     {
         zcInches	= 0,
@@ -3006,7 +3006,7 @@ enum ZcPlotPaperUnits
         zcPixels	= ( zcMillimeters + 1 )
     } 	ZcPlotPaperUnits;
 
-typedef   DECLSPEC_UUID("EC923041-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920101-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPlotRotation
     {
         zc0degrees	= 0,
@@ -3015,7 +3015,7 @@ enum ZcPlotRotation
         zc270degrees	= ( zc180degrees + 1 )
     } 	ZcPlotRotation;
 
-typedef   DECLSPEC_UUID("EC92302E-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920087-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPlotType
     {
         zcDisplay	= 0,
@@ -3026,7 +3026,7 @@ enum ZcPlotType
         zcLayout	= ( zcWindow + 1 )
     } 	ZcPlotType;
 
-typedef   DECLSPEC_UUID("EC923010-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920061-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPlotScale
     {
         zcScaleToFit	= 0,
@@ -3064,7 +3064,7 @@ enum ZcPlotScale
         zc100_1	= ( zc10_1 + 1 )
     } 	ZcPlotScale;
 
-typedef   DECLSPEC_UUID("EC9231B5-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920379-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcAlignment
     {
         zcAlignmentLeft	= 0,
@@ -3084,32 +3084,32 @@ enum ZcAlignment
         zcAlignmentBottomRight	= ( zcAlignmentBottomCenter + 1 )
     } 	ZcAlignment;
 
-typedef   DECLSPEC_UUID("EC9230FC-5A21-11E7-B72E-BC5FF42AC839") ZcColor ZCAD_COLOR;
+typedef   DECLSPEC_UUID("EF920243-5A25-11E7-B72E-BC5FF42AC839") ZcColor ZCAD_COLOR;
 
-typedef   DECLSPEC_UUID("EC922FFA-5A21-11E7-B72E-BC5FF42AC839") BSTR ZCAD_LAYER;
+typedef   DECLSPEC_UUID("EF920045-5A25-11E7-B72E-BC5FF42AC839") BSTR ZCAD_LAYER;
 
-typedef   DECLSPEC_UUID("EC923104-5A21-11E7-B72E-BC5FF42AC839") BSTR ZCAD_LTYPE;
+typedef   DECLSPEC_UUID("EF920247-5A25-11E7-B72E-BC5FF42AC839") BSTR ZCAD_LTYPE;
 
-typedef   DECLSPEC_UUID("EC923197-5A21-11E7-B72E-BC5FF42AC839") long ZCAD_NULL;
+typedef   DECLSPEC_UUID("EF920354-5A25-11E7-B72E-BC5FF42AC839") long ZCAD_NULL;
 
-typedef   DECLSPEC_UUID("EC92311F-5A21-11E7-B72E-BC5FF42AC839") double ZCAD_DISTANCE;
+typedef   DECLSPEC_UUID("EF920267-5A25-11E7-B72E-BC5FF42AC839") double ZCAD_DISTANCE;
 
-typedef   DECLSPEC_UUID("EC9230BE-5A21-11E7-B72E-BC5FF42AC839") double ZCAD_ANGLE;
+typedef   DECLSPEC_UUID("EF920192-5A25-11E7-B72E-BC5FF42AC839") double ZCAD_ANGLE;
 
-typedef   DECLSPEC_UUID("EC9231C6-5A21-11E7-B72E-BC5FF42AC839") ZcLineWeight ZCAD_LWEIGHT;
+typedef   DECLSPEC_UUID("EF920391-5A25-11E7-B72E-BC5FF42AC839") ZcLineWeight ZCAD_LWEIGHT;
 
-typedef   DECLSPEC_UUID("EC922FD5-5A21-11E7-B72E-BC5FF42AC839") double ZCAD_NOUNITS;
+typedef   DECLSPEC_UUID("EF920017-5A25-11E7-B72E-BC5FF42AC839") double ZCAD_NOUNITS;
 
-typedef   DECLSPEC_UUID("EC923037-5A21-11E7-B72E-BC5FF42AC839") VARIANT ZCAD_POINT;
+typedef   DECLSPEC_UUID("EF920094-5A25-11E7-B72E-BC5FF42AC839") VARIANT ZCAD_POINT;
 
-typedef   DECLSPEC_UUID("EC922FFD-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920048-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcLineSpacingStyle
     {
         zcLineSpacingStyleAtLeast	= 1,
         zcLineSpacingStyleExactly	= 2
     } 	ZcLineSpacingStyle;
 
-typedef   DECLSPEC_UUID("EC9230FA-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920241-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimPrecision
     {
         zcDimPrecisionZero	= 0,
@@ -3123,7 +3123,7 @@ enum ZcDimPrecision
         zcDimPrecisionEight	= ( zcDimPrecisionSeven + 1 )
     } 	ZcDimPrecision;
 
-typedef   DECLSPEC_UUID("EC92300E-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920059-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimUnits
     {
         zcDimScientific	= 1,
@@ -3136,7 +3136,7 @@ enum ZcDimUnits
         zcDimWindowsDesktop	= ( zcDimFractional + 1 )
     } 	ZcDimUnits;
 
-typedef   DECLSPEC_UUID("EC922FE7-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920030-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimLUnits
     {
         zcDimLScientific	= 1,
@@ -3147,7 +3147,7 @@ enum ZcDimLUnits
         zcDimLWindowsDesktop	= ( zcDimLFractional + 1 )
     } 	ZcDimLUnits;
 
-typedef   DECLSPEC_UUID("EC923080-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920147-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimArrowheadType
     {
         zcArrowDefault	= 0,
@@ -3173,7 +3173,7 @@ enum ZcDimArrowheadType
         zcArrowUserDefined	= 20
     } 	ZcDimArrowheadType;
 
-typedef   DECLSPEC_UUID("EC923001-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920051-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimCenterType
     {
         zcCenterMark	= 0,
@@ -3181,7 +3181,7 @@ enum ZcDimCenterType
         zcCenterNone	= ( zcCenterLine + 1 )
     } 	ZcDimCenterType;
 
-typedef   DECLSPEC_UUID("EC923057-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920118-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimFit
     {
         zcTextAndArrows	= 0,
@@ -3190,7 +3190,7 @@ enum ZcDimFit
         zcBestFit	= ( zcTextOnly + 1 )
     } 	ZcDimFit;
 
-typedef   DECLSPEC_UUID("EC9231EA-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920421-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimFractionType
     {
         zcHorizontal	= 0,
@@ -3198,7 +3198,7 @@ enum ZcDimFractionType
         zcNotStacked	= ( zcDiagonal + 1 )
     } 	ZcDimFractionType;
 
-typedef   DECLSPEC_UUID("EC923135-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920284-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimArcLengthSymbol
     {
         zcSymInFront	= 0,
@@ -3206,7 +3206,7 @@ enum ZcDimArcLengthSymbol
         zcSymNone	= ( zcSymAbove + 1 )
     } 	ZcDimArcLengthSymbol;
 
-typedef   DECLSPEC_UUID("EC92315C-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920311-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimHorizontalJustification
     {
         zcHorzCentered	= 0,
@@ -3216,7 +3216,7 @@ enum ZcDimHorizontalJustification
         zcOverSecondExtension	= ( zcOverFirstExtension + 1 )
     } 	ZcDimHorizontalJustification;
 
-typedef   DECLSPEC_UUID("EC9231DA-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920406-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimVerticalJustification
     {
         zcVertCentered	= 0,
@@ -3226,7 +3226,7 @@ enum ZcDimVerticalJustification
         zcUnder	= ( zcJIS + 1 )
     } 	ZcDimVerticalJustification;
 
-typedef   DECLSPEC_UUID("EC923054-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920116-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimTextMovement
     {
         zcDimLineWithText	= 0,
@@ -3234,7 +3234,7 @@ enum ZcDimTextMovement
         zcMoveTextNoLeader	= ( zcMoveTextAddLeader + 1 )
     } 	ZcDimTextMovement;
 
-typedef   DECLSPEC_UUID("EC9230B6-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920186-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimToleranceMethod
     {
         zcTolNone	= 0,
@@ -3244,7 +3244,7 @@ enum ZcDimToleranceMethod
         zcTolBasic	= ( zcTolLimits + 1 )
     } 	ZcDimToleranceMethod;
 
-typedef   DECLSPEC_UUID("EC923031-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920089-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDimToleranceJustify
     {
         zcTolBottom	= 0,
@@ -3252,7 +3252,7 @@ enum ZcDimToleranceJustify
         zcTolTop	= ( zcTolMiddle + 1 )
     } 	ZcDimToleranceJustify;
 
-typedef   DECLSPEC_UUID("EC922FD8-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920019-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcViewportScale
     {
         zcVpScaleToFit	= 0,
@@ -3292,7 +3292,7 @@ enum ZcViewportScale
         zcVp1ft_1ft	= ( zcVp6in_1ft + 1 )
     } 	ZcViewportScale;
 
-typedef   DECLSPEC_UUID("EC923022-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920077-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcISOPenWidth
     {
         zcPenWidth013	= 13,
@@ -3307,7 +3307,7 @@ enum ZcISOPenWidth
         zcPenWidthUnk	= -1
     } 	ZcISOPenWidth;
 
-typedef   DECLSPEC_UUID("EC92301E-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920074-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSaveAsType
     {
         zcUnknown	= -1,
@@ -3343,7 +3343,7 @@ enum ZcSaveAsType
         zcR18_Template	= zc2004_Template
     } 	ZcSaveAsType;
 
-typedef   DECLSPEC_UUID("EC92314C-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920298-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPrinterSpoolAlert
     {
         zcPrinterAlwaysAlert	= 0,
@@ -3352,14 +3352,14 @@ enum ZcPrinterSpoolAlert
         zcPrinterNeverAlert	= ( zcPrinterNeverAlertLogOnce + 1 )
     } 	ZcPrinterSpoolAlert;
 
-typedef   DECLSPEC_UUID("EC92314E-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920300-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPlotPolicyForNewDwgs
     {
         zcPolicyNewDefault	= 0,
         zcPolicyNewLegacy	= ( zcPolicyNewDefault + 1 )
     } 	ZcPlotPolicyForNewDwgs;
 
-typedef   DECLSPEC_UUID("EC922FE8-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920031-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPlotPolicyForLegacyDwgs
     {
         zcPolicyLegacyDefault	= 0,
@@ -3367,7 +3367,7 @@ enum ZcPlotPolicyForLegacyDwgs
         zcPolicyLegacyLegacy	= ( zcPolicyLegacyQuery + 1 )
     } 	ZcPlotPolicyForLegacyDwgs;
 
-typedef   DECLSPEC_UUID("EC9231BA-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920382-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcOleQuality
     {
         zcOQLineArt	= 0,
@@ -3377,14 +3377,14 @@ enum ZcOleQuality
         zcOQHighPhoto	= ( zcOQPhoto + 1 )
     } 	ZcOleQuality;
 
-typedef   DECLSPEC_UUID("EC923169-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920321-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcLoadPalette
     {
         zcPaletteByDrawing	= 0,
         zcPaletteBySession	= ( zcPaletteByDrawing + 1 )
     } 	ZcLoadPalette;
 
-typedef   DECLSPEC_UUID("EC923121-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920269-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcInsertUnits
     {
         zcInsertUnitsUnitless	= 0,
@@ -3414,49 +3414,49 @@ enum ZcInsertUnits
 		zcInsertUnitsUSSurveyMile	= ( zcInsertUnitsUSSurveyYard + 1 ) 
     } 	ZcInsertUnits;
 
-typedef   DECLSPEC_UUID("EC923168-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920320-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcAlignmentPointAcquisition
     {
         zcAlignPntAcquisitionAutomatic	= 0,
         zcAlignPntAcquisitionShiftToAcquire	= ( zcAlignPntAcquisitionAutomatic + 1 )
     } 	ZcAlignmentPointAcquisition;
 
-typedef   DECLSPEC_UUID("EC9230EA-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920226-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcInsertUnitsAction
     {
         zcInsertUnitsPrompt	= 0,
         zcInsertUnitsAutoAssign	= ( zcInsertUnitsPrompt + 1 )
     } 	ZcInsertUnitsAction;
 
-typedef   DECLSPEC_UUID("EC923132-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920281-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPlotPolicy
     {
         zcPolicyNamed	= 0,
         zcPolicyLegacy	= ( zcPolicyNamed + 1 )
     } 	ZcPlotPolicy;
 
-typedef   DECLSPEC_UUID("EC923076-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920141-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDrawingAreaShortCutMenu
     {
         zcNoDrawingAreaShortCutMenu	= 0,
         zcUseDefaultDrawingAreaShortCutMenu	= ( zcNoDrawingAreaShortCutMenu + 1 )
     } 	ZcDrawingAreaShortCutMenu;
 
-typedef   DECLSPEC_UUID("EC923161-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920315-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDrawingAreaSCMDefault
     {
         zcRepeatLastCommand	= 0,
         zcSCM	= ( zcRepeatLastCommand + 1 )
     } 	ZcDrawingAreaSCMDefault;
 
-typedef   DECLSPEC_UUID("EC923083-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920150-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDrawingAreaSCMEdit
     {
         zcEdRepeatLastCommand	= 0,
         zcEdSCM	= ( zcEdRepeatLastCommand + 1 )
     } 	ZcDrawingAreaSCMEdit;
 
-typedef   DECLSPEC_UUID("EC9230E0-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920219-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDrawingAreaSCMCommand
     {
         zcEnter	= 0,
@@ -3464,7 +3464,7 @@ enum ZcDrawingAreaSCMCommand
         zcEnableSCM	= ( zcEnableSCMOptions + 1 )
     } 	ZcDrawingAreaSCMCommand;
 
-typedef   DECLSPEC_UUID("EC9230C7-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920200-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcLayerStateMask
     {
         zcLsNone	= 0,
@@ -3480,7 +3480,7 @@ enum ZcLayerStateMask
         zcLsAll	= 0xffff
     } 	ZcLayerStateMask;
 
-typedef   DECLSPEC_UUID("EC92317B-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920334-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcShadePlot
     {
         zcShadePlotAsDisplayed	= 0,
@@ -3489,28 +3489,28 @@ enum ZcShadePlot
         zcShadePlotRendered	= ( zcShadePlotHidden + 1 )
     } 	ZcShadePlot;
 
-typedef   DECLSPEC_UUID("EC92309E-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920168-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcHatchObjectType
     {
         zcHatchObject	= 0,
         zcGradientObject	= 1
     } 	ZcHatchObjectType;
 
-typedef   DECLSPEC_UUID("EC92318A-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920345-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcGradientPatternType
     {
         zcPreDefinedGradient	= 0,
         zcUserDefinedGradient	= 1
     } 	ZcGradientPatternType;
 
-typedef   DECLSPEC_UUID("EC9231C9-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920394-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcTableDirection
     {
         zcTableTopToBottom	= 0,
         zcTableBottomToTop	= 1
     } 	ZcTableDirection;
 
-typedef   DECLSPEC_UUID("EC9230ED-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920229-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCellAlignment
     {
         zcTopLeft	= 1,
@@ -3524,7 +3524,7 @@ enum ZcCellAlignment
         zcBottomRight	= 9
     } 	ZcCellAlignment;
 
-typedef   DECLSPEC_UUID("EC9230F4-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920235-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcRowType
     {
         zcUnknownRow	= 0,
@@ -3533,7 +3533,7 @@ enum ZcRowType
         zcHeaderRow	= 4
     } 	ZcRowType;
 
-typedef   DECLSPEC_UUID("EC9231A4-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920366-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcValueDataType
     {
         zcUnknownDataType	= 0,
@@ -3549,7 +3549,7 @@ enum ZcValueDataType
         zcGeneral	= ( 0x1 << 9 )
     } 	ZcValueDataType;
 
-typedef   DECLSPEC_UUID("EC922FF2-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920038-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcValueUnitType
     {
         zcUnitless	= 0,
@@ -3559,7 +3559,7 @@ enum ZcValueUnitType
         zcUnitVolume	= ( 0x1 << 3 )
     } 	ZcValueUnitType;
 
-typedef   DECLSPEC_UUID("EC923070-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920135-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcParseOption
     {
         zcParseOptionNone	= 0,
@@ -3567,7 +3567,7 @@ enum ZcParseOption
         zcPreserveMtextFormat	= ( 0x1 << 1 )
     } 	ZcParseOption;
 
-typedef   DECLSPEC_UUID("EC92313E-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920289-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcFormatOption
     {
         kFormatOptionNone	= 0,
@@ -3577,7 +3577,7 @@ enum ZcFormatOption
         zcIgnoreMtextFormat	= ( 0x1 << 3 )
     } 	ZcFormatOption;
 
-typedef   DECLSPEC_UUID("EC92311A-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920263-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcGridLineType
     {
         zcInvalidGridLine	= 0,
@@ -3589,7 +3589,7 @@ enum ZcGridLineType
         zcVertRight	= 0x20
     } 	ZcGridLineType;
 
-typedef   DECLSPEC_UUID("EC9231C2-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920387-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCellType
     {
         zcUnknownCell	= 0,
@@ -3597,7 +3597,7 @@ enum ZcCellType
         zcBlockCell	= 2
     } 	ZcCellType;
 
-typedef   DECLSPEC_UUID("EC9230AD-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920178-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCellEdgeMask
     {
         zcTopMask	= 1,
@@ -3606,7 +3606,7 @@ enum ZcCellEdgeMask
         zcLeftMask	= 8
     } 	ZcCellEdgeMask;
 
-typedef   DECLSPEC_UUID("EC922FF5-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920041-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcRotationAngle
     {
         zcDegreesUnknown	= -1,
@@ -3616,7 +3616,7 @@ enum ZcRotationAngle
         zcDegrees270	= 3
     } 	ZcRotationAngle;
 
-typedef   DECLSPEC_UUID("EC9230EE-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920230-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcMergeCellStyleOption
     {
         zcMergeCellStyleNone	= 0,
@@ -3626,14 +3626,14 @@ enum ZcMergeCellStyleOption
         zcMergeCellStyleIgnoreNewStyles	= 0x8
     } 	ZcMergeCellStyleOption;
 
-typedef   DECLSPEC_UUID("EC92318E-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920348-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSelectType
     {
         zcTableSelectWindow	= 1,
         zcTableSelectCrossing	= 2
     } 	ZcSelectType;
 
-typedef   DECLSPEC_UUID("EC92314A-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920296-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcOleType
     {
         zcOTLink	= 1,
@@ -3641,7 +3641,7 @@ enum ZcOleType
         zcOTStatic	= 3
     } 	ZcOleType;
 
-typedef   DECLSPEC_UUID("EC923084-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920151-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcOlePlotQuality
     {
         zcOPQMonochrome	= 0,
@@ -3649,7 +3649,7 @@ enum ZcOlePlotQuality
         zcOPQHighGraphics	= ( zcOPQLowGraphics + 1 )
     } 	ZcOlePlotQuality;
 
-typedef   DECLSPEC_UUID("EC9230D8-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920213-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcTableStyleOverrides
     {
         zcTitleSuppressed	= 1,
@@ -3753,7 +3753,7 @@ enum ZcTableStyleOverrides
         zcCellDataType	= 148
     } 	ZcTableStyleOverrides;
 
-typedef   DECLSPEC_UUID("EC92302C-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920085-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcMLineJustification
     {
         zcTop	= 0,
@@ -3761,14 +3761,14 @@ enum ZcMLineJustification
         zcBottom	= 2
     } 	ZcMLineJustification;
 
-typedef   DECLSPEC_UUID("EC922FC4-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920007-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcBlockScaling
     {
         zcAny	= 0,
         zcUniform	= 1
     } 	ZcBlockScaling;
 
-typedef   DECLSPEC_UUID("EC92316F-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920324-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDynamicBlockReferencePropertyUnitsType
     {
         zcNoUnits	= 0,
@@ -3777,7 +3777,7 @@ enum ZcDynamicBlockReferencePropertyUnitsType
         zcArea	= 3
     } 	ZcDynamicBlockReferencePropertyUnitsType;
 
-typedef   DECLSPEC_UUID("EC92301F-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920075-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSectionState
     {
         zcSectionStatePlane	= ( 0x1 << 0 ) ,
@@ -3794,7 +3794,7 @@ typedef   DECLSPEC_UUID("EC91301F-5A21-11E7-B72E-BC5FF42AC839")
 	zcSectionState2Volume	= ( 0x1 << 3 ) 
 } 	ZcSectionState2;
 
-typedef   DECLSPEC_UUID("EC9231D8-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920404-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSectionSubItem
     {
         zcSectionSubItemkNone	= 0,
@@ -3808,7 +3808,7 @@ enum ZcSectionSubItem
         zcSectionSubItemVerticalLineBottom	= ( 0x1 << 7 )
     } 	ZcSectionSubItem;
 
-typedef   DECLSPEC_UUID("EC92305C-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920123-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSectionType
     {
         zcSectionTypeLiveSection	= ( 0x1 << 0 ) ,
@@ -3816,7 +3816,7 @@ enum ZcSectionType
         zcSectionType3dSection	= ( 0x1 << 2 )
     } 	ZcSectionType;
 
-typedef   DECLSPEC_UUID("EC9230DB-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920215-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSectionGeneration
     {
         zcSectionGenerationSourceAllObjects	= ( 0x1 << 0 ) ,
@@ -3826,7 +3826,7 @@ enum ZcSectionGeneration
         zcSectionGenerationDestinationFile	= ( 0x1 << 6 )
     } 	ZcSectionGeneration;
 
-typedef   DECLSPEC_UUID("EC9231C8-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920393-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcHelixConstrainType
     {
         zcTurnHeight	= 0,
@@ -3834,7 +3834,7 @@ enum ZcHelixConstrainType
         zcHeight	= 2
     } 	ZcHelixConstrainType;
 
-typedef   DECLSPEC_UUID("EC923154-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920303-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcShadowDisplayType
     {
         zcCastsAndReceivesShadows	= 0,
@@ -3843,7 +3843,7 @@ enum ZcShadowDisplayType
         zcIgnoreShadows	= 3
     } 	ZcShadowDisplayType;
 
-typedef   DECLSPEC_UUID("EC9230E2-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920221-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcLoftedSurfaceNormalType
     {
         zcRuled	= 0,
@@ -3855,21 +3855,21 @@ enum ZcLoftedSurfaceNormalType
         zcUseDraftAngles	= 6
     } 	ZcLoftedSurfaceNormalType;
 
-typedef   DECLSPEC_UUID("EC9231A6-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920368-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcHelixTwistType
     {
         zcCCW	= 0,
         zcCW	= 1
     } 	ZcHelixTwistType;
 
-typedef   DECLSPEC_UUID("EC92303B-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920097-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcUnderlayLayerOverrideType
     {
         zcNoOverrides	= 0,
         zcApplied	= 1
     } 	ZcUnderlayLayerOverrideType;
 
-typedef   DECLSPEC_UUID("EC9230CC-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920204-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcTableFlowDirection
     {
         zcTableFlowRight	= 0x1,
@@ -3877,7 +3877,7 @@ enum ZcTableFlowDirection
         zcTableFlowLeft	= 0x4
     } 	ZcTableFlowDirection;
 
-typedef   DECLSPEC_UUID("EC922FE6-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920029-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCellMargin
     {
         zcCellMarginTop	= 0x1,
@@ -3888,7 +3888,7 @@ enum ZcCellMargin
         zcCellMarginVertSpacing	= 0x20
     } 	ZcCellMargin;
 
-typedef   DECLSPEC_UUID("EC923033-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920091-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCellContentLayout
     {
         zcCellContentLayoutFlow	= 0x1,
@@ -3896,7 +3896,7 @@ enum ZcCellContentLayout
         zcCellContentLayoutStackedVertical	= 0x4
     } 	ZcCellContentLayout;
 
-typedef   DECLSPEC_UUID("EC923071-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920136-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCellProperty
     {
         zcInvalidCellProperty	= 0,
@@ -3925,21 +3925,21 @@ enum ZcCellProperty
         zcAllCellProperties	= (( (( (( (( (( (( (( (( (( zcLock | zcDataType )  | zcDataFormat )  | zcRotation )  | zcScale )  | zcAlignmentProperty )  | zcContentColor )  | zcBackgroundColor )  | zcTextStyle )  | zcTextHeight )  | zcMarginLeft )  | zcMarginTop )  | zcMarginRight )  | zcMarginBottom )  | zcEnableBackgroundColor )  | zcAutoScale )  | zcMergeAll )  | zcFlowDirBtoT )  | zcContentLayout )
     } 	ZcCellProperty;
 
-typedef   DECLSPEC_UUID("EC9231EE-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920423-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcGridLineStyle
     {
         zcGridLineStyleSingle	= 1,
         zcGridLineStyleDouble	= 2
     } 	ZcGridLineStyle;
 
-typedef   DECLSPEC_UUID("EC9231F5-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920428-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDataLinkUpdateDirection
     {
         zcUpdateDataFromSource	= 0x1,
         zcUpdateSourceFromData	= 0x2
     } 	ZcDataLinkUpdateDirection;
 
-typedef   DECLSPEC_UUID("EC922FEB-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920033-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDataLinkUpdateOption
     {
         zcUpdateOptionNone	= 0,
@@ -3949,7 +3949,7 @@ enum ZcDataLinkUpdateOption
         zcUpdateOptionIncludeXrefs	= 0x100000
     } 	ZcDataLinkUpdateOption;
 
-typedef   DECLSPEC_UUID("EC923026-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920080-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCellContentType
     {
         zcCellContentTypeUnknown	= 0,
@@ -3958,7 +3958,7 @@ enum ZcCellContentType
         zcCellContentTypeBlock	= ( 0x1 << 2 )
     } 	ZcCellContentType;
 
-typedef   DECLSPEC_UUID("EC923130-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920279-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCellState
     {
         zcCellStateNone	= 0,
@@ -3971,14 +3971,14 @@ enum ZcCellState
         zcCellStateFormatModified	= 0x40
     } 	ZcCellState;
 
-typedef   DECLSPEC_UUID("EC9231A0-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920362-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcCellOption
     {
         kCellOptionNone	= 0,
         kInheritCellFormat	= 0x1
     } 	ZcCellOption;
 
-typedef   DECLSPEC_UUID("EC9230DC-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920216-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcTextAttachmentType
     {
         zcAttachmentTopOfTop	= 0,
@@ -3992,7 +3992,7 @@ enum ZcTextAttachmentType
         zcAttachmentAllLine	= 8
     } 	ZcTextAttachmentType;
 
-typedef   DECLSPEC_UUID("EC9230BB-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920189-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcMLeaderType
     {
         zcStraightLeader	= 1,
@@ -4000,7 +4000,7 @@ enum ZcMLeaderType
         zcInVisibleLeader	= 0
     } 	ZcMLeaderType;
 
-typedef   DECLSPEC_UUID("EC923143-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920292-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcMLeaderContentType
     {
         zcNoneContent	= 0,
@@ -4008,7 +4008,7 @@ enum ZcMLeaderContentType
         zcMTextContent	= 2
     } 	ZcMLeaderContentType;
 
-typedef   DECLSPEC_UUID("EC922FD1-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920015-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcTextAlignmentType
     {
         zcLeftAlignment	= 0,
@@ -4016,7 +4016,7 @@ enum ZcTextAlignmentType
         zcRightAlignment	= 2
     } 	ZcTextAlignmentType;
 
-typedef   DECLSPEC_UUID("EC923082-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920149-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcTextAngleType
     {
         zcInsertAngle	= 0,
@@ -4024,14 +4024,14 @@ enum ZcTextAngleType
         zcAlwaysRightReadingAngle	= 2
     } 	ZcTextAngleType;
 
-typedef   DECLSPEC_UUID("EC92312E-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920277-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcBlockConnectionType
     {
         zcConnectExtents	= 0,
         zcConnectBase	= 1
     } 	ZcBlockConnectionType;
 
-typedef   DECLSPEC_UUID("EC923018-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920068-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcPredefBlockType
     {
         zcBlockImperial	= 0,
@@ -4043,21 +4043,21 @@ enum ZcPredefBlockType
         zcBlockUserDefined	= 6
     } 	ZcPredefBlockType;
 
-typedef   DECLSPEC_UUID("EC923062-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920128-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDrawLeaderOrderType
     {
         zcDrawLeaderHeadFirst	= 0,
         zcDrawLeaderTailFirst	= 1
     } 	ZcDrawLeaderOrderType;
 
-typedef   DECLSPEC_UUID("EC923051-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920115-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcDrawMLeaderOrderType
     {
         zcDrawContentFirst	= 0,
         zcDrawLeaderFirst	= 1
     } 	ZcDrawMLeaderOrderType;
 
-typedef   DECLSPEC_UUID("EC92303C-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920098-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSegmentAngleType
     {
         zcDegreesAny	= 0,
@@ -4069,21 +4069,21 @@ enum ZcSegmentAngleType
         zcDegreesHorz	= 12
     } 	ZcSegmentAngleType;
 
-typedef   DECLSPEC_UUID("EC92310D-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920254-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcTextAttachmentDirection
     {
         zcAttachmentHorizontal	= 0,
         zcAttachmentVertical	= 1
     } 	ZcTextAttachmentDirection;
 
-typedef   DECLSPEC_UUID("EC923198-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920355-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcVerticalTextAttachmentType
     {
         zcAttachmentCenter	= 0,
         zcAttachmentLinedCenter	= 1
     } 	ZcVerticalTextAttachmentType;
 
-typedef   DECLSPEC_UUID("EC923106-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920249-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcMeshCreaseType
     {
         zcNoneCrease	= 0,
@@ -4091,14 +4091,14 @@ enum ZcMeshCreaseType
         zcCreaseByLevel	= 2
     } 	ZcMeshCreaseType;
 
-typedef   DECLSPEC_UUID("EC923105-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920248-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcWireframeType
     {
         zcIsolines	= 0,
         zcIsoparms	= 1
     } 	ZcWireframeType;
 
-typedef   DECLSPEC_UUID("EC922FC5-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920008-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSplineKnotParameterizationType
     {
         zcChord	= 0,
@@ -4107,28 +4107,28 @@ enum ZcSplineKnotParameterizationType
         zcCustomParameterization	= 15
     } 	ZcSplineKnotParameterizationType;
 
-typedef   DECLSPEC_UUID("EC9231CB-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920395-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSplineFrameType
     {
         zcShow	= 0,
         zcHide	= 1
     } 	ZcSplineFrameType;
 
-typedef   DECLSPEC_UUID("EC9230BA-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920188-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcSplineMethodType
     {
         zcFit	= 0,
         zcControlVertices	= 1
     } 	ZcSplineMethodType;
 
-typedef   DECLSPEC_UUID("EC92329A-5A21-11E7-B72E-BC5FF42AC839") 
+typedef   DECLSPEC_UUID("EF920451-5A25-11E7-B72E-BC5FF42AC839") 
 	enum ZcPointCloudColorType
 {
 	zcTrueColor	= 0,
 	zcByColor	= 1
 } 	ZcPointCloudColorType;
 
-typedef   DECLSPEC_UUID("EC92329B-5A21-11E7-B72E-BC5FF42AC839") 
+typedef   DECLSPEC_UUID("EF920452-5A25-11E7-B72E-BC5FF42AC839") 
 	enum ZcPointCloudStylizationType
 {
 	zcScanColor	= 0,
@@ -4137,7 +4137,7 @@ typedef   DECLSPEC_UUID("EC92329B-5A21-11E7-B72E-BC5FF42AC839")
 	zcIntensity	= 3
 } 	ZcPointCloudStylizationType;
 
-typedef   DECLSPEC_UUID("EC92329C-5A21-11E7-B72E-BC5FF42AC839") 
+typedef   DECLSPEC_UUID("EF920453-5A25-11E7-B72E-BC5FF42AC839") 
 	enum ZcPointCloudIntensityStyle
 {
 	zcIntensityGrayscale	= 0,
@@ -4148,7 +4148,7 @@ typedef   DECLSPEC_UUID("EC92329C-5A21-11E7-B72E-BC5FF42AC839")
 	zcIntensityEditableFlag	= 5
 } 	ZcPointCloudIntensityStyle;
 
-typedef   DECLSPEC_UUID("EC9232BA-5A21-11E7-B72E-BC5FF42AC839") 
+typedef   DECLSPEC_UUID("EF920468-5A25-11E7-B72E-BC5FF42AC839") 
 	enum ZcPointCloudExStylizationType
 {
 	zcRGB	= 0,
@@ -4162,7 +4162,7 @@ typedef   DECLSPEC_UUID("EC9232BA-5A21-11E7-B72E-BC5FF42AC839")
 #pragma once
 #pragma once
 
-typedef   DECLSPEC_UUID("EC92319F-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920361-5A25-11E7-B72E-BC5FF42AC839")
 enum ZcColorMethod
     {
         zcColorMethodByLayer	= 192,
@@ -4172,7 +4172,7 @@ enum ZcColorMethod
         zcColorMethodForeground	= 197
     } 	ZcColorMethod;
 
-typedef   DECLSPEC_UUID("EC9232BD-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920469-5A25-11E7-B72E-BC5FF42AC839")
 enum __MIDL___MIDL_itf_zcad_0381_0001
     {
         ZCADSECURITYPARAMS_ENCRYPT_DATA	= 0x1,
@@ -4181,22 +4181,22 @@ enum __MIDL___MIDL_itf_zcad_0381_0001
         ZCADSECURITYPARAMS_ADD_TIMESTAMP	= 0x20
     } 	ZcadSecurityParamsType;
 
-typedef   DECLSPEC_UUID("EC9232BE-5A21-11E7-B72E-BC5FF42AC839")
+typedef   DECLSPEC_UUID("EF920470-5A25-11E7-B72E-BC5FF42AC839")
 enum __MIDL___MIDL_itf_zcad_0381_0002
     {
         ZCADSECURITYPARAMS_ALGID_RC4	= 0x6801
     } 	ZcadSecurityParamsConstants;
 
-DEFINE_GUID(LIBID_ZWCAD,0x2F671C10,0x669F,0x11E7,0x91,0xB7,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(LIBID_ZWCAD,0x2F671C11,0x669F,0x11E7,0x91,0xB7,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifndef __IZcadObject_INTERFACE_DEFINED__
 #define __IZcadObject_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadObject,0xEC9230C6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadObject,0xEF920199,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230C6-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920199-5A25-11E7-B72E-BC5FF42AC839")
     IZcadObject : public IDispatch
     {
     public:
@@ -4401,11 +4401,11 @@ DEFINE_GUID(IID_IZcadObject,0xEC9230C6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 #ifndef __IZcadDictionary_INTERFACE_DEFINED__
 #define __IZcadDictionary_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDictionary,0xEC922FDA,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDictionary,0xEF920021,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FDA-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920021-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDictionary : public IZcadObject
     {
     public:
@@ -4697,11 +4697,11 @@ DEFINE_GUID(IID_IZcadDictionary,0xEC922FDA,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 #ifndef __IZcadEntity_INTERFACE_DEFINED__
 #define __IZcadEntity_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadEntity,0xEC922FE0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadEntity,0xEF920024,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FE0-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920024-5A25-11E7-B72E-BC5FF42AC839")
     IZcadEntity : public IZcadObject
     {
     public:
@@ -5242,11 +5242,11 @@ DEFINE_GUID(IID_IZcadEntity,0xEC922FE0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 #ifndef __IZcadBlock_INTERFACE_DEFINED__
 #define __IZcadBlock_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadBlock,0xEC9230D7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadBlock,0xEF920212,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230D7-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920212-5A25-11E7-B72E-BC5FF42AC839")
     IZcadBlock : public IZcadObject
     {
     public:
@@ -6469,11 +6469,11 @@ DEFINE_GUID(IID_IZcadBlock,0xEC9230D7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 #ifndef __IZcadDatabase_INTERFACE_DEFINED__
 #define __IZcadDatabase_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDatabase,0xEC9230F3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDatabase,0xEF920234,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230F3-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920234-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDatabase : public IDispatch
     {
     public:
@@ -6830,11 +6830,11 @@ DEFINE_GUID(IID_IZcadDatabase,0xEC9230F3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 #ifndef __IZcadSectionTypeSettings_INTERFACE_DEFINED__
 #define __IZcadSectionTypeSettings_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSectionTypeSettings,0xEC92308C,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSectionTypeSettings,0xEF920158,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92308C-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920158-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSectionTypeSettings : public IDispatch
     {
     public:
@@ -7802,11 +7802,11 @@ DEFINE_GUID(IID_IZcadSectionTypeSettings,0xEC92308C,0x5A21,0x11E7,0xB7,0x2E,0xBC
 #ifndef __IZcadSectionTypeSettings2_INTERFACE_DEFINED__
 #define __IZcadSectionTypeSettings2_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSectionTypeSettings2, 0xEC92328E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSectionTypeSettings2, 0xEF920439,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92328E-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920439-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSectionTypeSettings2 : public IZcadSectionTypeSettings
     {
     public:
@@ -8499,11 +8499,11 @@ DEFINE_GUID(IID_IZcadSectionTypeSettings2, 0xEC92328E,0x5A21,0x11E7,0xB7,0x2E,0x
 #ifndef __IZcadHyperlink_INTERFACE_DEFINED__
 #define __IZcadHyperlink_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadHyperlink,0xEC923112,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadHyperlink,0xEF920258,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923112-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920258-5A25-11E7-B72E-BC5FF42AC839")
     IZcadHyperlink : public IDispatch
     {
     public:
@@ -8657,22 +8657,22 @@ DEFINE_GUID(IID_IZcadHyperlink,0xEC923112,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadHyperlink,0xEC9230B3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadHyperlink,0xEF920183,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230B3-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920183-5A25-11E7-B72E-BC5FF42AC839")
 ZcadHyperlink;
 #endif
 
 #ifndef __IZcadDynamicBlockReferenceProperty_INTERFACE_DEFINED__
 #define __IZcadDynamicBlockReferenceProperty_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDynamicBlockReferenceProperty,0xEC92310E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDynamicBlockReferenceProperty,0xEF920255,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92310E-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920255-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDynamicBlockReferenceProperty : public IDispatch
     {
     public:
@@ -8828,22 +8828,22 @@ DEFINE_GUID(IID_IZcadDynamicBlockReferenceProperty,0xEC92310E,0x5A21,0x11E7,0xB7
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadDynamicBlockReferenceProperty,0xEC922FC3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDynamicBlockReferenceProperty,0xEF920006,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FC3-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920006-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDynamicBlockReferenceProperty;
 #endif
 
 #ifndef __IZcadZcCmColor_INTERFACE_DEFINED__
 #define __IZcadZcCmColor_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadZcCmColor,0xEC922FFB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadZcCmColor,0xEF920046,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FFB-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920046-5A25-11E7-B72E-BC5FF42AC839")
     IZcadZcCmColor : public IDispatch
     {
     public:
@@ -9068,22 +9068,22 @@ DEFINE_GUID(IID_IZcadZcCmColor,0xEC922FFB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadZcCmColor,0xEC9231C3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadZcCmColor,0xEF920388,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231C3-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920388-5A25-11E7-B72E-BC5FF42AC839")
 ZcadZcCmColor;
 #endif
 
 #ifndef __IZcadObjectEvents_INTERFACE_DEFINED__
 #define __IZcadObjectEvents_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadObjectEvents,0xEC92317E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadObjectEvents,0xEF920337,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92317E-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920337-5A25-11E7-B72E-BC5FF42AC839")
     IZcadObjectEvents : public IUnknown
     {
     public:
@@ -9137,22 +9137,22 @@ DEFINE_GUID(IID_IZcadObjectEvents,0xEC92317E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0
 #endif
 
 #endif
-DEFINE_GUID(CLSID_ZcadObject,0xEC923157,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadObject,0xEF920306,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923157-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920306-5A25-11E7-B72E-BC5FF42AC839")
 ZcadObject;
 #endif
 
 #ifndef __IZcadXRecord_INTERFACE_DEFINED__
 #define __IZcadXRecord_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadXRecord,0xEC92307A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadXRecord,0xEF920143,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92307A-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920143-5A25-11E7-B72E-BC5FF42AC839")
     IZcadXRecord : public IZcadObject
     {
     public:
@@ -9374,22 +9374,22 @@ DEFINE_GUID(IID_IZcadXRecord,0xEC92307A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadXRecord,0xEC923032,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadXRecord,0xEF920090,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923032-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920090-5A25-11E7-B72E-BC5FF42AC839")
 ZcadXRecord;
 #endif
 
 #ifndef __IZcadSortentsTable_INTERFACE_DEFINED__
 #define __IZcadSortentsTable_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSortentsTable,0xEC9230B5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSortentsTable,0xEF920185,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230B5-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920185-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSortentsTable : public IZcadObject
     {
     public:
@@ -9644,22 +9644,22 @@ DEFINE_GUID(IID_IZcadSortentsTable,0xEC9230B5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSortentsTable,0xEC92308A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSortentsTable,0xEF920156,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92308A-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920156-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSortentsTable;
 #endif
 
 #ifndef __IZcadDimStyle_INTERFACE_DEFINED__
 #define __IZcadDimStyle_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimStyle,0xEC923160,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimStyle,0xEF920314,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923160-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920314-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimStyle : public IZcadObject
     {
     public:
@@ -9850,22 +9850,22 @@ DEFINE_GUID(IID_IZcadDimStyle,0xEC923160,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadDimStyle,0xEC923085,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimStyle,0xEF920152,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923085-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920152-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimStyle;
 #endif
 
 #ifndef __IZcadLayer_INTERFACE_DEFINED__
 #define __IZcadLayer_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLayer,0xEC9230C0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLayer,0xEF920194,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230C0-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920194-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLayer : public IZcadObject
     {
     public:
@@ -10272,22 +10272,22 @@ DEFINE_GUID(IID_IZcadLayer,0xEC9230C0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLayer,0xEC9231D0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLayer,0xEF920398,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231D0-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920398-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLayer;
 #endif
 
 #ifndef __IZcadLineType_INTERFACE_DEFINED__
 #define __IZcadLineType_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLineType,0xEC922FF1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLineType,0xEF920037,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FF1-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920037-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLineType : public IZcadObject
     {
     public:
@@ -10487,22 +10487,22 @@ DEFINE_GUID(IID_IZcadLineType,0xEC922FF1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLineType,0xEC922FF6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLineType,0xEF920042,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FF6-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920042-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLineType;
 #endif
 
 #ifndef __IZcadMaterial_INTERFACE_DEFINED__
 #define __IZcadMaterial_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMaterial,0xEC9230DD,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMaterial,0xEF920217,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230DD-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920217-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMaterial : public IZcadObject
     {
     public:
@@ -10702,22 +10702,22 @@ DEFINE_GUID(IID_IZcadMaterial,0xEC9230DD,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadMaterial,0xEC923024,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMaterial,0xEF920078,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923024-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920078-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMaterial;
 #endif
 
 #ifndef __IZcadRegisteredApplication_INTERFACE_DEFINED__
 #define __IZcadRegisteredApplication_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadRegisteredApplication,0xEC92318F,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadRegisteredApplication,0xEF920349,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92318F-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920349-5A25-11E7-B72E-BC5FF42AC839")
     IZcadRegisteredApplication : public IZcadObject
     {
     public:
@@ -10900,22 +10900,22 @@ DEFINE_GUID(IID_IZcadRegisteredApplication,0xEC92318F,0x5A21,0x11E7,0xB7,0x2E,0x
 
 
 #endif
-DEFINE_GUID(CLSID_ZcadRegisteredApplication,0xEC923107,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadRegisteredApplication,0xEF920250,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923107-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920250-5A25-11E7-B72E-BC5FF42AC839")
 ZcadRegisteredApplication;
 #endif
 
 #ifndef __IZcadTextStyle_INTERFACE_DEFINED__
 #define __IZcadTextStyle_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadTextStyle,0xEC922FF8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadTextStyle,0xEF920043,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FF8-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920043-5A25-11E7-B72E-BC5FF42AC839")
     IZcadTextStyle : public IZcadObject
     {
     public:
@@ -11248,22 +11248,22 @@ DEFINE_GUID(IID_IZcadTextStyle,0xEC922FF8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadTextStyle,0xEC9231A2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadTextStyle,0xEF920364,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231A2-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920364-5A25-11E7-B72E-BC5FF42AC839")
 ZcadTextStyle;
 #endif
 
 #ifndef __IZcadUCS_INTERFACE_DEFINED__
 #define __IZcadUCS_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadUCS,0xEC9230AB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadUCS,0xEF920176,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230AB-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920176-5A25-11E7-B72E-BC5FF42AC839")
     IZcadUCS : public IZcadObject
     {
     public:
@@ -11508,22 +11508,22 @@ DEFINE_GUID(IID_IZcadUCS,0xEC9230AB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadUCS,0xEC922FCB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadUCS,0xEF920011,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FCB-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920011-5A25-11E7-B72E-BC5FF42AC839")
 ZcadUCS;
 #endif
 
 #ifndef __IZcadView_INTERFACE_DEFINED__
 #define __IZcadView_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadView,0xEC923075,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadView,0xEF920140,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923075-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920140-5A25-11E7-B72E-BC5FF42AC839")
     IZcadView : public IZcadObject
     {
     public:
@@ -11867,22 +11867,22 @@ DEFINE_GUID(IID_IZcadView,0xEC923075,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadView,0xEC923014,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadView,0xEF920064,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923014-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920064-5A25-11E7-B72E-BC5FF42AC839")
 ZcadView;
 #endif
 
 #ifndef __IZcadViewport_INTERFACE_DEFINED__
 #define __IZcadViewport_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadViewport,0xEC92303D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadViewport,0xEF920099,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92303D-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920099-5A25-11E7-B72E-BC5FF42AC839")
     IZcadViewport : public IZcadObject
     {
     public:
@@ -12378,22 +12378,22 @@ DEFINE_GUID(IID_IZcadViewport,0xEC92303D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadViewport,0xEC9231D1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadViewport,0xEF920399,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231D1-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920399-5A25-11E7-B72E-BC5FF42AC839")
 ZcadViewport;
 #endif
 
 #ifndef __IZcadGroup_INTERFACE_DEFINED__
 #define __IZcadGroup_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadGroup,0xEC92319A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadGroup,0xEF920357,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92319A-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920357-5A25-11E7-B72E-BC5FF42AC839")
     IZcadGroup : public IZcadObject
     {
     public:
@@ -12719,22 +12719,22 @@ DEFINE_GUID(IID_IZcadGroup,0xEC92319A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadGroup,0xEC92316E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadGroup,0xEF920323,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92316E-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920323-5A25-11E7-B72E-BC5FF42AC839")
 ZcadGroup;
 #endif
 
 #ifndef __IZcadPlotConfiguration_INTERFACE_DEFINED__
 #define __IZcadPlotConfiguration_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPlotConfiguration,0xEC9231DB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPlotConfiguration,0xEF920407,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231DB-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920407-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPlotConfiguration : public IZcadObject
     {
     public:
@@ -13369,22 +13369,22 @@ DEFINE_GUID(IID_IZcadPlotConfiguration,0xEC9231DB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPlotConfiguration,0xEC9231A5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPlotConfiguration,0xEF920367,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231A5-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920367-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPlotConfiguration;
 #endif
 
 #ifndef __IZcadLayout_INTERFACE_DEFINED__
 #define __IZcadLayout_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLayout,0xEC923115,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLayout,0xEF920260,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923115-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920260-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLayout : public IZcadPlotConfiguration
     {
     public:
@@ -13888,22 +13888,22 @@ DEFINE_GUID(IID_IZcadLayout,0xEC923115,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLayout,0xEC922FF9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLayout,0xEF920044,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FF9-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920044-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLayout;
 #endif
 
 #ifndef __IZcadIdPair_INTERFACE_DEFINED__
 #define __IZcadIdPair_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadIdPair,0xEC9230D6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadIdPair,0xEF920211,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230D6-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920211-5A25-11E7-B72E-BC5FF42AC839")
     IZcadIdPair : public IDispatch
     {
     public:
@@ -14041,22 +14041,22 @@ DEFINE_GUID(IID_IZcadIdPair,0xEC9230D6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadIdPair,0xEC9230BC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadIdPair,0xEF920190,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230BC-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920190-5A25-11E7-B72E-BC5FF42AC839")
 ZcadIdPair;
 #endif
 
 #ifndef __IZcadTableStyle_INTERFACE_DEFINED__
 #define __IZcadTableStyle_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadTableStyle,0xEC923133,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadTableStyle,0xEF920282,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923133-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920282-5A25-11E7-B72E-BC5FF42AC839")
     IZcadTableStyle : public IZcadObject
     {
     public:
@@ -15033,22 +15033,22 @@ DEFINE_GUID(IID_IZcadTableStyle,0xEC923133,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadTableStyle,0xEC923111,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadTableStyle,0xEF920257,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923111-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920257-5A25-11E7-B72E-BC5FF42AC839")
 ZcadTableStyle;
 #endif
 
 #ifndef __IZcadSectionSettings_INTERFACE_DEFINED__
 #define __IZcadSectionSettings_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSectionSettings,0xEC9230B0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSectionSettings,0xEF920181,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230B0-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920181-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSectionSettings : public IZcadObject
     {
     public:
@@ -15241,30 +15241,30 @@ DEFINE_GUID(IID_IZcadSectionSettings,0xEC9230B0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSectionSettings,0xEC923094,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSectionSettings,0xEF920160,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923094-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920160-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSectionSettings;
 #endif
 
-DEFINE_GUID(CLSID_ZcadSectionTypeSettings,0xEC923027,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSectionTypeSettings,0xEF920081,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923027-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920081-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSectionTypeSettings;
 #endif
 
 #ifndef __IZcadMLeaderStyle_INTERFACE_DEFINED__
 #define __IZcadMLeaderStyle_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMLeaderStyle,0xEC923040,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMLeaderStyle,0xEF920100,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923040-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920100-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMLeaderStyle : public IZcadObject
     {
     public:
@@ -16192,22 +16192,22 @@ DEFINE_GUID(IID_IZcadMLeaderStyle,0xEC923040,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0
 #endif
 
 #endif
-DEFINE_GUID(CLSID_ZcadMLeaderStyle,0xEC923148,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMLeaderStyle,0xEF920294,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923148-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920294-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMLeaderStyle;
 #endif
 
 #ifndef __IZcadHyperlinks_INTERFACE_DEFINED__
 #define __IZcadHyperlinks_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadHyperlinks,0xEC9231DD,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadHyperlinks,0xEF920409,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231DD-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920409-5A25-11E7-B72E-BC5FF42AC839")
     IZcadHyperlinks : public IDispatch
     {
     public:
@@ -16344,30 +16344,30 @@ DEFINE_GUID(IID_IZcadHyperlinks,0xEC9231DD,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadHyperlinks,0xEC923046,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadHyperlinks,0xEF920104,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923046-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920104-5A25-11E7-B72E-BC5FF42AC839")
 ZcadHyperlinks;
 #endif
 
-DEFINE_GUID(CLSID_ZcadDictionary,0xEC9230BF,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDictionary,0xEF920193,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230BF-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920193-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDictionary;
 #endif
 
 #ifndef __IZcadLayers_INTERFACE_DEFINED__
 #define __IZcadLayers_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLayers,0xEC923043,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLayers,0xEF920102,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923043-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920102-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLayers : public IZcadObject
     {
     public:
@@ -16578,22 +16578,22 @@ DEFINE_GUID(IID_IZcadLayers,0xEC923043,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLayers,0xEC9230B8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLayers,0xEF920187,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230B8-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920187-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLayers;
 #endif
 
 #ifndef __IZcadDimStyles_INTERFACE_DEFINED__
 #define __IZcadDimStyles_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimStyles,0xEC9230AF,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimStyles,0xEF920180,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230AF-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920180-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimStyles : public IZcadObject
     {
     public:
@@ -16797,22 +16797,22 @@ DEFINE_GUID(IID_IZcadDimStyles,0xEC9230AF,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadDimStyles,0xEC923002,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimStyles,0xEF920052,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923002-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920052-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimStyles;
 #endif
 
 #ifndef __IZcadDictionaries_INTERFACE_DEFINED__
 #define __IZcadDictionaries_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDictionaries,0xEC92309D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDictionaries,0xEF920167,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92309D-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920167-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDictionaries : public IZcadObject
     {
     public:
@@ -17016,22 +17016,22 @@ DEFINE_GUID(IID_IZcadDictionaries,0xEC92309D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadDictionaries,0xEC923015,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDictionaries,0xEF920065,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923015-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920065-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDictionaries;
 #endif
 
 #ifndef __IZcadLineTypes_INTERFACE_DEFINED__
 #define __IZcadLineTypes_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLineTypes,0xEC923098,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLineTypes,0xEF920163,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923098-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920163-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLineTypes : public IZcadObject
     {
     public:
@@ -17246,22 +17246,22 @@ DEFINE_GUID(IID_IZcadLineTypes,0xEC923098,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLineTypes,0xEC922FE5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLineTypes,0xEF920028,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FE5-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920028-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLineTypes;
 #endif
 
 #ifndef __IZcadMaterials_INTERFACE_DEFINED__
 #define __IZcadMaterials_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMaterials,0xEC9230AC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMaterials,0xEF920177,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230AC-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920177-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMaterials : public IZcadObject
     {
     public:
@@ -17465,22 +17465,22 @@ DEFINE_GUID(IID_IZcadMaterials,0xEC9230AC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadMaterials,0xEC92310B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMaterials,0xEF920253,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92310B-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920253-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMaterials;
 #endif
 
 #ifndef __IZcadTextStyles_INTERFACE_DEFINED__
 #define __IZcadTextStyles_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadTextStyles,0xEC923131,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadTextStyles,0xEF920280,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923131-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920280-5A25-11E7-B72E-BC5FF42AC839")
     IZcadTextStyles : public IZcadObject
     {
     public:
@@ -17684,22 +17684,22 @@ DEFINE_GUID(IID_IZcadTextStyles,0xEC923131,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadTextStyles,0xEC9230C5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadTextStyles,0xEF920198,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230C5-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920198-5A25-11E7-B72E-BC5FF42AC839")
 ZcadTextStyles;
 #endif
 
 #ifndef __IZcadUCSs_INTERFACE_DEFINED__
 #define __IZcadUCSs_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadUCSs,0xEC9230EC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadUCSs,0xEF920228,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230EC-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920228-5A25-11E7-B72E-BC5FF42AC839")
     IZcadUCSs : public IZcadObject
     {
     public:
@@ -17909,22 +17909,22 @@ DEFINE_GUID(IID_IZcadUCSs,0xEC9230EC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadUCSs,0xEC9231CD,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadUCSs,0xEF920396,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231CD-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920396-5A25-11E7-B72E-BC5FF42AC839")
 ZcadUCSs;
 #endif
 
 #ifndef __IZcadRegisteredApplications_INTERFACE_DEFINED__
 #define __IZcadRegisteredApplications_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadRegisteredApplications,0xEC9231AE,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadRegisteredApplications,0xEF920374,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231AE-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920374-5A25-11E7-B72E-BC5FF42AC839")
     IZcadRegisteredApplications : public IZcadObject
     {
     public:
@@ -18129,22 +18129,22 @@ DEFINE_GUID(IID_IZcadRegisteredApplications,0xEC9231AE,0x5A21,0x11E7,0xB7,0x2E,0
 
 
 #endif
-DEFINE_GUID(CLSID_ZcadRegisteredApplications,0xEC923188,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadRegisteredApplications,0xEF920343,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923188-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920343-5A25-11E7-B72E-BC5FF42AC839")
 ZcadRegisteredApplications;
 #endif
 
 #ifndef __IZcadViews_INTERFACE_DEFINED__
 #define __IZcadViews_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadViews,0xEC92318D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadViews,0xEF920347,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92318D-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920347-5A25-11E7-B72E-BC5FF42AC839")
     IZcadViews : public IZcadObject
     {
     public:
@@ -18348,22 +18348,22 @@ DEFINE_GUID(IID_IZcadViews,0xEC92318D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadViews,0xEC9230A8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadViews,0xEF920173,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230A8-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920173-5A25-11E7-B72E-BC5FF42AC839")
 ZcadViews;
 #endif
 
 #ifndef __IZcadViewports_INTERFACE_DEFINED__
 #define __IZcadViewports_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadViewports,0xEC923149,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadViewports,0xEF920295,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923149-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920295-5A25-11E7-B72E-BC5FF42AC839")
     IZcadViewports : public IZcadObject
     {
     public:
@@ -18576,22 +18576,22 @@ DEFINE_GUID(IID_IZcadViewports,0xEC923149,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadViewports,0xEC922FCD,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadViewports,0xEF920013,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FCD-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920013-5A25-11E7-B72E-BC5FF42AC839")
 ZcadViewports;
 #endif
 
 #ifndef __IZcadGroups_INTERFACE_DEFINED__
 #define __IZcadGroups_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadGroups,0xEC92316B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadGroups,0xEF920322,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92316B-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920322-5A25-11E7-B72E-BC5FF42AC839")
     IZcadGroups : public IZcadObject
     {
     public:
@@ -18795,22 +18795,22 @@ DEFINE_GUID(IID_IZcadGroups,0xEC92316B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadGroups,0xEC9231D7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadGroups,0xEF920403,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231D7-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920403-5A25-11E7-B72E-BC5FF42AC839")
 ZcadGroups;
 #endif
 
 #ifndef __IZcadBlocks_INTERFACE_DEFINED__
 #define __IZcadBlocks_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadBlocks,0xEC923166,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadBlocks,0xEF920318,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923166-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920318-5A25-11E7-B72E-BC5FF42AC839")
     IZcadBlocks : public IZcadObject
     {
     public:
@@ -19016,22 +19016,22 @@ DEFINE_GUID(IID_IZcadBlocks,0xEC923166,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadBlocks,0xEC9231B1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadBlocks,0xEF920376,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231B1-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920376-5A25-11E7-B72E-BC5FF42AC839")
 ZcadBlocks;
 #endif
 
 #ifndef __IZcadLayouts_INTERFACE_DEFINED__
 #define __IZcadLayouts_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLayouts,0xEC92312D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLayouts,0xEF920276,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92312D-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920276-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLayouts : public IZcadObject
     {
     public:
@@ -19235,22 +19235,22 @@ DEFINE_GUID(IID_IZcadLayouts,0xEC92312D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLayouts,0xEC923079,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLayouts,0xEF920142,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923079-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920142-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLayouts;
 #endif
 
 #ifndef __IZcadPlotConfigurations_INTERFACE_DEFINED__
 #define __IZcadPlotConfigurations_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPlotConfigurations,0xEC9231BD,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPlotConfigurations,0xEF920385,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231BD-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920385-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPlotConfigurations : public IZcadObject
     {
     public:
@@ -19456,30 +19456,30 @@ DEFINE_GUID(IID_IZcadPlotConfigurations,0xEC9231BD,0x5A21,0x11E7,0xB7,0x2E,0xBC,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPlotConfigurations,0xEC923069,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPlotConfigurations,0xEF920130,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923069-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920130-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPlotConfigurations;
 #endif
 
-DEFINE_GUID(CLSID_ZcadEntity,0xEC92304D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadEntity,0xEF920111,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92304D-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920111-5A25-11E7-B72E-BC5FF42AC839")
 ZcadEntity;
 #endif
 
 #ifndef __IZcadShadowDisplay_INTERFACE_DEFINED__
 #define __IZcadShadowDisplay_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadShadowDisplay,0xEC923137,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadShadowDisplay,0xEF920286,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923137-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920286-5A25-11E7-B72E-BC5FF42AC839")
     IZcadShadowDisplay : public IUnknown
     {
     public:
@@ -19554,11 +19554,11 @@ DEFINE_GUID(IID_IZcadShadowDisplay,0xEC923137,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,
 #ifndef __IZcadRasterImage_INTERFACE_DEFINED__
 #define __IZcadRasterImage_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadRasterImage,0xEC923005,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadRasterImage,0xEF920055,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923005-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920055-5A25-11E7-B72E-BC5FF42AC839")
     IZcadRasterImage : public IZcadEntity
     {
     public:
@@ -20245,22 +20245,22 @@ DEFINE_GUID(IID_IZcadRasterImage,0xEC923005,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadRasterImage,0xEC923047,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadRasterImage,0xEF920105,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923047-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920105-5A25-11E7-B72E-BC5FF42AC839")
 ZcadRasterImage;
 #endif
 
 #ifndef __IZcad3DFace_INTERFACE_DEFINED__
 #define __IZcad3DFace_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcad3DFace,0xEC9231DC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcad3DFace,0xEF920408,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231DC-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920408-5A25-11E7-B72E-BC5FF42AC839")
     IZcad3DFace : public IZcadEntity
     {
     public:
@@ -20802,22 +20802,22 @@ DEFINE_GUID(IID_IZcad3DFace,0xEC9231DC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_Zcad3DFace,0xEC9231B4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_Zcad3DFace,0xEF920378,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231B4-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920378-5A25-11E7-B72E-BC5FF42AC839")
 Zcad3DFace;
 #endif
 
 #ifndef __IZcad3DPolyline_INTERFACE_DEFINED__
 #define __IZcad3DPolyline_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcad3DPolyline,0xEC923081,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcad3DPolyline,0xEF920148,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923081-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920148-5A25-11E7-B72E-BC5FF42AC839")
     IZcad3DPolyline : public IZcadEntity
     {
     public:
@@ -21328,22 +21328,22 @@ DEFINE_GUID(IID_IZcad3DPolyline,0xEC923081,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 
 #endif
 
-DEFINE_GUID(CLSID_Zcad3DPolyline,0xEC92304C,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_Zcad3DPolyline,0xEF920110,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92304C-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920110-5A25-11E7-B72E-BC5FF42AC839")
 Zcad3DPolyline;
 #endif
 
 #ifndef __IZcadRegion_INTERFACE_DEFINED__
 #define __IZcadRegion_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadRegion,0xEC9231E9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadRegion,0xEF920420,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231E9-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920420-5A25-11E7-B72E-BC5FF42AC839")
     IZcadRegion : public IZcadEntity
     {
     public:
@@ -21852,22 +21852,22 @@ DEFINE_GUID(IID_IZcadRegion,0xEC9231E9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadRegion,0xEC9231E7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadRegion,0xEF920418,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231E7-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920418-5A25-11E7-B72E-BC5FF42AC839")
 ZcadRegion;
 #endif
 
 #ifndef __IZcad3DSolid_INTERFACE_DEFINED__
 #define __IZcad3DSolid_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcad3DSolid,0xEC92309B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcad3DSolid,0xEF920166,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92309B-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920166-5A25-11E7-B72E-BC5FF42AC839")
     IZcad3DSolid : public IZcadEntity
     {
     public:
@@ -22459,22 +22459,22 @@ DEFINE_GUID(IID_IZcad3DSolid,0xEC92309B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0
 
 #endif
 
-DEFINE_GUID(CLSID_Zcad3DSolid,0xEC923173,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_Zcad3DSolid,0xEF920327,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923173-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920327-5A25-11E7-B72E-BC5FF42AC839")
 Zcad3DSolid;
 #endif
 
 #ifndef __IZcadArc_INTERFACE_DEFINED__
 #define __IZcadArc_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadArc,0xEC923095,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadArc,0xEF920161,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923095-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920161-5A25-11E7-B72E-BC5FF42AC839")
     IZcadArc : public IZcadEntity
     {
     public:
@@ -23046,22 +23046,22 @@ DEFINE_GUID(IID_IZcadArc,0xEC923095,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadArc,0xEC9230B1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadArc,0xEF920182,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230B1-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920182-5A25-11E7-B72E-BC5FF42AC839")
 ZcadArc;
 #endif
 
 #ifndef __IZcadAttribute_INTERFACE_DEFINED__
 #define __IZcadAttribute_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadAttribute,0xEC923192,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadAttribute,0xEF920352,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923192-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920352-5A25-11E7-B72E-BC5FF42AC839")
     IZcadAttribute : public IZcadEntity
     {
     public:
@@ -23998,22 +23998,22 @@ DEFINE_GUID(IID_IZcadAttribute,0xEC923192,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadAttribute,0xEC923182,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadAttribute,0xEF920338,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923182-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920338-5A25-11E7-B72E-BC5FF42AC839")
 ZcadAttribute;
 #endif
 
 #ifndef __IZcadAttributeReference_INTERFACE_DEFINED__
 #define __IZcadAttributeReference_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadAttributeReference,0xEC92304E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadAttributeReference,0xEF920112,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92304E-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920112-5A25-11E7-B72E-BC5FF42AC839")
     IZcadAttributeReference : public IZcadEntity
     {
     public:
@@ -24860,22 +24860,22 @@ DEFINE_GUID(IID_IZcadAttributeReference,0xEC92304E,0x5A21,0x11E7,0xB7,0x2E,0xBC,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadAttributeReference,0xEC9231A3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadAttributeReference,0xEF920365,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231A3-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920365-5A25-11E7-B72E-BC5FF42AC839")
 ZcadAttributeReference;
 #endif
 
 #ifndef __IZcadBlockReference_INTERFACE_DEFINED__
 #define __IZcadBlockReference_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadBlockReference,0xEC9230D5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadBlockReference,0xEF920210,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230D5-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920210-5A25-11E7-B72E-BC5FF42AC839")
     IZcadBlockReference : public IZcadEntity
     {
     public:
@@ -25567,22 +25567,22 @@ DEFINE_GUID(IID_IZcadBlockReference,0xEC9230D5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadBlockReference,0xEC92315A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadBlockReference,0xEF920309,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92315A-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920309-5A25-11E7-B72E-BC5FF42AC839")
 ZcadBlockReference;
 #endif
 
 #ifndef __IZcadCircle_INTERFACE_DEFINED__
 #define __IZcadCircle_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadCircle,0xEC923048,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadCircle,0xEF920106,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923048-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920106-5A25-11E7-B72E-BC5FF42AC839")
     IZcadCircle : public IZcadEntity
     {
     public:
@@ -26127,22 +26127,22 @@ DEFINE_GUID(IID_IZcadCircle,0xEC923048,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadCircle,0xEC92303A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadCircle,0xEF920096,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92303A-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920096-5A25-11E7-B72E-BC5FF42AC839")
 ZcadCircle;
 #endif
 
 #ifndef __IZcadEllipse_INTERFACE_DEFINED__
 #define __IZcadEllipse_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadEllipse,0xEC9230CA,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadEllipse,0xEF920202,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230CA-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920202-5A25-11E7-B72E-BC5FF42AC839")
     IZcadEllipse : public IZcadEntity
     {
     public:
@@ -26777,22 +26777,22 @@ DEFINE_GUID(IID_IZcadEllipse,0xEC9230CA,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadEllipse,0xEC9231C5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadEllipse,0xEF920390,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231C5-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920390-5A25-11E7-B72E-BC5FF42AC839")
 ZcadEllipse;
 #endif
 
 #ifndef __IZcadHatch_INTERFACE_DEFINED__
 #define __IZcadHatch_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadHatch,0xEC92319B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadHatch,0xEF920358,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92319B-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920358-5A25-11E7-B72E-BC5FF42AC839")
     IZcadHatch : public IZcadEntity
     {
     public:
@@ -27602,22 +27602,22 @@ DEFINE_GUID(IID_IZcadHatch,0xEC92319B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadHatch,0xEC923120,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadHatch,0xEF920268,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923120-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920268-5A25-11E7-B72E-BC5FF42AC839")
 ZcadHatch;
 #endif
 
 #ifndef __IZcadLeader_INTERFACE_DEFINED__
 #define __IZcadLeader_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLeader,0xEC92308B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLeader,0xEF920157,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92308B-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920157-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLeader : public IZcadEntity
     {
     public:
@@ -28279,22 +28279,22 @@ DEFINE_GUID(IID_IZcadLeader,0xEC92308B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLeader,0xEC922FD3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLeader,0xEF920016,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FD3-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920016-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLeader;
 #endif
 
 #ifndef __IZcadSubEntity_INTERFACE_DEFINED__
 #define __IZcadSubEntity_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSubEntity,0xEC923058,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSubEntity,0xEF920119,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC923058-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920119-5A25-11E7-B72E-BC5FF42AC839")
 IZcadSubEntity : public IDispatch
 {
 public:
@@ -28493,11 +28493,11 @@ interface IZcadSubEntity
 #ifndef __IZcadMLeaderLeader_INTERFACE_DEFINED__
 #define __IZcadMLeaderLeader_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMLeaderLeader,0xEC92328F,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMLeaderLeader,0xEF920440,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC92328F-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920440-5A25-11E7-B72E-BC5FF42AC839")
 IZcadMLeaderLeader : public IZcadSubEntity
 {
 public:
@@ -28804,11 +28804,11 @@ interface IZcadMLeaderLeader
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadMLeaderLeader,0xEC9232B9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMLeaderLeader,0xEF920467,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232B9-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920467-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadMLeaderLeader;
 #endif
 
@@ -28816,11 +28816,11 @@ class DECLSPEC_UUID("EC9232B9-5A21-11E7-B72E-BC5FF42AC839")
 #ifndef __IZcadMLeader_INTERFACE_DEFINED__
 #define __IZcadMLeader_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMLeader,0xEC922FC2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMLeader,0xEF920005,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FC2-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920005-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMLeader : public IZcadEntity
     {
     public:
@@ -30128,22 +30128,22 @@ void __RPC_STUB IZcadMLeader_SetBlockAttributeValue_Stub(
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadMLeader,0xEC923004,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMLeader,0xEF920054,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923004-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920054-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMLeader;
 #endif
 
 #ifndef __IZcadLWPolyline_INTERFACE_DEFINED__
 #define __IZcadLWPolyline_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLWPolyline,0xEC92311E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLWPolyline,0xEF920266,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92311E-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920266-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLWPolyline : public IZcadEntity
     {
     public:
@@ -30796,22 +30796,22 @@ DEFINE_GUID(IID_IZcadLWPolyline,0xEC92311E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLWPolyline,0xEC92307B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLWPolyline,0xEF920144,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92307B-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920144-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLWPolyline;
 #endif
 
 #ifndef __IZcadLine_INTERFACE_DEFINED__
 #define __IZcadLine_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLine,0xEC9230FB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLine,0xEF920242,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230FB-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920242-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLine : public IZcadEntity
     {
     public:
@@ -31331,22 +31331,22 @@ DEFINE_GUID(IID_IZcadLine,0xEC9230FB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLine,0xEC923177,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLine,0xEF920330,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923177-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920330-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLine;
 #endif
 
 #ifndef __IZcadMText_INTERFACE_DEFINED__
 #define __IZcadMText_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMText,0xEC922FE1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMText,0xEF920025,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FE1-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920025-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMText : public IZcadEntity
     {
     public:
@@ -31997,22 +31997,22 @@ DEFINE_GUID(IID_IZcadMText,0xEC922FE1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadMText,0xEC92302D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMText,0xEF920086,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92302D-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920086-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMText;
 #endif
 
 #ifndef __IZcadPoint_INTERFACE_DEFINED__
 #define __IZcadPoint_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPoint,0xEC92315D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPoint,0xEF920312,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92315D-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920312-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPoint : public IZcadEntity
     {
     public:
@@ -32474,22 +32474,22 @@ DEFINE_GUID(IID_IZcadPoint,0xEC92315D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPoint,0xEC92314D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPoint,0xEF920299,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92314D-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920299-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPoint;
 #endif
 
 #ifndef __IZcadPolyline_INTERFACE_DEFINED__
 #define __IZcadPolyline_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPolyline,0xEC9230F2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPolyline,0xEF920233,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230F2-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920233-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPolyline : public IZcadEntity
     {
     public:
@@ -33158,22 +33158,22 @@ DEFINE_GUID(IID_IZcadPolyline,0xEC9230F2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPolyline,0xEC92305E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPolyline,0xEF920125,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92305E-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920125-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPolyline;
 #endif
 
 #ifndef __IZcadPolygonMesh_INTERFACE_DEFINED__
 #define __IZcadPolygonMesh_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPolygonMesh,0xEC923073,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPolygonMesh,0xEF920138,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923073-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920138-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPolygonMesh : public IZcadEntity
     {
     public:
@@ -33747,22 +33747,22 @@ DEFINE_GUID(IID_IZcadPolygonMesh,0xEC923073,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPolygonMesh,0xEC923017,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPolygonMesh,0xEF920067,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923017-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920067-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPolygonMesh;
 #endif
 
 #ifndef __IZcadRay_INTERFACE_DEFINED__
 #define __IZcadRay_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadRay,0xEC92300F,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadRay,0xEF920060,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92300F-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920060-5A25-11E7-B72E-BC5FF42AC839")
     IZcadRay : public IZcadEntity
     {
     public:
@@ -34224,22 +34224,22 @@ DEFINE_GUID(IID_IZcadRay,0xEC92300F,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadRay,0xEC9231F2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadRay,0xEF920427,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231F2-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920427-5A25-11E7-B72E-BC5FF42AC839")
 ZcadRay;
 #endif
 
 #ifndef __IZcadShape_INTERFACE_DEFINED__
 #define __IZcadShape_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadShape,0xEC92301C,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadShape,0xEF920072,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92301C-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920072-5A25-11E7-B72E-BC5FF42AC839")
     IZcadShape : public IZcadEntity
     {
     public:
@@ -34791,22 +34791,22 @@ DEFINE_GUID(IID_IZcadShape,0xEC92301C,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadShape,0xEC92304F,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadShape,0xEF920113,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92304F-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920113-5A25-11E7-B72E-BC5FF42AC839")
 ZcadShape;
 #endif
 
 #ifndef __IZcadSolid_INTERFACE_DEFINED__
 #define __IZcadSolid_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSolid,0xEC9230E8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSolid,0xEF920224,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230E8-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920224-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSolid : public IZcadEntity
     {
     public:
@@ -35290,22 +35290,22 @@ DEFINE_GUID(IID_IZcadSolid,0xEC9230E8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSolid,0xEC92312B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSolid,0xEF920275,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92312B-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920275-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSolid;
 #endif
 
 #ifndef __IZcadSpline_INTERFACE_DEFINED__
 #define __IZcadSpline_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSpline,0xEC92319E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSpline,0xEF920360,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92319E-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920360-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSpline : public IZcadEntity
     {
     public:
@@ -36121,22 +36121,22 @@ DEFINE_GUID(IID_IZcadSpline,0xEC92319E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSpline,0xEC923158,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSpline,0xEF920307,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923158-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920307-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSpline;
 #endif
 
 #ifndef __IZcadText_INTERFACE_DEFINED__
 #define __IZcadText_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadText,0xEC9230C3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadText,0xEF920197,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230C3-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920197-5A25-11E7-B72E-BC5FF42AC839")
     IZcadText : public IZcadEntity
     {
     public:
@@ -36841,22 +36841,22 @@ DEFINE_GUID(IID_IZcadText,0xEC9230C3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadText,0xEC923067,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadText,0xEF920129,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923067-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920129-5A25-11E7-B72E-BC5FF42AC839")
 ZcadText;
 #endif
 
 #ifndef __IZcadTolerance_INTERFACE_DEFINED__
 #define __IZcadTolerance_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadTolerance,0xEC923101,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadTolerance,0xEF920246,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923101-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920246-5A25-11E7-B72E-BC5FF42AC839")
     IZcadTolerance : public IZcadEntity
     {
     public:
@@ -37444,22 +37444,22 @@ DEFINE_GUID(IID_IZcadTolerance,0xEC923101,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadTolerance,0xEC9230D2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadTolerance,0xEF920207,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230D2-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920207-5A25-11E7-B72E-BC5FF42AC839")
 ZcadTolerance;
 #endif
 
 #ifndef __IZcadTrace_INTERFACE_DEFINED__
 #define __IZcadTrace_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadTrace,0xEC9231B0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadTrace,0xEF920375,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231B0-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920375-5A25-11E7-B72E-BC5FF42AC839")
     IZcadTrace : public IZcadEntity
     {
     public:
@@ -37943,22 +37943,22 @@ DEFINE_GUID(IID_IZcadTrace,0xEC9231B0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadTrace,0xEC923159,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadTrace,0xEF920308,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923159-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920308-5A25-11E7-B72E-BC5FF42AC839")
 ZcadTrace;
 #endif
 
 #ifndef __IZcadXline_INTERFACE_DEFINED__
 #define __IZcadXline_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadXline,0xEC923055,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadXline,0xEF920117,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923055-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920117-5A25-11E7-B72E-BC5FF42AC839")
     IZcadXline : public IZcadEntity
     {
     public:
@@ -38431,22 +38431,22 @@ DEFINE_GUID(IID_IZcadXline,0xEC923055,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadXline,0xEC9231CE,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadXline,0xEF920397,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231CE-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920397-5A25-11E7-B72E-BC5FF42AC839")
 ZcadXline;
 #endif
 
 #ifndef __IZcadPViewport_INTERFACE_DEFINED__
 #define __IZcadPViewport_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPViewport,0xEC923139,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPViewport,0xEF920287,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923139-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920287-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPViewport : public IZcadEntity
     {
     public:
@@ -39427,22 +39427,22 @@ DEFINE_GUID(IID_IZcadPViewport,0xEC923139,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPViewport,0xEC923088,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPViewport,0xEF920154,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923088-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920154-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPViewport;
 #endif
 
 #ifndef __IZcadMInsertBlock_INTERFACE_DEFINED__
 #define __IZcadMInsertBlock_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMInsertBlock,0xEC922FC1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMInsertBlock,0xEF920004,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FC1-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920004-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMInsertBlock : public IZcadBlockReference
     {
     public:
@@ -40113,22 +40113,22 @@ DEFINE_GUID(IID_IZcadMInsertBlock,0xEC922FC1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadMInsertBlock,0xEC9230F1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMInsertBlock,0xEF920232,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230F1-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920232-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMInsertBlock;
 #endif
 
 #ifndef __IZcadPolyfaceMesh_INTERFACE_DEFINED__
 #define __IZcadPolyfaceMesh_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPolyfaceMesh,0xEC923114,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPolyfaceMesh,0xEF920259,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923114-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920259-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPolyfaceMesh : public IZcadEntity
     {
     public:
@@ -40603,22 +40603,22 @@ DEFINE_GUID(IID_IZcadPolyfaceMesh,0xEC923114,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPolyfaceMesh,0xEC9231F8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPolyfaceMesh,0xEF920431,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231F8-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920431-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPolyfaceMesh;
 #endif
 
 #ifndef __IZcadMLine_INTERFACE_DEFINED__
 #define __IZcadMLine_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMLine,0xEC9231D9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMLine,0xEF920405,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231D9-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920405-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMLine : public IZcadEntity
     {
     public:
@@ -41089,22 +41089,22 @@ DEFINE_GUID(IID_IZcadMLine,0xEC9231D9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadMLine,0xEC9230C1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMLine,0xEF920195,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230C1-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920195-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMLine;
 #endif
 
 #ifndef __IZcadExternalReference_INTERFACE_DEFINED__
 #define __IZcadExternalReference_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadExternalReference,0xEC923029,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadExternalReference,0xEF920082,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923029-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920082-5A25-11E7-B72E-BC5FF42AC839")
     IZcadExternalReference : public IZcadBlockReference
     {
     public:
@@ -41731,22 +41731,22 @@ DEFINE_GUID(IID_IZcadExternalReference,0xEC923029,0x5A21,0x11E7,0xB7,0x2E,0xBC,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadExternalReference,0xEC923009,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadExternalReference,0xEF920057,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923009-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920057-5A25-11E7-B72E-BC5FF42AC839")
 ZcadExternalReference;
 #endif
 
 #ifndef __IZcadComparedReference_INTERFACE_DEFINED__
 #define __IZcadComparedReference_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadComparedReference,0xEC920000,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadComparedReference,0xEF920474,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC920000-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920474-5A25-11E7-B72E-BC5FF42AC839")
     IZcadComparedReference : public IZcadExternalReference
     {
     public:
@@ -42459,22 +42459,22 @@ DEFINE_GUID(IID_IZcadComparedReference,0xEC920000,0x5A21,0x11E7,0xB7,0x2E,0xBC,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadComparedReference,0xEC920000, 0x5A21, 0x11E7, 0xB7, 0x2E, 0xBC, 0x5F, 0xF4, 0x2A, 0xC8, 0x39);
+DEFINE_GUID(CLSID_ZcadComparedReference,0xEF920475,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC920000-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920475-5A25-11E7-B72E-BC5FF42AC839")
 ZcadComparedReference;
 #endif
 
 #ifndef __IZcadTable_INTERFACE_DEFINED__
 #define __IZcadTable_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadTable,0xEC9231D2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadTable,0xEF920400,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231D2-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920400-5A25-11E7-B72E-BC5FF42AC839")
     IZcadTable : public IZcadEntity
     {
     public:
@@ -47340,22 +47340,22 @@ void __RPC_STUB IZcadTable_SetToolTip_Stub(
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadTable,0xEC923019,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadTable,0xEF920069,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923019-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920069-5A25-11E7-B72E-BC5FF42AC839")
 ZcadTable;
 #endif
 
 #ifndef __IZcadOle_INTERFACE_DEFINED__
 #define __IZcadOle_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadOle,0xEC923045,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadOle,0xEF920103,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923045-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920103-5A25-11E7-B72E-BC5FF42AC839")
     IZcadOle : public IZcadEntity
     {
     public:
@@ -47943,22 +47943,22 @@ DEFINE_GUID(IID_IZcadOle,0xEC923045,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadOle,0xEC92311B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadOle,0xEF920264,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92311B-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920264-5A25-11E7-B72E-BC5FF42AC839")
 ZcadOle;
 #endif
 
 #ifndef __IZcadHelix_INTERFACE_DEFINED__
 #define __IZcadHelix_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadHelix,0xEC923142,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadHelix,0xEF920291,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923142-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920291-5A25-11E7-B72E-BC5FF42AC839")
     IZcadHelix : public IZcadEntity
     {
     public:
@@ -48529,22 +48529,22 @@ DEFINE_GUID(IID_IZcadHelix,0xEC923142,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadHelix,0xEC923012,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadHelix,0xEF920063,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923012-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920063-5A25-11E7-B72E-BC5FF42AC839")
 ZcadHelix;
 #endif
 
 #ifndef __IZcadSurface_INTERFACE_DEFINED__
 #define __IZcadSurface_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSurface,0xEC9231DF,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSurface,0xEF920411,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231DF-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920411-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSurface : public IZcadEntity
     {
     public:
@@ -49087,22 +49087,22 @@ DEFINE_GUID(IID_IZcadSurface,0xEC9231DF,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSurface,0xEC92305A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSurface,0xEF920121,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92305A-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920121-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSurface;
 #endif
 
 #ifndef __IZcadPlaneSurface_INTERFACE_DEFINED__
 #define __IZcadPlaneSurface_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPlaneSurface,0xEC9230A4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPlaneSurface,0xEF920171,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230A4-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920171-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPlaneSurface : public IZcadSurface
     {
     public:
@@ -49601,22 +49601,22 @@ DEFINE_GUID(IID_IZcadPlaneSurface,0xEC9230A4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPlaneSurface,0xEC923036,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPlaneSurface,0xEF920093,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923036-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920093-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPlaneSurface;
 #endif
 
 #ifndef __IZcadExtrudedSurface_INTERFACE_DEFINED__
 #define __IZcadExtrudedSurface_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadExtrudedSurface,0xEC923285,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadExtrudedSurface,0xEF920436,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923285-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920436-5A25-11E7-B72E-BC5FF42AC839")
     IZcadExtrudedSurface : public IZcadSurface
     {
     public:
@@ -50160,22 +50160,22 @@ DEFINE_GUID(IID_IZcadExtrudedSurface,0xEC923285,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadExtrudedSurface,0xEC923284,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadExtrudedSurface,0xEF920435,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923284-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920435-5A25-11E7-B72E-BC5FF42AC839")
 ZcadExtrudedSurface;
 #endif
 
 #ifndef __IZcadRevolvedSurface_INTERFACE_DEFINED__
 #define __IZcadRevolvedSurface_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadRevolvedSurface,0xEC9231B7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadRevolvedSurface,0xEF920381,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231B7-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920381-5A25-11E7-B72E-BC5FF42AC839")
     IZcadRevolvedSurface : public IZcadSurface
     {
     public:
@@ -50719,22 +50719,22 @@ DEFINE_GUID(IID_IZcadRevolvedSurface,0xEC9231B7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadRevolvedSurface,0xEC922FE4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadRevolvedSurface,0xEF920027,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FE4-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920027-5A25-11E7-B72E-BC5FF42AC839")
 ZcadRevolvedSurface;
 #endif
 
 #ifndef __IZcadSweptSurface_INTERFACE_DEFINED__
 #define __IZcadSweptSurface_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSweptSurface,0xEC92304B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSweptSurface,0xEF920109,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92304B-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920109-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSweptSurface : public IZcadSurface
     {
     public:
@@ -51314,22 +51314,22 @@ DEFINE_GUID(IID_IZcadSweptSurface,0xEC92304B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSweptSurface,0xEC923060,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSweptSurface,0xEF920127,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923060-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920127-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSweptSurface;
 #endif
 
 #ifndef __IZcadLoftedSurface_INTERFACE_DEFINED__
 #define __IZcadLoftedSurface_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLoftedSurface,0xEC923221,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLoftedSurface,0xEF920432,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923221-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920432-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLoftedSurface : public IZcadSurface
     {
     public:
@@ -52044,22 +52044,22 @@ DEFINE_GUID(IID_IZcadLoftedSurface,0xEC923221,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLoftedSurface,0xEC923222,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLoftedSurface,0xEF920433,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923222-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920433-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLoftedSurface;
 #endif
 
 #ifndef __IZcadSection_INTERFACE_DEFINED__
 #define __IZcadSection_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSection,0xEC9231D6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSection,0xEF920402,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231D6-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920402-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSection : public IZcadEntity
     {
     public:
@@ -52782,11 +52782,11 @@ DEFINE_GUID(IID_IZcadSection,0xEC9231D6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0
 #ifndef __IZcadSection2_INTERFACE_DEFINED__
 #define __IZcadSection2_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSection2,0xEC923290,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSection2,0xEF920441,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC923290-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920441-5A25-11E7-B72E-BC5FF42AC839")
 IZcadSection2 : public IZcadSection
 {
 public:
@@ -53545,22 +53545,22 @@ interface IZcadSection2
 #endif 	
 
 
-DEFINE_GUID(CLSID_ZcadSection,0xEC92302B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSection,0xEF920084,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92302B-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920084-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSection;
 #endif
 
 #ifndef __IZcadSectionManager_INTERFACE_DEFINED__
 #define __IZcadSectionManager_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSectionManager,0xEC923035,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSectionManager,0xEF920092,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923035-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920092-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSectionManager : public IZcadObject
     {
     public:
@@ -53773,22 +53773,22 @@ DEFINE_GUID(IID_IZcadSectionManager,0xEC923035,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSectionManager,0xEC9230EB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSectionManager,0xEF920227,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230EB-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920227-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSectionManager;
 #endif
 
 #ifndef __IZcadUnderlay_INTERFACE_DEFINED__
 #define __IZcadUnderlay_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadUnderlay,0xEC9230F8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadUnderlay,0xEF920239,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230F8-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920239-5A25-11E7-B72E-BC5FF42AC839")
     IZcadUnderlay : public IZcadEntity
     {
     public:
@@ -54479,11 +54479,11 @@ DEFINE_GUID(IID_IZcadUnderlay,0xEC9230F8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 #ifndef __IZcadDwfUnderlay_INTERFACE_DEFINED__
 #define __IZcadDwfUnderlay_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDwfUnderlay,0xEC92319C,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDwfUnderlay,0xEF920359,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC92319C-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920359-5A25-11E7-B72E-BC5FF42AC839")
 IZcadDwfUnderlay : public IZcadUnderlay
 {
 public:
@@ -55182,46 +55182,46 @@ interface IZcadDwfUnderlay
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadDwfUnderlay,0xEC92312A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDwfUnderlay,0xEF920274,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92312A-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920274-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadDwfUnderlay;
 #endif
 
-DEFINE_GUID(CLSID_ZcadDgnUnderlay,0xEC9232A0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDgnUnderlay,0xEF920456,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232A0-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920456-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDgnUnderlay;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPdfUnderlay,0xEC92327C,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPdfUnderlay,0xEF920434,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92327C-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920434-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadPdfUnderlay;
 #endif
 
-DEFINE_GUID(CLSID_ZcadSubEntity,0xEC9231A7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSubEntity,0xEF920369,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231A7-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920369-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSubEntity;
 #endif
 
 #ifndef __IZcadSubEntSolidFace_INTERFACE_DEFINED__
 #define __IZcadSubEntSolidFace_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSubEntSolidFace,0xEC923291,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSubEntSolidFace,0xEF920442,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923291-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920442-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSubEntSolidFace : public IZcadSubEntity
     {
     public:
@@ -55383,22 +55383,22 @@ DEFINE_GUID(IID_IZcadSubEntSolidFace,0xEC923291,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSubEntSolidFace,0xEC9232A1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSubEntSolidFace,0xEF920457,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232A1-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920457-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSubEntSolidFace;
 #endif
 
 #ifndef __IZcadSubEntSolidEdge_INTERFACE_DEFINED__
 #define __IZcadSubEntSolidEdge_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSubEntSolidEdge,0xEC923136,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSubEntSolidEdge,0xEF920285,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923136-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920285-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSubEntSolidEdge : public IZcadSubEntity
     {
     public:
@@ -55542,22 +55542,22 @@ DEFINE_GUID(IID_IZcadSubEntSolidEdge,0xEC923136,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSubEntSolidEdge,0xEC923191,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSubEntSolidEdge,0xEF920351,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923191-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920351-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSubEntSolidEdge;
 #endif
 
 #ifndef __IZcadSubEntSolidVertex_INTERFACE_DEFINED__
 #define __IZcadSubEntSolidVertex_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSubEntSolidVertex,0xEC922FEF,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSubEntSolidVertex,0xEF920035,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FEF-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920035-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSubEntSolidVertex : public IZcadSubEntity
     {
     public:
@@ -55701,22 +55701,22 @@ DEFINE_GUID(IID_IZcadSubEntSolidVertex,0xEC922FEF,0x5A21,0x11E7,0xB7,0x2E,0xBC,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSubEntSolidVertex,0xEC9230E1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSubEntSolidVertex,0xEF920220,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230E1-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920220-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSubEntSolidVertex;
 #endif
 
 #ifndef __IZcadSubEntSolidNode_INTERFACE_DEFINED__
 #define __IZcadSubEntSolidNode_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSubEntSolidNode,0xEC923292,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSubEntSolidNode,0xEF920443,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923292-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920443-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSubEntSolidNode : public IZcadSubEntity
     {
     public:
@@ -55860,22 +55860,22 @@ DEFINE_GUID(IID_IZcadSubEntSolidNode,0xEC923292,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSubEntSolidNode,0xEC9232A2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSubEntSolidNode,0xEF920458,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232A2-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920458-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSubEntSolidNode;
 #endif
 
 #ifndef __IZcadWipeout_INTERFACE_DEFINED__
 #define __IZcadWipeout_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadWipeout,0xEC9230D0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadWipeout,0xEF920206,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC9230D0-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920206-5A25-11E7-B72E-BC5FF42AC839")
 IZcadWipeout : public IZcadRasterImage
 {
 public:
@@ -56554,11 +56554,11 @@ interface IZcadWipeout
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadWipeout, 0xEC923089,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadWipeout, 0xEF920155,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923089-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920155-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadWipeout;
 #endif
 
@@ -56567,11 +56567,11 @@ class DECLSPEC_UUID("EC923089-5A21-11E7-B72E-BC5FF42AC839")
 #define __IZcadSubDMesh_INTERFACE_DEFINED__
 
 
-DEFINE_GUID(IID_IZcadSubDMesh,0xEC923287,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSubDMesh,0xEF920438,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("EC923287-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920438-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSubDMesh : public IZcadEntity
     {
     public:
@@ -57128,11 +57128,11 @@ DEFINE_GUID(IID_IZcadSubDMesh,0xEC923287,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 #endif 
 
 
-DEFINE_GUID(CLSID_ZcadSubDMesh,0xEC923286,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSubDMesh,0xEF920437,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923286-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920437-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSubDMesh;
 #endif
 
@@ -57140,11 +57140,11 @@ ZcadSubDMesh;
 #ifndef __IZcadSubDMeshFace_INTERFACE_DEFINED__
 #define __IZcadSubDMeshFace_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSubDMeshFace,0xEC923293,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSubDMeshFace,0xEF920444,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC923293-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920444-5A25-11E7-B72E-BC5FF42AC839")
 IZcadSubDMeshFace : public IZcadSubEntity
 {
 public:
@@ -57363,22 +57363,22 @@ interface IZcadSubDMeshFace
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadSubDMeshFace, 0xEC9232A3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSubDMeshFace, 0xEF920459,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232A3-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920459-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadSubDMeshFace;
 #endif
 
 #ifndef __IZcadSubDMeshEdge_INTERFACE_DEFINED__
 #define __IZcadSubDMeshEdge_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSubDMeshEdge,0xEC923294,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSubDMeshEdge,0xEF920445,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC923294-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920445-5A25-11E7-B72E-BC5FF42AC839")
 IZcadSubDMeshEdge : public IZcadSubEntity
 {
 public:
@@ -57577,22 +57577,22 @@ interface IZcadSubDMeshEdge
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadSubDMeshEdge,0xEC9232A4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSubDMeshEdge,0xEF920460,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232A4-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920460-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadSubDMeshEdge;
 #endif
 
 #ifndef __IZcadSubDMeshVertex_INTERFACE_DEFINED__
 #define __IZcadSubDMeshVertex_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSubDMeshVertex, 0xEC923295,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSubDMeshVertex, 0xEF920446,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC923295-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920446-5A25-11E7-B72E-BC5FF42AC839")
 IZcadSubDMeshVertex : public IZcadSubEntity
 {
 public:
@@ -57811,22 +57811,22 @@ interface IZcadSubDMeshVertex
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadSubDMeshVertex, 0xEC9232A5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSubDMeshVertex, 0xEF920461,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232A5-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920461-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadSubDMeshVertex;
 #endif
 
 #ifndef __IZcadNurbSurface_INTERFACE_DEFINED__
 #define __IZcadNurbSurface_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadNurbSurface, 0xEC923296,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadNurbSurface, 0xEF920447,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC923296-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920447-5A25-11E7-B72E-BC5FF42AC839")
 IZcadNurbSurface : public IZcadSurface
 {
 public:
@@ -58413,22 +58413,22 @@ interface IZcadNurbSurface
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadNurbSurface,0xEC9232A6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadNurbSurface,0xEF920462,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923296-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920447-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadNurbSurface;
 #endif
 
 #ifndef __IZcadGeoPositionMarker_INTERFACE_DEFINED__
 #define __IZcadGeoPositionMarker_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadGeoPositionMarker,0xEC923297,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadGeoPositionMarker,0xEF920448,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC923297-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920448-5A25-11E7-B72E-BC5FF42AC839")
 IZcadGeoPositionMarker : public IZcadEntity
 {
 public:
@@ -59270,22 +59270,22 @@ interface IZcadGeoPositionMarker
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadGeoPositionMarker,0xEC9232A7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadGeoPositionMarker,0xEF920463,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232A7-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920463-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadGeoPositionMarker;
 #endif
 
 #ifndef __IZcadGeomapImage_INTERFACE_DEFINED__
 #define __IZcadGeomapImage_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadGeomapImage,0xEC923298,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadGeomapImage,0xEF920449,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC923298-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920449-5A25-11E7-B72E-BC5FF42AC839")
 IZcadGeomapImage : public IZcadRasterImage
 {
 public:
@@ -60054,11 +60054,11 @@ interface IZcadGeomapImage
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadGeomapImage, 0xEC9232A8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadGeomapImage, 0xEF920464,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232A8-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920464-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadGeomapImage;
 #endif
 
@@ -60066,11 +60066,11 @@ class DECLSPEC_UUID("EC9232A8-5A21-11E7-B72E-BC5FF42AC839")
 #ifndef __IZcadDimension_INTERFACE_DEFINED__
 #define __IZcadDimension_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimension,0xEC9230DF,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimension,0xEF920218,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230DF-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920218-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimension : public IZcadEntity
     {
     public:
@@ -61000,22 +61000,22 @@ DEFINE_GUID(IID_IZcadDimension,0xEC9230DF,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadDimension,0xEC9230F7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimension,0xEF920238,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230F7-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920238-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimension;
 #endif
 
 #ifndef __IZcadDimAligned_INTERFACE_DEFINED__
 #define __IZcadDimAligned_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimAligned,0xEC923189,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimAligned,0xEF920344,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923189-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920344-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimAligned : public IZcadDimension
     {
     public:
@@ -64133,22 +64133,22 @@ void __RPC_STUB IZcadDimAligned_put_AltSubUnitsFactor_Stub(
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadDimAligned,0xEC923118,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimAligned,0xEF920261,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923118-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920261-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimAligned;
 #endif
 
 #ifndef __IZcadDimAngular_INTERFACE_DEFINED__
 #define __IZcadDimAngular_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimAngular,0xEC923152,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimAngular,0xEF920302,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923152-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920302-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimAngular : public IZcadDimension
     {
     public:
@@ -66279,22 +66279,22 @@ void __RPC_STUB IZcadDimAngular_put_DimConstrDesc_Stub(
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadDimAngular,0xEC92306D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimAngular,0xEF920132,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92306D-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920132-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimAngular;
 #endif
 
 #ifndef __IZcadDimDiametric_INTERFACE_DEFINED__
 #define __IZcadDimDiametric_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimDiametric,0xEC9231B6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimDiametric,0xEF920380,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231B6-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920380-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimDiametric : public IZcadDimension
     {
     public:
@@ -68786,22 +68786,22 @@ void __RPC_STUB IZcadDimDiametric_put_DimConstrDesc_Stub(
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadDimDiametric,0xEC9231E5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimDiametric,0xEF920416,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231E5-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920416-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimDiametric;
 #endif
 
 #ifndef __IZcadDimOrdinate_INTERFACE_DEFINED__
 #define __IZcadDimOrdinate_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimOrdinate,0xEC923030,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimOrdinate,0xEF920088,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923030-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920088-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimOrdinate : public IZcadDimension
     {
     public:
@@ -70780,22 +70780,22 @@ void __RPC_STUB IZcadDimOrdinate_put_AltSubUnitsFactor_Stub(
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadDimOrdinate,0xEC92313B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimOrdinate,0xEF920288,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92313B-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920288-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimOrdinate;
 #endif
 
 #ifndef __IZcadDimRadial_INTERFACE_DEFINED__
 #define __IZcadDimRadial_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimRadial,0xEC923119,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimRadial,0xEF920262,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923119-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920262-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimRadial : public IZcadDimension
     {
     public:
@@ -73173,22 +73173,22 @@ void __RPC_STUB IZcadDimRadial_put_DimConstrDesc_Stub(
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadDimRadial,0xEC922FEA,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimRadial,0xEF920032,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FEA-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920032-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimRadial;
 #endif
 
 #ifndef __IZcadDimRotated_INTERFACE_DEFINED__
 #define __IZcadDimRotated_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimRotated,0xEC922FDE,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimRotated,0xEF920022,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FDE-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920022-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimRotated : public IZcadDimension
     {
     public:
@@ -76231,22 +76231,22 @@ void __RPC_STUB IZcadDimRotated_put_AltSubUnitsFactor_Stub(
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadDimRotated,0xEC923179,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimRotated,0xEF920332,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923179-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920332-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimRotated;
 #endif
 
 #ifndef __IZcadDim3PointAngular_INTERFACE_DEFINED__
 #define __IZcadDim3PointAngular_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDim3PointAngular,0xEC923174,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDim3PointAngular,0xEF920328,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923174-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920328-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDim3PointAngular : public IZcadDimension
     {
     public:
@@ -78339,22 +78339,22 @@ void __RPC_STUB IZcadDim3PointAngular_put_DimConstrDesc_Stub(
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadDim3PointAngular,0xEC923072,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDim3PointAngular,0xEF920137,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923072-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920137-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDim3PointAngular;
 #endif
 
 #ifndef __IZcadDimArcLength_INTERFACE_DEFINED__
 #define __IZcadDimArcLength_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimArcLength,0xEC923167,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimArcLength,0xEF920319,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923167-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920319-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimArcLength : public IZcadDimension
     {
     public:
@@ -81587,22 +81587,22 @@ void __RPC_STUB IZcadDimArcLength_put_AltSubUnitsFactor_Stub(
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadDimArcLength,0xEC92301D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimArcLength,0xEF920073,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92301D-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920073-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimArcLength;
 #endif
 
 #ifndef __IZcadDimRadialLarge_INTERFACE_DEFINED__
 #define __IZcadDimRadialLarge_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDimRadialLarge,0xEC922FE2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDimRadialLarge,0xEF920026,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FE2-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920026-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDimRadialLarge : public IZcadDimension
     {
     public:
@@ -83923,30 +83923,30 @@ void __RPC_STUB IZcadDimRadialLarge_put_DimensionLinetype_Stub(
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadDimRadialLarge,0xEC923110,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDimRadialLarge,0xEF920256,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923110-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920256-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDimRadialLarge;
 #endif
 
-DEFINE_GUID(CLSID_ZcadBlock,0xEC923016,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadBlock,0xEF920066,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923016-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920066-5A25-11E7-B72E-BC5FF42AC839")
 ZcadBlock;
 #endif
 
 #ifndef __IZcadModelSpace_INTERFACE_DEFINED__
 #define __IZcadModelSpace_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadModelSpace,0xEC9231E6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadModelSpace,0xEF920417,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231E6-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920417-5A25-11E7-B72E-BC5FF42AC839")
     IZcadModelSpace : public IZcadBlock
     {
     public:
@@ -84758,22 +84758,22 @@ DEFINE_GUID(IID_IZcadModelSpace,0xEC9231E6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadModelSpace,0xEC9231A1,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadModelSpace,0xEF920363,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231A1-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920363-5A25-11E7-B72E-BC5FF42AC839")
 ZcadModelSpace;
 #endif
 
 #ifndef __IZcadPaperSpace_INTERFACE_DEFINED__
 #define __IZcadPaperSpace_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPaperSpace,0xEC9230E3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPaperSpace,0xEF920222,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230E3-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920222-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPaperSpace : public IZcadBlock
     {
     public:
@@ -85600,11 +85600,11 @@ DEFINE_GUID(IID_IZcadPaperSpace,0xEC9230E3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPaperSpace,0xEC9231E4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPaperSpace,0xEF920415,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231E4-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920415-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPaperSpace;
 #endif
 
@@ -85612,11 +85612,11 @@ ZcadPaperSpace;
 #ifndef __IZcadFileDependency_INTERFACE_DEFINED__
 #define __IZcadFileDependency_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadFileDependency,0xEC923096,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadFileDependency,0xEF920162,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923096-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920162-5A25-11E7-B72E-BC5FF42AC839")
     IZcadFileDependency : public IDispatch
     {
     public:
@@ -85808,22 +85808,22 @@ DEFINE_GUID(IID_IZcadFileDependency,0xEC923096,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadFileDependency,0xEC9231C4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadFileDependency,0xEF920389,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231C4-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920389-5A25-11E7-B72E-BC5FF42AC839")
 ZcadFileDependency;
 #endif
 
 #ifndef __IZcadFileDependencies_INTERFACE_DEFINED__
 #define __IZcadFileDependencies_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadFileDependencies,0xEC92302A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadFileDependencies,0xEF920083,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92302A-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920083-5A25-11E7-B72E-BC5FF42AC839")
     IZcadFileDependencies : public IDispatch
     {
     public:
@@ -85995,11 +85995,11 @@ DEFINE_GUID(IID_IZcadFileDependencies,0xEC92302A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadFileDependencies,0xEC92315B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadFileDependencies,0xEF920310,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92315B-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920310-5A25-11E7-B72E-BC5FF42AC839")
 ZcadFileDependencies;
 #endif
 
@@ -86007,11 +86007,11 @@ ZcadFileDependencies;
 #ifndef __IZcadPointCloud_INTERFACE_DEFINED__
 #define __IZcadPointCloud_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPointCloud,0xEC923299,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPointCloud,0xEF920450,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC923299-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920450-5A25-11E7-B72E-BC5FF42AC839")
 IZcadPointCloud : public IZcadEntity
 {
 public:
@@ -86753,22 +86753,22 @@ interface IZcadPointCloud
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadPointCloud,0xEC9232A9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPointCloud,0xEF920465,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232A9-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920465-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadPointCloud;
 #endif
 
 #ifndef __IZcadPointCloudEx_INTERFACE_DEFINED__
 #define __IZcadPointCloudEx_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPointCloudEx,0xEC92329E,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPointCloudEx,0xEF920455,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC92329E-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920455-5A25-11E7-B72E-BC5FF42AC839")
 IZcadPointCloudEx : public IZcadEntity
 {
 public:
@@ -87451,11 +87451,11 @@ interface IZcadPointCloudEx
 #ifndef __IZcadPointCloudEx2_INTERFACE_DEFINED__
 #define __IZcadPointCloudEx2_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPointCloudEx2,0xEC92329D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPointCloudEx2,0xEF920454,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC92329D-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920454-5A25-11E7-B72E-BC5FF42AC839")
 IZcadPointCloudEx2 : public IZcadPointCloudEx
 {
 public:
@@ -88082,11 +88082,11 @@ interface IZcadPointCloudEx2
 
 #endif 	
 
-DEFINE_GUID(CLSID_ZcadPointCloudEx,0xEC9232AA,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPointCloudEx,0xEF920466,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9232AA-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920466-5A25-11E7-B72E-BC5FF42AC839")
 	ZcadPointCloudEx;
 #endif
 
@@ -88094,11 +88094,11 @@ class DECLSPEC_UUID("EC9232AA-5A21-11E7-B72E-BC5FF42AC839")
 #ifndef __IZcadSummaryInfo_INTERFACE_DEFINED__
 #define __IZcadSummaryInfo_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSummaryInfo,0xEC922FF0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSummaryInfo,0xEF920036,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FF0-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920036-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSummaryInfo : public IDispatch
     {
     public:
@@ -88412,22 +88412,22 @@ DEFINE_GUID(IID_IZcadSummaryInfo,0xEC922FF0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSummaryInfo,0xEC9230E6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSummaryInfo,0xEF920223,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230E6-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920223-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSummaryInfo;
 #endif
 
 #ifndef __IZcadDatabasePreferences_INTERFACE_DEFINED__
 #define __IZcadDatabasePreferences_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDatabasePreferences,0xEC923099,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDatabasePreferences,0xEF920164,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923099-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920164-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDatabasePreferences : public IDispatch
     {
     public:
@@ -88862,30 +88862,30 @@ DEFINE_GUID(IID_IZcadDatabasePreferences,0xEC923099,0x5A21,0x11E7,0xB7,0x2E,0xBC
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadDatabasePreferences,0xEC9231F0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDatabasePreferences,0xEF920425,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231F0-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920425-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDatabasePreferences;
 #endif
 
-DEFINE_GUID(CLSID_ZcadDatabase,0xEC92317A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDatabase,0xEF920333,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92317A-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920333-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDatabase;
 #endif
 
 #ifndef __IZcadSecurityParams_INTERFACE_DEFINED__
 #define __IZcadSecurityParams_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSecurityParams,0xEC923193,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSecurityParams,0xEF920353,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923193-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920353-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSecurityParams : public IDispatch
     {
     public:
@@ -89167,22 +89167,22 @@ DEFINE_GUID(IID_IZcadSecurityParams,0xEC923193,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSecurityParams,0xEC922FF4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSecurityParams,0xEF920040,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FF4-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920040-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSecurityParams;
 #endif
 
 #ifndef __IZcadLayerStateManager_INTERFACE_DEFINED__
 #define __IZcadLayerStateManager_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadLayerStateManager,0xEC9230F6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadLayerStateManager,0xEF920237,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230F6-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920237-5A25-11E7-B72E-BC5FF42AC839")
     IZcadLayerStateManager : public IDispatch
     {
     public:
@@ -89357,22 +89357,22 @@ DEFINE_GUID(IID_IZcadLayerStateManager,0xEC9230F6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadLayerStateManager,0xEC92312F,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadLayerStateManager,0xEF920278,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92312F-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920278-5A25-11E7-B72E-BC5FF42AC839")
 ZcadLayerStateManager;
 #endif
 
 #ifndef ___DZcadApplicationEvents_DISPINTERFACE_DEFINED__
 #define ___DZcadApplicationEvents_DISPINTERFACE_DEFINED__
 
-DEFINE_GUID(DIID__DZcadApplicationEvents,0xEC923092,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(DIID__DZcadApplicationEvents,0xEF920159,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923092-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920159-5A25-11E7-B72E-BC5FF42AC839")
     _DZcadApplicationEvents : public IDispatch
     {
     };
@@ -89457,11 +89457,11 @@ DEFINE_GUID(DIID__DZcadApplicationEvents,0xEC923092,0x5A21,0x11E7,0xB7,0x2E,0xBC
 #ifndef __IZcadDocument_INTERFACE_DEFINED__
 #define __IZcadDocument_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadDocument,0xEC923156,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDocument,0xEF920305,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923156-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920305-5A25-11E7-B72E-BC5FF42AC839")
     IZcadDocument : public IZcadDatabase
     {
     public:
@@ -90322,11 +90322,11 @@ DEFINE_GUID(IID_IZcadDocument,0xEC923156,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 #define __IZcadDocuments_INTERFACE_DEFINED__
 
 
-DEFINE_GUID(IID_IZcadDocuments,0xEC9230A9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadDocuments,0xEF920174,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC9230A9-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920174-5A25-11E7-B72E-BC5FF42AC839")
 IZcadDocuments : public IDispatch
 {
 public:
@@ -90536,11 +90536,11 @@ interface IZcadDocuments
 #define __IZcadPreferences_INTERFACE_DEFINED__
 
 
-DEFINE_GUID(IID_IZcadPreferences,0xEC9231E8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferences,0xEF920419,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231E8-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920419-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferences : public IDispatch
     {
     public:
@@ -90716,11 +90716,11 @@ DEFINE_GUID(IID_IZcadPreferences,0xEC9231E8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0x
 #ifndef __IZcadMenuGroups_INTERFACE_DEFINED__
 #define __IZcadMenuGroups_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMenuGroups,0xEC923155,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMenuGroups,0xEF920304,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923155-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920304-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMenuGroups : public IDispatch
     {
     public:
@@ -90866,11 +90866,11 @@ DEFINE_GUID(IID_IZcadMenuGroups,0xEC923155,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 #ifndef __IZcadMenuBar_INTERFACE_DEFINED__
 #define __IZcadMenuBar_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMenuBar,0xEC92305B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMenuBar,0xEF920122,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92305B-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920122-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMenuBar : public IDispatch
     {
     public:
@@ -91003,11 +91003,11 @@ DEFINE_GUID(IID_IZcadMenuBar,0xEC92305B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0
 #ifndef __IZcadApplication_INTERFACE_DEFINED__
 #define __IZcadApplication_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadApplication,0xEC9231AC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadApplication,0xEF920373,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-MIDL_INTERFACE("EC9231AC-5A21-11E7-B72E-BC5FF42AC839")
+MIDL_INTERFACE("EF920373-5A25-11E7-B72E-BC5FF42AC839")
 IZcadApplication : public IDispatch
 {
 public:
@@ -91596,11 +91596,11 @@ interface IZcadApplication
 #ifndef __IZcadState_INTERFACE_DEFINED__
 #define __IZcadState_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadState,0xEC923162,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadState,0xEF920316,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923162-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920316-5A25-11E7-B72E-BC5FF42AC839")
     IZcadState : public IDispatch
     {
     public:
@@ -91702,19 +91702,19 @@ DEFINE_GUID(IID_IZcadState,0xEC923162,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadState,0xEC922FCC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadState,0xEF920012,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FCC-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920012-5A25-11E7-B72E-BC5FF42AC839")
 ZcadState;
 #endif
 
-DEFINE_GUID(CLSID_ZcadApplication,0xEC92313D,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadApplication,0x2F671EA1,0x669F,0x11E7,0x91,0xB7,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92313D-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("2F671EA1-669F-11E7-91B7-BC5FF42AC839")
 ZcadApplication;
 #endif
 
@@ -91745,11 +91745,11 @@ AcadApplicationMinorVersion3;
 #ifndef __IZcadSelectionSet_INTERFACE_DEFINED__
 #define __IZcadSelectionSet_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSelectionSet,0xEC923124,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSelectionSet,0xEF920271,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923124-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920271-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSelectionSet : public IDispatch
     {
     public:
@@ -91991,22 +91991,22 @@ DEFINE_GUID(IID_IZcadSelectionSet,0xEC923124,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSelectionSet,0xEC923000,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSelectionSet,0xEF920050,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923000-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920050-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSelectionSet;
 #endif
 
 #ifndef __IZcadSelectionSets_INTERFACE_DEFINED__
 #define __IZcadSelectionSets_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadSelectionSets,0xEC9231DE,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadSelectionSets,0xEF920410,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231DE-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920410-5A25-11E7-B72E-BC5FF42AC839")
     IZcadSelectionSets : public IDispatch
     {
     public:
@@ -92139,22 +92139,22 @@ DEFINE_GUID(IID_IZcadSelectionSets,0xEC9231DE,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadSelectionSets,0xEC923150,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadSelectionSets,0xEF920301,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923150-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920301-5A25-11E7-B72E-BC5FF42AC839")
 ZcadSelectionSets;
 #endif
 
 #ifndef __IZcadPlot_INTERFACE_DEFINED__
 #define __IZcadPlot_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPlot,0xEC92301B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPlot,0xEF920071,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92301B-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920071-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPlot : public IDispatch
     {
     public:
@@ -92352,22 +92352,22 @@ DEFINE_GUID(IID_IZcadPlot,0xEC92301B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPlot,0xEC92315F,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPlot,0xEF920313,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92315F-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920313-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPlot;
 #endif
 
 #ifndef __IZcadPreferencesFiles_INTERFACE_DEFINED__
 #define __IZcadPreferencesFiles_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPreferencesFiles,0xEC9231B2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferencesFiles,0xEF920377,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231B2-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920377-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferencesFiles : public IDispatch
     {
     public:
@@ -93114,11 +93114,11 @@ DEFINE_GUID(IID_IZcadPreferencesFiles,0xEC9231B2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x
 #ifndef __IZcadPreferencesDisplay_INTERFACE_DEFINED__
 #define __IZcadPreferencesDisplay_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPreferencesDisplay,0xEC9231E3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferencesDisplay,0xEF920414,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231E3-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920414-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferencesDisplay : public IDispatch
     {
     public:
@@ -93681,11 +93681,11 @@ DEFINE_GUID(IID_IZcadPreferencesDisplay,0xEC9231E3,0x5A21,0x11E7,0xB7,0x2E,0xBC,
 #ifndef __IZcadPreferencesOpenSave_INTERFACE_DEFINED__
 #define __IZcadPreferencesOpenSave_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPreferencesOpenSave,0xEC923128,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferencesOpenSave,0xEF920273,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923128-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920273-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferencesOpenSave : public IDispatch
     {
     public:
@@ -94023,11 +94023,11 @@ DEFINE_GUID(IID_IZcadPreferencesOpenSave,0xEC923128,0x5A21,0x11E7,0xB7,0x2E,0xBC
 #ifndef __IZcadPreferencesUser_INTERFACE_DEFINED__
 #define __IZcadPreferencesUser_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPreferencesUser,0xEC923038,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferencesUser,0xEF920095,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923038-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920095-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferencesUser : public IDispatch
     {
     public:
@@ -94320,11 +94320,11 @@ DEFINE_GUID(IID_IZcadPreferencesUser,0xEC923038,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5
 #ifndef __IZcadPreferencesProfiles_INTERFACE_DEFINED__
 #define __IZcadPreferencesProfiles_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPreferencesProfiles,0xEC92314B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferencesProfiles,0xEF920297,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92314B-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920297-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferencesProfiles : public IDispatch
     {
     public:
@@ -94510,11 +94510,11 @@ DEFINE_GUID(IID_IZcadPreferencesProfiles,0xEC92314B,0x5A21,0x11E7,0xB7,0x2E,0xBC
 #ifndef __IZcadPreferencesDrafting_INTERFACE_DEFINED__
 #define __IZcadPreferencesDrafting_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPreferencesDrafting,0xEC923186,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferencesDrafting,0xEF920342,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923186-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920342-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferencesDrafting : public IDispatch
     {
     public:
@@ -94807,11 +94807,11 @@ DEFINE_GUID(IID_IZcadPreferencesDrafting,0xEC923186,0x5A21,0x11E7,0xB7,0x2E,0xBC
 #ifndef __IZcadPreferencesOutput_INTERFACE_DEFINED__
 #define __IZcadPreferencesOutput_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPreferencesOutput,0xEC9230B4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferencesOutput,0xEF920184,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230B4-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920184-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferencesOutput : public IDispatch
     {
     public:
@@ -95140,11 +95140,11 @@ DEFINE_GUID(IID_IZcadPreferencesOutput,0xEC9230B4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0
 #ifndef __IZcadPreferencesSelection_INTERFACE_DEFINED__
 #define __IZcadPreferencesSelection_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPreferencesSelection,0xEC9231AB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferencesSelection,0xEF920372,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231AB-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920372-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferencesSelection : public IDispatch
     {
     public:
@@ -95437,11 +95437,11 @@ DEFINE_GUID(IID_IZcadPreferencesSelection,0xEC9231AB,0x5A21,0x11E7,0xB7,0x2E,0xB
 #ifndef __IZcadPreferencesSystem_INTERFACE_DEFINED__
 #define __IZcadPreferencesSystem_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPreferencesSystem,0xEC9231D5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPreferencesSystem,0xEF920401,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9231D5-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920401-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPreferencesSystem : public IDispatch
     {
     public:
@@ -95678,94 +95678,94 @@ DEFINE_GUID(IID_IZcadPreferencesSystem,0xEC9231D5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferences,0xEC922FC7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferences,0xEF920009,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FC7-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920009-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferences;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferencesDrafting,0xEC9231EB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferencesDrafting,0xEF920422,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231EB-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920422-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferencesDrafting;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferencesDisplay,0xEC92300A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferencesDisplay,0xEF920058,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92300A-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920058-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferencesDisplay;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferencesFiles,0xEC9230A0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferencesFiles,0xEF920169,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230A0-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920169-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferencesFiles;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferencesOpenSave,0xEC92304A,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferencesOpenSave,0xEF920108,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC92304A-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920108-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferencesOpenSave;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferencesOutput,0xEC9230F0,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferencesOutput,0xEF920231,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230F0-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920231-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferencesOutput;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferencesProfiles,0xEC9231F7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferencesProfiles,0xEF920430,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231F7-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920430-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferencesProfiles;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferencesSelection,0xEC9230A7,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferencesSelection,0xEF920172,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230A7-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920172-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferencesSelection;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferencesSystem,0xEC923185,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferencesSystem,0xEF920341,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923185-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920341-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferencesSystem;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPreferencesUser,0xEC9231A8,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPreferencesUser,0xEF920370,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231A8-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920370-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPreferencesUser;
 #endif
 
 #ifndef __IZcadMenuGroup_INTERFACE_DEFINED__
 #define __IZcadMenuGroup_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadMenuGroup,0xEC9230F5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadMenuGroup,0xEF920236,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230F5-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920236-5A25-11E7-B72E-BC5FF42AC839")
     IZcadMenuGroup : public IDispatch
     {
     public:
@@ -95939,22 +95939,22 @@ DEFINE_GUID(IID_IZcadMenuGroup,0xEC9230F5,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadMenuGroups,0xEC923146,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMenuGroups,0xEF920293,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923146-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920293-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMenuGroups;
 #endif
 
 #ifndef __IZcadPopupMenus_INTERFACE_DEFINED__
 #define __IZcadPopupMenus_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPopupMenus,0xEC92318C,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPopupMenus,0xEF920346,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92318C-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920346-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPopupMenus : public IDispatch
     {
     public:
@@ -96118,11 +96118,11 @@ DEFINE_GUID(IID_IZcadPopupMenus,0xEC92318C,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF
 #ifndef __IZcadToolbars_INTERFACE_DEFINED__
 #define __IZcadToolbars_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadToolbars,0xEC923003,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadToolbars,0xEF920053,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923003-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920053-5A25-11E7-B72E-BC5FF42AC839")
     IZcadToolbars : public IDispatch
     {
     public:
@@ -96282,22 +96282,22 @@ DEFINE_GUID(IID_IZcadToolbars,0xEC923003,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadMenuGroup,0xEC9231F6,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMenuGroup,0xEF920429,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231F6-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920429-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMenuGroup;
 #endif
 
 #ifndef __IZcadPopupMenu_INTERFACE_DEFINED__
 #define __IZcadPopupMenu_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPopupMenu,0xEC9230C2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPopupMenu,0xEF920196,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC9230C2-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920196-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPopupMenu : public IDispatch
     {
     public:
@@ -96537,30 +96537,30 @@ DEFINE_GUID(IID_IZcadPopupMenu,0xEC9230C2,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadMenuBar,0xEC922FED,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadMenuBar,0xEF920034,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FED-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920034-5A25-11E7-B72E-BC5FF42AC839")
 ZcadMenuBar;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPopupMenus,0xEC922FD9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPopupMenus,0xEF920020,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FD9-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920020-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPopupMenus;
 #endif
 
 #ifndef __IZcadPopupMenuItem_INTERFACE_DEFINED__
 #define __IZcadPopupMenuItem_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadPopupMenuItem,0xEC923050,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadPopupMenuItem,0xEF920114,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923050-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920114-5A25-11E7-B72E-BC5FF42AC839")
     IZcadPopupMenuItem : public IDispatch
     {
     public:
@@ -96831,30 +96831,30 @@ DEFINE_GUID(IID_IZcadPopupMenuItem,0xEC923050,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadPopupMenu,0xEC923008,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPopupMenu,0xEF920056,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923008-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920056-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPopupMenu;
 #endif
 
-DEFINE_GUID(CLSID_ZcadPopupMenuItem,0xEC9230D4,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadPopupMenuItem,0xEF920209,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230D4-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920209-5A25-11E7-B72E-BC5FF42AC839")
 ZcadPopupMenuItem;
 #endif
 
 #ifndef __IZcadUtility_INTERFACE_DEFINED__
 #define __IZcadUtility_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadUtility,0xEC923126,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadUtility,0xEF920272,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923126-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920272-5A25-11E7-B72E-BC5FF42AC839")
     IZcadUtility : public IDispatch
     {
     public:
@@ -97324,22 +97324,22 @@ DEFINE_GUID(IID_IZcadUtility,0xEC923126,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadUtility,0xEC922FFC,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadUtility,0xEF920047,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FFC-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920047-5A25-11E7-B72E-BC5FF42AC839")
 ZcadUtility;
 #endif
 
 #ifndef ___DZcadDocumentEvents_DISPINTERFACE_DEFINED__
 #define ___DZcadDocumentEvents_DISPINTERFACE_DEFINED__
 
-DEFINE_GUID(DIID__DZcadDocumentEvents,0xEC923172,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(DIID__DZcadDocumentEvents,0xEF920326,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC923172-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920326-5A25-11E7-B72E-BC5FF42AC839")
     _DZcadDocumentEvents : public IDispatch
     {
     };
@@ -97422,30 +97422,30 @@ DEFINE_GUID(DIID__DZcadDocumentEvents,0xEC923172,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x
 #endif
 
 
-DEFINE_GUID(CLSID_ZcadDocument,0x2F671DA0,0x669F,0x11E7,0x91,0xB7,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDocument,0x2F671DA1,0x669F,0x11E7,0x91,0xB7,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("2F671DA0-669F-11E7-91B7-BC5FF42AC839")
+class DECLSPEC_UUID("2F671DA1-669F-11E7-91B7-BC5FF42AC839")
 ZcadDocument;
 #endif
 
-DEFINE_GUID(CLSID_ZcadDocuments,0xEC9231BB,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadDocuments,0xEF920383,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9231BB-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920383-5A25-11E7-B72E-BC5FF42AC839")
 ZcadDocuments;
 #endif
 
 #ifndef __IZcadToolbar_INTERFACE_DEFINED__
 #define __IZcadToolbar_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadToolbar,0xEC92306B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadToolbar,0xEF920131,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC92306B-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920131-5A25-11E7-B72E-BC5FF42AC839")
     IZcadToolbar : public IDispatch
     {
     public:
@@ -97788,22 +97788,22 @@ DEFINE_GUID(IID_IZcadToolbar,0xEC92306B,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadToolbars,0xEC923086,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadToolbars,0xEF920153,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC923086-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920153-5A25-11E7-B72E-BC5FF42AC839")
 ZcadToolbars;
 #endif
 
 #ifndef __IZcadToolbarItem_INTERFACE_DEFINED__
 #define __IZcadToolbarItem_INTERFACE_DEFINED__
 
-DEFINE_GUID(IID_IZcadToolbarItem,0xEC922FFE,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(IID_IZcadToolbarItem,0xEF920049,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-    MIDL_INTERFACE("EC922FFE-5A21-11E7-B72E-BC5FF42AC839")
+    MIDL_INTERFACE("EF920049-5A25-11E7-B72E-BC5FF42AC839")
     IZcadToolbarItem : public IDispatch
     {
     public:
@@ -98062,19 +98062,19 @@ DEFINE_GUID(IID_IZcadToolbarItem,0xEC922FFE,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0x
 
 #endif
 
-DEFINE_GUID(CLSID_ZcadToolbar,0xEC922FF3,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadToolbar,0xEF920039,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC922FF3-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920039-5A25-11E7-B72E-BC5FF42AC839")
 ZcadToolbar;
 #endif
 
-DEFINE_GUID(CLSID_ZcadToolbarItem,0xEC9230E9,0x5A21,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
+DEFINE_GUID(CLSID_ZcadToolbarItem,0xEF920225,0x5A25,0x11E7,0xB7,0x2E,0xBC,0x5F,0xF4,0x2A,0xC8,0x39);
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("EC9230E9-5A21-11E7-B72E-BC5FF42AC839")
+class DECLSPEC_UUID("EF920225-5A25-11E7-B72E-BC5FF42AC839")
 ZcadToolbarItem;
 #endif
 #endif
