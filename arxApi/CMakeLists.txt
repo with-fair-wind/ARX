@@ -15,7 +15,7 @@ endif()
 # File lists
 file(GLOB_RECURSE INCS CONFIGURE_DEPENDS inc/*.h)
 file(GLOB_RECURSE SRCS CONFIGURE_DEPENDS src/*.cpp src/*.def)
-file(GLOB_RECURSE LIBS CONFIGURE_DEPENDS ${zrxsdk_dir}/lib-${_ZRXSDK_ARCH}/*.lib)
+file(GLOB_RECURSE LIBS ${zrxsdk_dir}/lib-${_ZRXSDK_ARCH}/*.lib)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRCS} ${INCS})
 
@@ -43,7 +43,7 @@ target_include_directories(${PROJECT_NAME}
 )
 
 # 链接目录与库仅在构建时使用，避免把源码目录前缀的绝对路径导出到 INTERFACE 属性
-target_link_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${zrxsdk_dir}/lib-${CMAKE_VS_PLATFORM_NAME}>)
+target_link_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${zrxsdk_dir}/lib-${_ZRXSDK_ARCH}>)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBS})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
