@@ -248,7 +248,7 @@ AcArray<AcDbEntity*> KTArxEntity::AnnularMatrix(const AcDbObjectIdArray& entityI
 
     for (int i = 0; i < arrAngle.length(); i++) {
         AcArray<AcDbEntity*> arrpCopy = CopyEnt(entityIds);
-        RotateEnt(arrpCopy, basePoint, KTArxConvert{}.ToRadian(arrAngle[i]));
+        RotateEnt(arrpCopy, basePoint, KTArxConvert::ToRadian(arrAngle[i]));
         arrpMatrix.append(arrpCopy);
     }
 
@@ -272,7 +272,7 @@ AcArray<AcDbEntity*> KTArxEntity::AnnularMatrix(const AcArray<AcDbEntity*>& enti
 
     for (int i = 0; i < arrAngle.length(); i++) {
         AcArray<AcDbEntity*> arrpCopy = CopyEnt(entities);
-        RotateEnt(arrpCopy, basePoint, KTArxConvert{}.ToRadian(arrAngle[i]));
+        RotateEnt(arrpCopy, basePoint, KTArxConvert::ToRadian(arrAngle[i]));
         arrpMatrix.append(arrpCopy);
     }
 
