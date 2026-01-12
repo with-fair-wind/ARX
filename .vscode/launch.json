@@ -6,20 +6,17 @@
   "configurations": [
     {
       "name": "(Windows) 启动 ZWCAD",
-      "type": "cppvsdbg",
+      "type": "lldb",
       "request": "launch",
       "program": "D:/soft/ZWCAD 2025/zwcad.exe",
       "args": [],
-      "stopAtEntry": false,
       "cwd": "D:/soft/ZWCAD 2025",
-      "environment": [],
       "console": "externalTerminal"
     },
     {
       "name": "(Windows) 附加到 ZWCAD",
-      "type": "cppvsdbg",
-      "request": "attach",
-      "processId": "${command:pickProcess}"
+      "type": "lldb",
+      "request": "attach"
     }
   ]
 }
