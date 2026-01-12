@@ -51,5 +51,7 @@
     "chrono": "cpp",
     "functional": "cpp",
     "ratio": "cpp"
-  }
+  },
+  "cmake.generator": "Visual Studio 18 2026",
+  "cmake.outputLogEncoding": "utf8"
 }
