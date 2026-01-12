@@ -11,5 +11,10 @@ class KT_EXPORTARX_API KTArxConvert {
         static constexpr double kDegreesToRadians = (M_PI / 180.0);
         return angleDegrees * kDegreesToRadians;
     }
+
+    static double toDegrees(double angleRadians) {
+        static constexpr double kRadiansToDegrees = (180.0 / M_PI);
+        return angleRadians * kRadiansToDegrees;
+    }
 };
 }  // namespace KTArxTool
