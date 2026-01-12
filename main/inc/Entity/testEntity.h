@@ -6,12 +6,16 @@ class TestEntity : public AcDbEntity {
     ACRX_DECLARE_MEMBERS(TestEntity)
 
     TestEntity() = default;
-    virtual ~TestEntity() = default;
+    TestEntity(const TestEntity&) = delete;
+    TestEntity& operator=(const TestEntity&) = delete;
+    TestEntity(TestEntity&&) = delete;
+    TestEntity& operator=(TestEntity&&) = delete;
+    ~TestEntity() override = default;
 
    protected:
-    virtual Adesk::Boolean subWorldDraw(AcGiWorldDraw* mode) override;
-    virtual void subViewportDraw(AcGiViewportDraw* mode) override;
-    virtual Adesk::UInt32 subViewportDrawLogicalFlags(AcGiViewportDraw* vd) override;
+    Adesk::Boolean subWorldDraw(AcGiWorldDraw* worldDraw) override;
+    void subViewportDraw(AcGiViewportDraw* viewportDraw) override;
+    Adesk::UInt32 subViewportDrawLogicalFlags(AcGiViewportDraw* viewportDraw) override;
 };
 
 class TestEntity2 : public AcDbEntity {
@@ -19,16 +23,20 @@ class TestEntity2 : public AcDbEntity {
     ACRX_DECLARE_MEMBERS(TestEntity2)
 
     TestEntity2() = default;
-    virtual ~TestEntity2() = default;
+    TestEntity2(const TestEntity2&) = delete;
+    TestEntity2& operator=(const TestEntity2&) = delete;
+    TestEntity2(TestEntity2&&) = delete;
+    TestEntity2& operator=(TestEntity2&&) = delete;
+    ~TestEntity2() override = default;
 
     PROPERTY_CREATE_ARX(TestEntity2, AcGePoint3d, CenterPos, m_centerPos)
     PROPERTY_CREATE_ARX(TestEntity2, double, Radius, m_radius)
     PROPERTY_CREATE_ARX(TestEntity2, int32_t, TestNum, m_testNum)
 
    protected:
-    virtual Acad::ErrorStatus dwgInFields(AcDbDwgFiler* filer) override;
-    virtual Acad::ErrorStatus dwgOutFields(AcDbDwgFiler* filer) const override;
-    virtual Adesk::Boolean subWorldDraw(AcGiWorldDraw* mode) override;
+    Acad::ErrorStatus dwgInFields(AcDbDwgFiler* filer) override;
+    Acad::ErrorStatus dwgOutFields(AcDbDwgFiler* filer) const override;
+    Adesk::Boolean subWorldDraw(AcGiWorldDraw* mode) override;
 
    private:
     AcGePoint3d m_centerPos = AcGePoint3d::kOrigin;

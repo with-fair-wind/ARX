@@ -33,7 +33,7 @@ if(MSVC)
 endif()
 
 target_include_directories(${PROJECT_NAME}
-    PRIVATE
+    PUBLIC
     $<BUILD_INTERFACE:${zrxsdk_dir}/inc>
     $<BUILD_INTERFACE:${zrxsdk_dir}/arxport/inc>
     $<BUILD_INTERFACE:${zrxsdk_dir}/arxport/inc-x64>
@@ -43,8 +43,8 @@ target_include_directories(${PROJECT_NAME}
 )
 
 # 链接目录与库仅在构建时使用，避免把源码目录前缀的绝对路径导出到 INTERFACE 属性
-target_link_directories(${PROJECT_NAME} PRIVATE $<BUILD_INTERFACE:${zrxsdk_dir}/lib-${CMAKE_VS_PLATFORM_NAME}>)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
+target_link_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${zrxsdk_dir}/lib-${CMAKE_VS_PLATFORM_NAME}>)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBS})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     FOLDER "Api"

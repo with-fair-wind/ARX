@@ -1,8 +1,7 @@
 #include <Entity/testEntity.h>
 #include <Test/command.h>
 
-#include <sstream>
-
+namespace {
 void registerEntity() {
     Test_Entity::TestEntity::rxInit();
     Test_Entity::TestEntity2::rxInit();
@@ -28,6 +27,7 @@ void unloadApp() {
     deleteEntity();
     acedRegCmds->removeGroup(_T("TestCMD"));
 }
+}  // namespace
 
 extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
     switch (msg) {
