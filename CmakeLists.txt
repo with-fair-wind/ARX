@@ -49,3 +49,4 @@ SET(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install CACHE PATH "install
 add_subdirectory(arxApi)
 
 # add_subdirectory(main)
+add_generate_compile_commands_target(7)
