@@ -13,6 +13,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 if(MSVC)
+    message(STATUS "MSVC detected")
     set(CMAKE_SYSTEM_VERSION 10.0.17763.0)
 endif()
 
@@ -46,4 +47,5 @@ endif()
 SET(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install CACHE PATH "installation path" FORCE)
 
 add_subdirectory(arxApi)
-add_subdirectory(main)
+
+# add_subdirectory(main)
