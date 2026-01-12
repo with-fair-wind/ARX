@@ -6,8 +6,14 @@
 class CObjectArxApp : public AcRxArxApp {
    public:
     CObjectArxApp() : AcRxArxApp() {}
+    CObjectArxApp(const CObjectArxApp&) = delete;
+    CObjectArxApp& operator=(const CObjectArxApp&) = delete;
+    CObjectArxApp(CObjectArxApp&&) = delete;
+    CObjectArxApp& operator=(CObjectArxApp&&) = delete;
 
-    virtual AcRx::AppRetCode On_kInitAppMsg(void* pkt) override {
+    virtual ~CObjectArxApp() = default;
+
+    AcRx::AppRetCode On_kInitAppMsg(void* pkt) override {
         // TODO: 如果有其他依赖项，请在这里加载
 
         // You *must* call On_kInitAppMsg here
@@ -18,7 +24,7 @@ class CObjectArxApp : public AcRxArxApp {
         return (retCode);
     }
 
-    virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt) override {
+    AcRx::AppRetCode On_kUnloadAppMsg(void* pkt) override {
         // TODO: 退出
 
         // You *must* call On_kUnloadAppMsg here
@@ -28,7 +34,7 @@ class CObjectArxApp : public AcRxArxApp {
 
         return (retCode);
     }
-    virtual void RegisterServerComponents() override {}
+    void RegisterServerComponents() override {}
 };
 
 IMPLEMENT_ARX_ENTRYPOINT(CObjectArxApp)
