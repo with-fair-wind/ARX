@@ -3,6 +3,6 @@
 namespace KTArxTool {
 class KT_EXPORTARX_API KTArxUiPr {
    public:
-    static bool SelEnt(LPCTSTR prompt, AcRxClass* classType, AcDbObjectId& objectId, AcGePoint3d& pickedPoint);
+    static bool selEnt(LPCTSTR prompt, AcRxClass* classType, AcDbObjectId& objectId, AcGePoint3d& pickedPoint);
 };
 }  // namespace KTArxTool

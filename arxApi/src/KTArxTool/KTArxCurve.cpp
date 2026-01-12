@@ -6,7 +6,7 @@
 #include <cmath>
 
 namespace KTArxTool {
-bool KTArxCurve::GetPosAngNegValue(AcDbCurve* curve, const AcGePoint3d& basePoint, const AcGeVector3d& directionVector) {
+bool KTArxCurve::getPosAngNegValue(AcDbCurve* curve, const AcGePoint3d& basePoint, const AcGeVector3d& directionVector) {
     assert(curve != nullptr);
 
     const AcGePoint3d ptNew = basePoint + directionVector;
@@ -40,7 +40,7 @@ bool KTArxCurve::GetPosAngNegValue(AcDbCurve* curve, const AcGePoint3d& basePoin
     return isPositive;
 }
 
-AcArray<AcDbCurve*> KTArxCurve::OffsetCurve(AcDbCurve* curve, double offset) {
+AcArray<AcDbCurve*> KTArxCurve::offsetCurve(AcDbCurve* curve, double offset) {
     AcArray<AcDbCurve*> arrOffsetCurve;
     AcDbVoidPtrArray osArr;
     if (curve->getOffsetCurves(offset, osArr) == Acad::eOk) {
@@ -51,7 +51,7 @@ AcArray<AcDbCurve*> KTArxCurve::OffsetCurve(AcDbCurve* curve, double offset) {
     return arrOffsetCurve;
 }
 
-AcArray<AcDbCurve*> KTArxCurve::OffsetCurve(AcDbCurve* curve, double offset, const AcGePoint3d& point, bool opposite) {
+AcArray<AcDbCurve*> KTArxCurve::offsetCurve(AcDbCurve* curve, double offset, const AcGePoint3d& point, bool opposite) {
     offset = std::fabs(offset);  // 绝对值
     // 算出实体平面法向量
     AcGePlane plane;
@@ -59,7 +59,7 @@ AcArray<AcDbCurve*> KTArxCurve::OffsetCurve(AcDbCurve* curve, double offset, con
     curve->getPlane(plane, type);
     AcGeVector3d vecNormal = plane.normal();
     // 根据偏移点（鼠标点），找出矩形上距离该点最近的点ptClosed
-    AcGePoint3d ptClosed = GetClosedPtInCurve(curve, point);
+    AcGePoint3d ptClosed = getClosedPtInCurve(curve, point);
     // 算出矩形上经过ptClosed的切线，即经过该点的那条边vecDerive
     AcGeVector3d vecDerive;
     curve->getFirstDeriv(ptClosed, vecDerive);
@@ -80,10 +80,10 @@ AcArray<AcDbCurve*> KTArxCurve::OffsetCurve(AcDbCurve* curve, double offset, con
         offset = -offset;
     }
     // 偏移实体
-    return OffsetCurve(curve, offset);
+    return offsetCurve(curve, offset);
 }
 
-AcGePoint3d KTArxCurve::GetClosedPtInCurve(AcDbCurve* curve, const AcGePoint3d& point) {
+AcGePoint3d KTArxCurve::getClosedPtInCurve(AcDbCurve* curve, const AcGePoint3d& point) {
     double dist = 0.0;
     if (Acad::eInvalidInput == curve->getDistAtPoint(point, dist)) {
         AcGePoint3d ptOnCurve;
@@ -93,20 +93,20 @@ AcGePoint3d KTArxCurve::GetClosedPtInCurve(AcDbCurve* curve, const AcGePoint3d& 
     return point;
 }
 
-bool KTArxCurve::GetClosedPtInCurve(const AcDbObjectId& curveId, const AcGePoint3d& point, AcGePoint3d& closestPoint) {
+bool KTArxCurve::getClosedPtInCurve(const AcDbObjectId& curveId, const AcGePoint3d& point, AcGePoint3d& closestPoint) {
     AcDbObjectPointer<AcDbCurve> curve(curveId, AcDb::kForRead);
     if (Acad::eOk != curve.openStatus()) {
         return false;
     }
-    closestPoint = GetClosedPtInCurve(curve, point);
+    closestPoint = getClosedPtInCurve(curve, point);
     return true;
 }
 
-AcArray<AcDbCurve*> KTArxCurve::SplitCurve(AcDbCurve* pCurve, const AcGePoint3dArray& arrSplitPt) {
+AcArray<AcDbCurve*> KTArxCurve::splitCurve(AcDbCurve* pCurve, const AcGePoint3dArray& arrSplitPt) {
     AcArray<AcDbCurve*> arrSplitCurve;
     AcDbVoidPtrArray spArr;
     AcGePoint3dArray arrptClosed;
-    for (int i = 0; i < arrSplitPt.length(); i++) arrptClosed.append(GetClosedPtInCurve(pCurve, arrSplitPt.at(i)));
+    for (int i = 0; i < arrSplitPt.length(); i++) arrptClosed.append(getClosedPtInCurve(pCurve, arrSplitPt.at(i)));
 
     if (pCurve->getSplitCurves(arrptClosed, spArr) == Acad::eOk) {
         for (int i = 0; i < spArr.length(); i++) arrSplitCurve.append(static_cast<AcDbCurve*>(spArr.at(i)));
@@ -114,20 +114,20 @@ AcArray<AcDbCurve*> KTArxCurve::SplitCurve(AcDbCurve* pCurve, const AcGePoint3dA
     return arrSplitCurve;
 }
 
-AcArray<AcDbCurve*> KTArxCurve::SplitCurve(const AcDbObjectId& idCurve, const AcGePoint3dArray& arrSplitPt) {
+AcArray<AcDbCurve*> KTArxCurve::splitCurve(const AcDbObjectId& idCurve, const AcGePoint3dArray& arrSplitPt) {
     AcArray<AcDbCurve*> arrpSplit;
     AcDbObjectPointer<AcDbCurve> pCurve(idCurve, AcDb::kForRead);
     if (Acad::eOk != pCurve.openStatus()) return arrpSplit;
-    return SplitCurve(pCurve, arrSplitPt);
+    return splitCurve(pCurve, arrSplitPt);
 }
 
-AcArray<AcDbCurve*> KTArxCurve::SplitCurve(AcDbCurve* pCurve, const AcGePoint3d& ptSplit) {
+AcArray<AcDbCurve*> KTArxCurve::splitCurve(AcDbCurve* pCurve, const AcGePoint3d& ptSplit) {
     AcGePoint3dArray arrSplitPt;
     arrSplitPt.append(ptSplit);
-    return SplitCurve(pCurve, arrSplitPt);
+    return splitCurve(pCurve, arrSplitPt);
 }
 
-bool KTArxCurve::ExtendCurveByDist(AcDbPolyline* polyline, bool isStartPoint, double distance) {
+bool KTArxCurve::extendCurveByDist(AcDbPolyline* polyline, bool isStartPoint, double distance) {
     if (polyline->numVerts() < 2) {
         return false;
     }
@@ -171,7 +171,7 @@ bool KTArxCurve::ExtendCurveByDist(AcDbPolyline* polyline, bool isStartPoint, do
     return polyline->extend(endParam) == Acad::eOk;
 }
 
-bool KTArxCurve::ExtendCurve(AcDbCurve* border, AcDbCurve* curveToExtend, const AcGePoint3d& extendPoint) {
+bool KTArxCurve::extendCurve(AcDbCurve* border, AcDbCurve* curveToExtend, const AcGePoint3d& extendPoint) {
     AcGePoint3dArray arrptInter;
     curveToExtend->intersectWith(border, AcDb::kExtendThis, arrptInter);
     if (arrptInter.isEmpty()) {
@@ -186,24 +186,24 @@ bool KTArxCurve::ExtendCurve(AcDbCurve* border, AcDbCurve* curveToExtend, const 
 }
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-bool KTArxCurve::TrimCurve(AcDbCurve* pBorder, AcDbCurve* pTrim, const AcGePoint3d& ptTrim, AcDbCurve*& pNewTrim) {
+bool KTArxCurve::trimCurve(AcDbCurve* pBorder, AcDbCurve* pTrim, const AcGePoint3d& ptTrim, AcDbCurve*& pNewTrim) {
     AcGePoint3dArray arrptInter;
     pTrim->intersectWith(pBorder, AcDb::kOnBothOperands, arrptInter);
     if (arrptInter.isEmpty()) return false;
 
-    AcArray<AcDbCurve*> arrSplit = SplitCurve(pTrim, arrptInter[0]);
+    AcArray<AcDbCurve*> arrSplit = splitCurve(pTrim, arrptInter[0]);
     if (arrSplit.length() != 2) {
         for (int i = 0; i < arrSplit.length(); i++) DEL(arrSplit[i]);
         return false;
     }
 
-    if (IsPtOnCurve(ptTrim, arrSplit[0])) {
+    if (isPtOnCurve(ptTrim, arrSplit[0])) {
         pNewTrim = arrSplit[1];
         DEL(arrSplit[0]);
         return true;
     }
 
-    if (IsPtOnCurve(ptTrim, arrSplit[1])) {
+    if (isPtOnCurve(ptTrim, arrSplit[1])) {
         pNewTrim = arrSplit[0];
         DEL(arrSplit[1]);
         return true;
@@ -213,7 +213,7 @@ bool KTArxCurve::TrimCurve(AcDbCurve* pBorder, AcDbCurve* pTrim, const AcGePoint
     return false;
 }
 
-bool KTArxCurve::IsPtOnCurve(const AcGePoint3d& point, AcDbCurve* curve, double tolerance) {
+bool KTArxCurve::isPtOnCurve(const AcGePoint3d& point, AcDbCurve* curve, double tolerance) {
     double dist = 0.0;
     if (Acad::eInvalidInput != curve->getDistAtPoint(point, dist)) {
         return true;
@@ -223,15 +223,15 @@ bool KTArxCurve::IsPtOnCurve(const AcGePoint3d& point, AcDbCurve* curve, double 
         return false;
     }
 
-    const AcGePoint3d ptOnCurve = GetClosedPtInCurve(curve, point);
+    const AcGePoint3d ptOnCurve = getClosedPtInCurve(curve, point);
     AcGeTol tol;
     tol.setEqualPoint(tolerance);
     return point.isEqualTo(ptOnCurve, tol);
 }
 
-double KTArxCurve::GetArcBulge(AcDbArc* arc) { return GetArcBulge(arc->startAngle(), arc->endAngle()); }
+double KTArxCurve::getArcBulge(AcDbArc* arc) { return getArcBulge(arc->startAngle(), arc->endAngle()); }
 
-double KTArxCurve::GetArcBulge(double startAngle, double endAngle) {
+double KTArxCurve::getArcBulge(double startAngle, double endAngle) {
     constexpr double kBulgeDivisor = 4.0;
     constexpr double kTwoPi = 2.0 * M_PI;
 
@@ -242,26 +242,26 @@ double KTArxCurve::GetArcBulge(double startAngle, double endAngle) {
     return std::tan(deltaAngle / kBulgeDivisor);
 }
 
-double KTArxCurve::GetArcBulge(const AcGeCircArc2d& arc) { return GetArcBulge(arc.startAng(), arc.endAng()); }
+double KTArxCurve::getArcBulge(const AcGeCircArc2d& arc) { return getArcBulge(arc.startAng(), arc.endAng()); }
 
-double KTArxCurve::GetArcBulge(AcDbCurve* curve) {
+double KTArxCurve::getArcBulge(AcDbCurve* curve) {
     double dBulge = 0.0;
     if (curve->isKindOf(AcDbArc::desc())) {
         AcDbArc* arc = AcDbArc::cast(curve);
-        dBulge = GetArcBulge(arc->startAngle(), arc->endAngle());
+        dBulge = getArcBulge(arc->startAngle(), arc->endAngle());
     }
     return dBulge;
 }
 
-double KTArxCurve::GetArcBulge(const AcDbObjectId& arcId) {
+double KTArxCurve::getArcBulge(const AcDbObjectId& arcId) {
     AcDbObjectPointer<AcDbArc> arc(arcId, AcDb::kForRead);
     if (Acad::eOk != arc.openStatus()) {
         return 0.0;
     }
-    return GetArcBulge(arc->startAngle(), arc->endAngle());
+    return getArcBulge(arc->startAngle(), arc->endAngle());
 }
 
-AcGeLine2d KTArxCurve::GetGeLine2d(AcDbLine* line) {
+AcGeLine2d KTArxCurve::getGeLine2d(AcDbLine* line) {
     AcGePoint3d ptStart = line->startPoint();
     AcGePoint3d ptEnd = line->endPoint();
     AcGeLine2d geLine;
@@ -269,7 +269,7 @@ AcGeLine2d KTArxCurve::GetGeLine2d(AcDbLine* line) {
     return geLine;
 }
 
-AcGeLineSeg2d KTArxCurve::GetGeLineSeg2d(AcDbLine* line) {
+AcGeLineSeg2d KTArxCurve::getGeLineSeg2d(AcDbLine* line) {
     AcGePoint3d ptStart = line->startPoint();
     AcGePoint3d ptEnd = line->endPoint();
     AcGeLineSeg2d geLine;
@@ -277,7 +277,7 @@ AcGeLineSeg2d KTArxCurve::GetGeLineSeg2d(AcDbLine* line) {
     return geLine;
 }
 
-AcGeLineSeg2d KTArxCurve::GetGeLineSeg2d(AcDbPolyline* polyline, unsigned int index) {
+AcGeLineSeg2d KTArxCurve::getGeLineSeg2d(AcDbPolyline* polyline, unsigned int index) {
     AcGeLineSeg2d geLine;
     const Acad::ErrorStatus errorStatus = polyline->getLineSegAt(index, geLine);
     if (errorStatus != Acad::eOk) {
@@ -286,7 +286,7 @@ AcGeLineSeg2d KTArxCurve::GetGeLineSeg2d(AcDbPolyline* polyline, unsigned int in
     return geLine;
 }
 
-AcGeLineSeg2d KTArxCurve::GetGeLineSeg2d(const AcDbObjectId& lineId) {
+AcGeLineSeg2d KTArxCurve::getGeLineSeg2d(const AcDbObjectId& lineId) {
     AcGeLineSeg2d geLine;
     AcDbObjectPointer<AcDbLine> line(lineId, AcDb::kForRead);
     if (Acad::eOk != line.openStatus()) {
@@ -298,7 +298,7 @@ AcGeLineSeg2d KTArxCurve::GetGeLineSeg2d(const AcDbObjectId& lineId) {
     return geLine;
 }
 
-AcGeCircArc2d KTArxCurve::GetGeCircArc2d(AcDbPolyline* polyline, unsigned int index) {
+AcGeCircArc2d KTArxCurve::getGeCircArc2d(AcDbPolyline* polyline, unsigned int index) {
     AcGeCircArc2d geCircArc;
     const Acad::ErrorStatus errorStatus = polyline->getArcSegAt(index, geCircArc);
     if (errorStatus != Acad::eOk) {
@@ -307,7 +307,7 @@ AcGeCircArc2d KTArxCurve::GetGeCircArc2d(AcDbPolyline* polyline, unsigned int in
     return geCircArc;
 }
 
-AcGeCircArc2d KTArxCurve::GetGeCircArc2d(AcDbArc* arc) {
+AcGeCircArc2d KTArxCurve::getGeCircArc2d(AcDbArc* arc) {
     AcGePoint3d centerPt = arc->center();
     double dRadius = arc->radius();
     double dStartAngle = arc->startAngle();
@@ -317,7 +317,7 @@ AcGeCircArc2d KTArxCurve::GetGeCircArc2d(AcDbArc* arc) {
     return geCircArc;
 }
 
-AcGeCircArc2d KTArxCurve::GetGeCircArc2d(AcDbCircle* circle) {
+AcGeCircArc2d KTArxCurve::getGeCircArc2d(AcDbCircle* circle) {
     AcGePoint3d centerPt = circle->center();
     double dRadius = circle->radius();
     AcGeCircArc2d geCircArc;
@@ -325,7 +325,7 @@ AcGeCircArc2d KTArxCurve::GetGeCircArc2d(AcDbCircle* circle) {
     return geCircArc;
 }
 
-bool KTArxCurve::GetIntersectPoint(const AcGeLine2d& line1, const AcGeLine2d& line2, AcGePoint3d& intersectionPoint) {
+bool KTArxCurve::getIntersectPoint(const AcGeLine2d& line1, const AcGeLine2d& line2, AcGePoint3d& intersectionPoint) {
     AcGePoint2d pt2d;
     const bool isIntersected = line1.intersectWith(line2, pt2d);
     if (!isIntersected) {
@@ -335,7 +335,7 @@ bool KTArxCurve::GetIntersectPoint(const AcGeLine2d& line1, const AcGeLine2d& li
     return true;
 }
 
-bool KTArxCurve::GetIntersectPoint(const AcGeLineSeg2d& lineSeg1, const AcGeLineSeg2d& lineSeg2, AcGePoint3d& intersectionPoint) {
+bool KTArxCurve::getIntersectPoint(const AcGeLineSeg2d& lineSeg1, const AcGeLineSeg2d& lineSeg2, AcGePoint3d& intersectionPoint) {
     AcGePoint2d pt2d;
     const bool isIntersected = lineSeg1.intersectWith(lineSeg2, pt2d);
     if (!isIntersected) {
@@ -345,7 +345,7 @@ bool KTArxCurve::GetIntersectPoint(const AcGeLineSeg2d& lineSeg1, const AcGeLine
     return true;
 }
 
-bool KTArxCurve::GetIntersectPoint(const AcGeLineSeg2d& lineSeg, const AcGeLine2d& line, AcGePoint3d& intersectionPoint) {
+bool KTArxCurve::getIntersectPoint(const AcGeLineSeg2d& lineSeg, const AcGeLine2d& line, AcGePoint3d& intersectionPoint) {
     AcGePoint2d pt2d;
     const bool isIntersected = lineSeg.intersectWith(line, pt2d);
     if (!isIntersected) {
@@ -355,7 +355,7 @@ bool KTArxCurve::GetIntersectPoint(const AcGeLineSeg2d& lineSeg, const AcGeLine2
     return true;
 }
 
-bool KTArxCurve::GetIntersectPoint(const AcGeCircArc2d& arc1, const AcGeCircArc2d& arc2, int& intersectionCount, AcGePoint3dArray& intersectionPoints) {
+bool KTArxCurve::getIntersectPoint(const AcGeCircArc2d& arc1, const AcGeCircArc2d& arc2, int& intersectionCount, AcGePoint3dArray& intersectionPoints) {
     intersectionCount = 0;
     AcGePoint2d pt1, pt2;
     const bool isIntersected = arc1.intersectWith(arc2, intersectionCount, pt1, pt2);
@@ -371,7 +371,7 @@ bool KTArxCurve::GetIntersectPoint(const AcGeCircArc2d& arc1, const AcGeCircArc2
     return true;
 }
 
-bool KTArxCurve::GetIntersectPoint(const AcGeLine2d& line, const AcGeCircArc2d& arc, int& intersectionCount, AcGePoint3dArray& intersectionPoints) {
+bool KTArxCurve::getIntersectPoint(const AcGeLine2d& line, const AcGeCircArc2d& arc, int& intersectionCount, AcGePoint3dArray& intersectionPoints) {
     intersectionCount = 0;
     AcGePoint2d pt1, pt2;
     if (!arc.intersectWith(line, intersectionCount, pt1, pt2)) {
@@ -386,7 +386,7 @@ bool KTArxCurve::GetIntersectPoint(const AcGeLine2d& line, const AcGeCircArc2d& 
     return true;
 }
 
-bool KTArxCurve::GetIntersectPoint(const AcGeLineSeg2d& lineSeg, const AcGeCircArc2d& arc, int& intersectionCount, AcGePoint3dArray& intersectionPoints) {
+bool KTArxCurve::getIntersectPoint(const AcGeLineSeg2d& lineSeg, const AcGeCircArc2d& arc, int& intersectionCount, AcGePoint3dArray& intersectionPoints) {
     intersectionCount = 0;
     AcGePoint2d pt1, pt2;
     if (!arc.intersectWith(lineSeg, intersectionCount, pt1, pt2)) {
@@ -402,31 +402,31 @@ bool KTArxCurve::GetIntersectPoint(const AcGeLineSeg2d& lineSeg, const AcGeCircA
 }
 
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-AcGeVector3d KTArxCurve::GetProjectVector(const AcGePoint3d& basePoint, const AcGeVector3d& offsetVector, const AcGeVector3d& directionVector) {
+AcGeVector3d KTArxCurve::getProjectVector(const AcGePoint3d& basePoint, const AcGeVector3d& offsetVector, const AcGeVector3d& directionVector) {
     const AcGePoint3d offsetPoint = basePoint + offsetVector;
     const AcGeLine3d line(basePoint, directionVector);
     const AcGePoint3d projectedPoint = line.closestPointTo(offsetPoint);
     return projectedPoint - basePoint;
 }
 
-AcGeVector3d KTArxCurve::GetTangentLineVec(const AcGePoint3d& ptOnCurve, const AcDbObjectId& idCurve) {
+AcGeVector3d KTArxCurve::getTangentLineVec(const AcGePoint3d& ptOnCurve, const AcDbObjectId& idCurve) {
     AcDbObjectPointer<AcDbCurve> pCurve(idCurve, AcDb::kForRead);
     if (Acad::eOk != pCurve.openStatus()) {
         return AcGeVector3d::kIdentity;
     }
-    const AcGePoint3d closestPoint = GetClosedPtInCurve(pCurve, ptOnCurve);
+    const AcGePoint3d closestPoint = getClosedPtInCurve(pCurve, ptOnCurve);
     AcGeVector3d vecTangLine;
     pCurve->getFirstDeriv(closestPoint, vecTangLine);
     return vecTangLine;
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* polyline, const AcGePoint3d& point, AcGeVector3dArray& tangentVectors) {
+bool KTArxCurve::getTangentLineVecArrForPolyline(AcDbPolyline* polyline, const AcGePoint3d& point, AcGeVector3dArray& tangentVectors) {
     if (polyline == nullptr) {
         return false;
     }
 
-    const AcGePoint3d pointOnCurve = GetClosedPtInCurve(polyline, point);
+    const AcGePoint3d pointOnCurve = getClosedPtInCurve(polyline, point);
     const unsigned int vertexCount = polyline->numVerts();
     if (vertexCount < 2U) {
         return false;
@@ -435,7 +435,7 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* polyline, const A
     AcGePoint3dArray vertices;  // 顶点集合
     AcArray<double> bulges;     // 凸度集合(每段对应一个 bulge)
 
-    const bool isClosed = KTArxEntity::IsClosedPline(polyline);
+    const bool isClosed = KTArxEntity::isClosedPline(polyline);
     const bool isNativeClosed = polyline->isClosed();
     for (unsigned int i = 0; i < vertexCount; i++) {
         AcGePoint3d vertex;
@@ -498,7 +498,7 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* polyline, const A
 
         AcGeCircArc2d segmentArc;
         polyline->getArcSegAt(static_cast<unsigned int>(segmentStartIndex), segmentArc);
-        const AcGePoint3d centerPoint = KTArxConvert::ToPt3d(segmentArc.center());
+        const AcGePoint3d centerPoint = KTArxConvert::toPt3d(segmentArc.center());
 
         const AcGePoint3d& vertexPoint = atStartVertex ? vertices[segmentStartIndex] : vertices[endIndex];
         const AcGeVector3d radiusVector = vertexPoint - centerPoint;
@@ -546,7 +546,7 @@ bool KTArxCurve::GetTangentLineVecArrForPolyline(AcDbPolyline* polyline, const A
     return true;
 }
 
-AcGeVector3dArray KTArxCurve::GetTangentLineVecArr(const AcGePoint3d& point, AcDbCurve* curve) {
+AcGeVector3dArray KTArxCurve::getTangentLineVecArr(const AcGePoint3d& point, AcDbCurve* curve) {
     constexpr double kEqualPointTol = 0.01;
     AcGeTol tol;
     tol.setEqualPoint(kEqualPointTol);
@@ -556,7 +556,7 @@ AcGeVector3dArray KTArxCurve::GetTangentLineVecArr(const AcGePoint3d& point, AcD
         return tangentVectors;
     }
 
-    const AcGePoint3d pointOnCurve = GetClosedPtInCurve(curve, point);
+    const AcGePoint3d pointOnCurve = getClosedPtInCurve(curve, point);
 
     if (curve->isKindOf(AcDbCircle::desc()) || curve->isKindOf(AcDbEllipse::desc())) {  // 圆、椭圆
         AcGeVector3d vecDeriv;
@@ -589,23 +589,23 @@ AcGeVector3dArray KTArxCurve::GetTangentLineVecArr(const AcGePoint3d& point, AcD
     }
 
     if (curve->isKindOf(AcDbPolyline::desc())) {
-        (void)GetTangentLineVecArrForPolyline(AcDbPolyline::cast(curve), point, tangentVectors);
+        (void)getTangentLineVecArrForPolyline(AcDbPolyline::cast(curve), point, tangentVectors);
         return tangentVectors;
     }
 
     return tangentVectors;
 }
 
-AcGeVector3dArray KTArxCurve::GetTangentLineVecArr(const AcGePoint3d& point, const AcDbObjectId& curveId) {
+AcGeVector3dArray KTArxCurve::getTangentLineVecArr(const AcGePoint3d& point, const AcDbObjectId& curveId) {
     AcDbObjectPointer<AcDbCurve> curve(curveId, AcDb::kForRead);
-    return GetTangentLineVecArr(point, curve);
+    return getTangentLineVecArr(point, curve);
 }
 
-AcGeVector2d KTArxCurve::GetMidVectorOfLines(AcDbLine* pLine1, AcDbLine* pLine2) {
-    AcGeLine2d geLine1 = GetGeLine2d(pLine1);
-    AcGeLine2d geLine2 = GetGeLine2d(pLine2);
+AcGeVector2d KTArxCurve::getMidVectorOfLines(AcDbLine* pLine1, AcDbLine* pLine2) {
+    AcGeLine2d geLine1 = getGeLine2d(pLine1);
+    AcGeLine2d geLine2 = getGeLine2d(pLine2);
     AcGePoint3d ptInter;
-    GetIntersectPoint(geLine1, geLine2, ptInter);
+    getIntersectPoint(geLine1, geLine2, ptInter);
     AcGePoint3d ptEnd1 = ptInter.isEqualTo(pLine1->startPoint()) ? pLine1->endPoint() : pLine1->startPoint();
     AcGePoint3d ptEnd2 = ptInter.isEqualTo(pLine2->startPoint()) ? pLine2->endPoint() : pLine2->startPoint();
     AcGeVector2d vec1 = ptEnd1.convert2d(AcGePlane::kXYPlane) - ptInter.convert2d(AcGePlane::kXYPlane);
@@ -614,9 +614,9 @@ AcGeVector2d KTArxCurve::GetMidVectorOfLines(AcDbLine* pLine1, AcDbLine* pLine2)
     return midVector;
 }
 
-double KTArxCurve::GetAngle(const AcGeVector3d& vector) { return AcGeVector3d::kXAxis.angleTo(vector, AcGeVector3d::kZAxis); }
+double KTArxCurve::getAngle(const AcGeVector3d& vector) { return AcGeVector3d::kXAxis.angleTo(vector, AcGeVector3d::kZAxis); }
 
-double KTArxCurve::GetCurveLength(AcDbCurve* curve) {
+double KTArxCurve::getCurveLength(AcDbCurve* curve) {
     double length = 0.0;
     double endParam = 0.0;
     curve->getEndParam(endParam);
@@ -625,11 +625,11 @@ double KTArxCurve::GetCurveLength(AcDbCurve* curve) {
 }
 }  // namespace KTArxTool
 
-double KTArxTool::KTArxCurve::GetAngleOfLines(AcDbLine* pLine1, AcDbLine* pLine2) {
-    AcGeLine2d geLine1 = GetGeLine2d(pLine1);
-    AcGeLine2d geLine2 = GetGeLine2d(pLine2);
+double KTArxTool::KTArxCurve::getAngleOfLines(AcDbLine* pLine1, AcDbLine* pLine2) {
+    AcGeLine2d geLine1 = getGeLine2d(pLine1);
+    AcGeLine2d geLine2 = getGeLine2d(pLine2);
     AcGePoint3d ptInter;
-    if (!GetIntersectPoint(geLine1, geLine2, ptInter)) return 0.;
+    if (!getIntersectPoint(geLine1, geLine2, ptInter)) return 0.;
     AcGePoint3d ptEnd1 = ptInter.isEqualTo(pLine1->startPoint()) ? pLine1->endPoint() : pLine1->startPoint();
     AcGePoint3d ptEnd2 = ptInter.isEqualTo(pLine2->startPoint()) ? pLine2->endPoint() : pLine2->startPoint();
     AcGeVector2d vec1 = ptEnd1.convert2d(AcGePlane::kXYPlane) - ptInter.convert2d(AcGePlane::kXYPlane);

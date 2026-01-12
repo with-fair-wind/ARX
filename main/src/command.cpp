@@ -28,7 +28,7 @@ namespace Test_Command {
 void test1() {
     const AcGePoint3d endPoint{kBaseSize, kBaseSize, kDefaultZ};
     auto line = std::make_unique<AcDbLine>(AcGePoint3d::kOrigin, endPoint);
-    (void)KTArxTool::KTArxUtility::PostToModelSpace(line.release());
+    (void)KTArxTool::KTArxUtility::postToModelSpace(line.release());
 }
 
 void test2() {
@@ -39,7 +39,7 @@ void test2() {
     points.append(AcGePoint2d(kBaseSize, 0.0));
     points.append(AcGePoint2d(kBaseSize, kBaseSize));
 
-    const double bulge = std::tan(KTArxTool::KTArxConvert::ToRadian(kQuarterCircleDegrees / kBulgeDivisor));
+    const double bulge = std::tan(KTArxTool::KTArxConvert::toRadian(kQuarterCircleDegrees / kBulgeDivisor));
 
     AcArray<double> bulges;
     bulges.append(0.0);
@@ -49,23 +49,23 @@ void test2() {
     CreatePolylineWithBulge(polyline.get(), points, bulges);
 
     polyline->setClosed(true);
-    (void)KTArxTool::KTArxUtility::PostToModelSpace(polyline.release());
+    (void)KTArxTool::KTArxUtility::postToModelSpace(polyline.release());
 }
 
 void test3() {
     auto entity = std::make_unique<Test_Entity::TestEntity>();
-    (void)KTArxTool::KTArxUtility::PostToModelSpace(entity.release());
+    (void)KTArxTool::KTArxUtility::postToModelSpace(entity.release());
 }
 
 void test4() {
     auto entity = std::make_unique<Test_Entity::TestEntity2>();
-    (void)KTArxTool::KTArxUtility::PostToModelSpace(entity.release());
+    (void)KTArxTool::KTArxUtility::postToModelSpace(entity.release());
 }
 
 void test5() {
     AcDbObjectId entId;
     AcGePoint3d pickedPoint;
-    if (KTArxTool::KTArxUiPr::SelEnt(_T("选择实体"), Test_Entity::TestEntity2::desc(), entId, pickedPoint)) {
+    if (KTArxTool::KTArxUiPr::selEnt(_T("选择实体"), Test_Entity::TestEntity2::desc(), entId, pickedPoint)) {
         if (entId.isValid()) {
             AcDbObjectPointer<Test_Entity::TestEntity2> pTestEnt(entId, AcDb::kForWrite);
             {

@@ -7,13 +7,13 @@
 #include <memory>
 
 namespace KTArxTool {
-CString KTArxUtility::GetCurZrxFilePath() {
+CString KTArxUtility::getCurZrxFilePath() {
     std::array<TCHAR, _MAX_PATH> pathBuffer{};
     ::GetModuleFileName(_hdllInstance, pathBuffer.data(), static_cast<DWORD>(pathBuffer.size()));
     return pathBuffer.data();
 }
 
-CString KTArxUtility::GetCurZrxFolderPath() {
+CString KTArxUtility::getCurZrxFolderPath() {
     std::array<TCHAR, _MAX_PATH> pathBuffer{};
     ::GetModuleFileName(_hdllInstance, pathBuffer.data(), static_cast<DWORD>(pathBuffer.size()));
     CString strZrxPath = pathBuffer.data();
@@ -22,7 +22,7 @@ CString KTArxUtility::GetCurZrxFolderPath() {
     return strFloder;
 }
 
-AcArray<CString> KTArxUtility::GetAllDwgPath(LPCTSTR szFolderPath) {
+AcArray<CString> KTArxUtility::getAllDwgPath(LPCTSTR szFolderPath) {
     AcArray<CString> arrDwgPath;
     CFileFind finder;
     CString path{szFolderPath};
@@ -43,7 +43,7 @@ AcArray<CString> KTArxUtility::GetAllDwgPath(LPCTSTR szFolderPath) {
     return arrDwgPath;
 }
 
-AcArray<CString> KTArxUtility::GetAllDwgName(LPCTSTR szFolderPath) {
+AcArray<CString> KTArxUtility::getAllDwgName(LPCTSTR szFolderPath) {
     AcArray<CString> arrDwgPath;
     CFileFind finder;
     CString path{szFolderPath};
@@ -65,7 +65,7 @@ AcArray<CString> KTArxUtility::GetAllDwgName(LPCTSTR szFolderPath) {
 }
 
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-bool KTArxUtility::LoadCadMenu(const CString& strMenuFileName, const CString& strMenuGroupName) {
+bool KTArxUtility::loadCadMenu(const CString& strMenuFileName, const CString& strMenuGroupName) {
     CString strFilePath = strMenuFileName;
     CFileStatus fileStatus;
     if (CFile::GetStatus(strFilePath, fileStatus) == FALSE) {
@@ -89,7 +89,7 @@ bool KTArxUtility::LoadCadMenu(const CString& strMenuFileName, const CString& st
     return true;
 }
 
-bool KTArxUtility::UnloadCadMenu(const CString& strMenuGroupName) {
+bool KTArxUtility::unloadCadMenu(const CString& strMenuGroupName) {
     CString strCmdLoad;
     strCmdLoad = _T("(command \"menuunload\" \"") + strMenuGroupName + _T("\")");
 
@@ -100,7 +100,7 @@ bool KTArxUtility::UnloadCadMenu(const CString& strMenuGroupName) {
     return true;
 }
 
-bool KTArxUtility::LoadZrxFile(LPCTSTR szFilePath) {
+bool KTArxUtility::loadZrxFile(LPCTSTR szFilePath) {
     bool bRet = false;
     CFileStatus fileStatus;
     if (CFile::GetStatus(szFilePath, fileStatus) == FALSE) {
@@ -114,7 +114,7 @@ bool KTArxUtility::LoadZrxFile(LPCTSTR szFilePath) {
     return bRet;
 }
 
-bool KTArxUtility::AddSearchPath(LPCTSTR szSearchDir) {
+bool KTArxUtility::addSearchPath(LPCTSTR szSearchDir) {
     CFileStatus fileStatus;
     if (CFile::GetStatus(szSearchDir, fileStatus) == FALSE) {
         return false;
@@ -139,7 +139,7 @@ bool KTArxUtility::AddSearchPath(LPCTSTR szSearchDir) {
     return true;
 }
 
-AcDbObjectId KTArxUtility::PostToModelSpace(AcDbEntity* pEnt, AcDbDatabase* pDb /*= acdbCurDwg()*/) {
+AcDbObjectId KTArxUtility::postToModelSpace(AcDbEntity* pEnt, AcDbDatabase* pDb /*= acdbCurDwg()*/) {
     assert(pEnt != nullptr);
     assert(pDb != nullptr);
 
@@ -159,7 +159,7 @@ AcDbObjectId KTArxUtility::PostToModelSpace(AcDbEntity* pEnt, AcDbDatabase* pDb 
     return entId;
 }
 
-AcGePoint3dArray KTArxUtility::SortPtArr(const AcGePoint3dArray& PointArr, bool bVertical) {
+AcGePoint3dArray KTArxUtility::sortPtArr(const AcGePoint3dArray& PointArr, bool bVertical) {
     AcGePoint3dArray tempPointArr = PointArr;
     if (tempPointArr.length() <= 1) {
         return tempPointArr;
@@ -178,7 +178,7 @@ AcGePoint3dArray KTArxUtility::SortPtArr(const AcGePoint3dArray& PointArr, bool 
     return tempPointArr;
 }
 
-void KTArxUtility::ShowProgressBar(const CString& strName, bool bStart) {
+void KTArxUtility::showProgressBar(const CString& strName, bool bStart) {
     constexpr int kProgressMin = 0;
     constexpr int kProgressMax = 100;
 
@@ -189,7 +189,7 @@ void KTArxUtility::ShowProgressBar(const CString& strName, bool bStart) {
     }
 }
 
-void KTArxUtility::SetProgressBar(int nCurIndex, int nSum) {
+void KTArxUtility::setProgressBar(int nCurIndex, int nSum) {
     constexpr int kProgressMax = 100;
     if (nSum <= 0) {
         acedSetStatusBarProgressMeterPos(0);

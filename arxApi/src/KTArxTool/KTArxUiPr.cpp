@@ -4,7 +4,7 @@
 #include <type_traits>
 
 namespace KTArxTool {
-bool KTArxUiPr::SelEnt(LPCTSTR prompt, AcRxClass* classType, AcDbObjectId& objectId, AcGePoint3d& pickedPoint) {
+bool KTArxUiPr::selEnt(LPCTSTR prompt, AcRxClass* classType, AcDbObjectId& objectId, AcGePoint3d& pickedPoint) {
     CString strPrompt{_T("\n")};
     strPrompt += prompt;
     strPrompt += _T(": ");

@@ -6,25 +6,25 @@
 #include <type_traits>
 
 namespace KTArxTool {
-bool KTArxEntity::ModifyEntByScale(AcDbEntity* entity, double scale, const AcGePoint3d& basePoint) {
+bool KTArxEntity::modifyEntByScale(AcDbEntity* entity, double scale, const AcGePoint3d& basePoint) {
     assert(entity != nullptr);
     AcGeMatrix3d mtx;
     mtx.setToScaling(scale, basePoint);
     return entity->transformBy(mtx) == Acad::eOk;
 }
 
-bool KTArxEntity::ModifyEntByScale(const AcDbObjectId& entityId, double scale, const AcGePoint3d& basePoint) {
+bool KTArxEntity::modifyEntByScale(const AcDbObjectId& entityId, double scale, const AcGePoint3d& basePoint) {
     AcDbEntityPointer entity(entityId, AcDb::kForWrite);
     if (entity.openStatus() != Acad::eOk) {
         return false;
     }
-    return ModifyEntByScale(entity, scale, basePoint);
+    return modifyEntByScale(entity, scale, basePoint);
 }
 
-bool KTArxEntity::ModifyEntByScale(const AcArray<AcDbEntity*>& entities, double scale, const AcGePoint3d& basePoint) {
+bool KTArxEntity::modifyEntByScale(const AcArray<AcDbEntity*>& entities, double scale, const AcGePoint3d& basePoint) {
     bool isOk = true;
     for (const auto& cur : entities) {
-        isOk = ModifyEntByScale(cur, scale, basePoint);
+        isOk = modifyEntByScale(cur, scale, basePoint);
         if (!isOk) {
             break;
         }
@@ -32,7 +32,7 @@ bool KTArxEntity::ModifyEntByScale(const AcArray<AcDbEntity*>& entities, double 
     return isOk;
 }
 
-AcArray<AcDbEntity*> KTArxEntity::ExplodeEnt(AcDbEntity* entity) {
+AcArray<AcDbEntity*> KTArxEntity::explodeEnt(AcDbEntity* entity) {
     AcArray<AcDbEntity*> arrExpEnt;
     AcDbVoidPtrArray exArr;
     if (entity != nullptr && entity->explode(exArr) == Acad::eOk) {
@@ -43,16 +43,16 @@ AcArray<AcDbEntity*> KTArxEntity::ExplodeEnt(AcDbEntity* entity) {
     return arrExpEnt;
 }
 
-AcArray<AcDbEntity*> KTArxEntity::ExplodeEnt(const AcDbObjectId& entityId) {
+AcArray<AcDbEntity*> KTArxEntity::explodeEnt(const AcDbObjectId& entityId) {
     AcArray<AcDbEntity*> arrExpEnt;
     AcDbEntityPointer entity(entityId, AcDb::kForRead);
     if (Acad::eOk != entity.openStatus()) {
         return arrExpEnt;
     }
-    return ExplodeEnt(entity);
+    return explodeEnt(entity);
 }
 
-bool KTArxEntity::MoveEnt(AcDbEntity* entity, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint) {
+bool KTArxEntity::moveEnt(AcDbEntity* entity, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint) {
     assert(entity != nullptr);
     AcGeMatrix3d xform;
     AcGeVector3d vec(destPoint - basePoint);
@@ -60,13 +60,13 @@ bool KTArxEntity::MoveEnt(AcDbEntity* entity, const AcGePoint3d& basePoint, cons
     return entity->transformBy(xform) == Acad::eOk;
 }
 
-bool KTArxEntity::MoveEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint) {
+bool KTArxEntity::moveEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint) {
     bool isOk = true;
     for (const auto& entity : entities) {
         if (entity == nullptr) {
             continue;
         }
-        isOk = MoveEnt(entity, basePoint, destPoint);
+        isOk = moveEnt(entity, basePoint, destPoint);
         if (!isOk) {
             break;
         }
@@ -74,22 +74,22 @@ bool KTArxEntity::MoveEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3
     return isOk;
 }
 
-bool KTArxEntity::MoveEnt(const AcDbObjectId& entityId, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint) {
+bool KTArxEntity::moveEnt(const AcDbObjectId& entityId, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint) {
     AcDbEntityPointer entity(entityId, AcDb::kForWrite);
     if (Acad::eOk != entity.openStatus()) {
         return false;
     }
-    return MoveEnt(entity, basePoint, destPoint);
+    return moveEnt(entity, basePoint, destPoint);
 }
 
-bool KTArxEntity::MoveEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint) {
+bool KTArxEntity::moveEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d& basePoint, const AcGePoint3d& destPoint) {
     bool isOk = true;
     for (int i = 0; i < entityIds.length(); i++) {
         AcDbEntityPointer entity(entityIds[i], AcDb::kForWrite);
         if (Acad::eOk != entity.openStatus()) {
             continue;
         }
-        isOk = MoveEnt(entity, basePoint, destPoint);
+        isOk = moveEnt(entity, basePoint, destPoint);
         if (!isOk) {
             break;
         }
@@ -97,20 +97,20 @@ bool KTArxEntity::MoveEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d&
     return isOk;
 }
 
-bool KTArxEntity::RotateEnt(AcDbEntity* entity, const AcGePoint3d& basePoint, double rotation) {
+bool KTArxEntity::rotateEnt(AcDbEntity* entity, const AcGePoint3d& basePoint, double rotation) {
     assert(entity != nullptr);
     AcGeMatrix3d xform;
     xform.setToRotation(rotation, AcGeVector3d::kZAxis, basePoint);  // 参数二是输入旋转轴向量
     return entity->transformBy(xform) == Acad::eOk;
 }
 
-bool KTArxEntity::RotateEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& basePoint, double rotation) {
+bool KTArxEntity::rotateEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& basePoint, double rotation) {
     bool isOk = true;
     for (const auto& entity : entities) {
         if (entity == nullptr) {
             continue;
         }
-        isOk = RotateEnt(entity, basePoint, rotation);
+        isOk = rotateEnt(entity, basePoint, rotation);
         if (!isOk) {
             break;
         }
@@ -118,7 +118,7 @@ bool KTArxEntity::RotateEnt(const AcArray<AcDbEntity*>& entities, const AcGePoin
     return isOk;
 }
 
-bool KTArxEntity::DeleteEnt(const AcDbObjectId& entityId) {
+bool KTArxEntity::deleteEnt(const AcDbObjectId& entityId) {
     AcDbEntityPointer entity(entityId, AcDb::kForWrite);
     if (Acad::eOk != entity.openStatus()) {
         return false;
@@ -126,13 +126,13 @@ bool KTArxEntity::DeleteEnt(const AcDbObjectId& entityId) {
     return entity->erase() == Acad::eOk;
 }
 
-void KTArxEntity::DeleteEnt(AcArray<AcDbEntity*>& entities) {
+void KTArxEntity::deleteEnt(AcArray<AcDbEntity*>& entities) {
     for (int i = 0; i < entities.length(); i++) {
         DEL(entities[i]);
     }
 }
 
-AcArray<AcDbEntity*> KTArxEntity::CopyEnt(const AcDbObjectIdArray& entityIds) {
+AcArray<AcDbEntity*> KTArxEntity::copyEnt(const AcDbObjectIdArray& entityIds) {
     AcArray<AcDbEntity*> arrEnt;
     for (int i = (entityIds.length() - 1); i >= 0; i--) {
         AcDbEntityPointer entity(entityIds[i], AcDb::kForRead);
@@ -147,7 +147,7 @@ AcArray<AcDbEntity*> KTArxEntity::CopyEnt(const AcDbObjectIdArray& entityIds) {
     return arrEnt;
 }
 
-AcArray<AcDbEntity*> KTArxEntity::CopyEnt(const AcArray<AcDbEntity*>& entities) {
+AcArray<AcDbEntity*> KTArxEntity::copyEnt(const AcArray<AcDbEntity*>& entities) {
     AcArray<AcDbEntity*> arrEnt;
     for (int i = (entities.length() - 1); i >= 0; i--) {
         AcDbEntity* const source = entities[i];
@@ -162,7 +162,7 @@ AcArray<AcDbEntity*> KTArxEntity::CopyEnt(const AcArray<AcDbEntity*>& entities) 
     return arrEnt;
 }
 
-AcDbEntity* KTArxEntity::CopyEnt(const AcDbObjectId& entityId) {
+AcDbEntity* KTArxEntity::copyEnt(const AcDbObjectId& entityId) {
     AcDbEntityPointer entity(entityId, AcDb::kForRead);
     if (Acad::eOk != entity.openStatus()) {
         return nullptr;
@@ -170,7 +170,7 @@ AcDbEntity* KTArxEntity::CopyEnt(const AcDbObjectId& entityId) {
     return AcDbEntity::cast(entity->clone());
 }
 
-AcDbEntity* KTArxEntity::MirrorEnt(AcDbEntity* entity, const AcGePoint3d& point1, const AcGePoint3d& point2) {
+AcDbEntity* KTArxEntity::mirrorEnt(AcDbEntity* entity, const AcGePoint3d& point1, const AcGePoint3d& point2) {
     if (entity == nullptr) {
         return nullptr;
     }
@@ -189,7 +189,7 @@ AcDbEntity* KTArxEntity::MirrorEnt(AcDbEntity* entity, const AcGePoint3d& point1
     return pCopy;
 }
 
-AcArray<AcDbEntity*> KTArxEntity::MirrorEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d& point1, const AcGePoint3d& point2) {
+AcArray<AcDbEntity*> KTArxEntity::mirrorEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d& point1, const AcGePoint3d& point2) {
     AcArray<AcDbEntity*> arrpEnt;
     AcGeMatrix3d mat;
     mat.setToMirroring(AcGeLine3d(point1, point2));
@@ -210,7 +210,7 @@ AcArray<AcDbEntity*> KTArxEntity::MirrorEnt(const AcDbObjectIdArray& entityIds, 
     return arrpEnt;
 }
 
-AcArray<AcDbEntity*> KTArxEntity::MirrorEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& point1, const AcGePoint3d& point2) {
+AcArray<AcDbEntity*> KTArxEntity::mirrorEnt(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& point1, const AcGePoint3d& point2) {
     AcArray<AcDbEntity*> arrpEnt;
     AcGeMatrix3d mat;
     mat.setToMirroring(AcGeLine3d(point1, point2));
@@ -232,7 +232,7 @@ AcArray<AcDbEntity*> KTArxEntity::MirrorEnt(const AcArray<AcDbEntity*>& entities
 }
 
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-AcArray<AcDbEntity*> KTArxEntity::AnnularMatrix(const AcDbObjectIdArray& entityIds, const AcGePoint3d& basePoint, int currentCount, int totalCount) {
+AcArray<AcDbEntity*> KTArxEntity::annularMatrix(const AcDbObjectIdArray& entityIds, const AcGePoint3d& basePoint, int currentCount, int totalCount) {
     AcArray<AcDbEntity*> arrpMatrix;
 
     if (totalCount < 2 || entityIds.isEmpty()) {
@@ -247,8 +247,8 @@ AcArray<AcDbEntity*> KTArxEntity::AnnularMatrix(const AcDbObjectIdArray& entityI
     }
 
     for (int i = 0; i < arrAngle.length(); i++) {
-        AcArray<AcDbEntity*> arrpCopy = CopyEnt(entityIds);
-        RotateEnt(arrpCopy, basePoint, KTArxConvert::ToRadian(arrAngle[i]));
+        AcArray<AcDbEntity*> arrpCopy = copyEnt(entityIds);
+        rotateEnt(arrpCopy, basePoint, KTArxConvert::toRadian(arrAngle[i]));
         arrpMatrix.append(arrpCopy);
     }
 
@@ -256,7 +256,7 @@ AcArray<AcDbEntity*> KTArxEntity::AnnularMatrix(const AcDbObjectIdArray& entityI
 }
 
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-AcArray<AcDbEntity*> KTArxEntity::AnnularMatrix(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& basePoint, int currentCount, int totalCount) {
+AcArray<AcDbEntity*> KTArxEntity::annularMatrix(const AcArray<AcDbEntity*>& entities, const AcGePoint3d& basePoint, int currentCount, int totalCount) {
     AcArray<AcDbEntity*> arrpMatrix;
 
     if (currentCount < 2 || entities.isEmpty() || totalCount < 1) {
@@ -271,15 +271,15 @@ AcArray<AcDbEntity*> KTArxEntity::AnnularMatrix(const AcArray<AcDbEntity*>& enti
     }
 
     for (int i = 0; i < arrAngle.length(); i++) {
-        AcArray<AcDbEntity*> arrpCopy = CopyEnt(entities);
-        RotateEnt(arrpCopy, basePoint, KTArxConvert::ToRadian(arrAngle[i]));
+        AcArray<AcDbEntity*> arrpCopy = copyEnt(entities);
+        rotateEnt(arrpCopy, basePoint, KTArxConvert::toRadian(arrAngle[i]));
         arrpMatrix.append(arrpCopy);
     }
 
     return arrpMatrix;
 }
 
-bool KTArxEntity::IsClosedPline(AcDbPolyline* polyline) {
+bool KTArxEntity::isClosedPline(AcDbPolyline* polyline) {
     if (polyline == nullptr) {
         return false;
     }
@@ -292,7 +292,7 @@ bool KTArxEntity::IsClosedPline(AcDbPolyline* polyline) {
     return ptStart.isEqualTo(ptEnd);
 }
 
-void KTArxEntity::SetEntSelected(const AcDbObjectIdArray& entityIds, bool selected /*= true*/, bool highlight /*= false*/) {
+void KTArxEntity::setEntSelected(const AcDbObjectIdArray& entityIds, bool selected /*= true*/, bool highlight /*= false*/) {
     //	acedSSDel(ent, ssname);		//将实体从集合中删除掉
     acedSSSetFirst(nullptr, nullptr);  // 将选中状态清除
     if (selected) {
@@ -319,7 +319,7 @@ void KTArxEntity::SetEntSelected(const AcDbObjectIdArray& entityIds, bool select
     }
 }
 
-bool KTArxEntity::SetEntToBottom(const AcDbObjectId& entityId, AcDbDatabase* database /*= acdbCurDwg()*/) {
+bool KTArxEntity::setEntToBottom(const AcDbObjectId& entityId, AcDbDatabase* database /*= acdbCurDwg()*/) {
     AcDbObjectId spaceId = database->currentSpaceId();
     AcDbObjectPointer<AcDbBlockTableRecord> pBTR(spaceId, AcDb::kForRead);
     if (pBTR.openStatus() != Acad::eOk) {
@@ -338,7 +338,7 @@ bool KTArxEntity::SetEntToBottom(const AcDbObjectId& entityId, AcDbDatabase* dat
 }
 
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-bool KTArxEntity::StretchEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d& cornerPoint1, const AcGePoint3d& cornerPoint2, const AcGePoint3d& basePoint, const AcGePoint3d& targetPoint) {
+bool KTArxEntity::stretchEnt(const AcDbObjectIdArray& entityIds, const AcGePoint3d& cornerPoint1, const AcGePoint3d& cornerPoint2, const AcGePoint3d& basePoint, const AcGePoint3d& targetPoint) {
     AcGeVector3d stretchVec = targetPoint - basePoint;  // 拉伸距离
     AcGeBoundBlock3d box;
     const AcGeVector3d cornerVector{cornerPoint2 - cornerPoint1};
@@ -369,7 +369,7 @@ bool KTArxEntity::StretchEnt(const AcDbObjectIdArray& entityIds, const AcGePoint
     return true;
 }
 
-AcDbObjectIdArray KTArxEntity::GetEntIdByPt(const AcGePoint3d& point, bool all /*= false*/) {
+AcDbObjectIdArray KTArxEntity::getEntIdByPt(const AcGePoint3d& point, bool all /*= false*/) {
     AcDbObjectIdArray entityIds;
 
     std::array<std::remove_extent_t<ads_name>, std::extent_v<ads_name>> selectionSet{};
@@ -401,7 +401,7 @@ AcDbObjectIdArray KTArxEntity::GetEntIdByPt(const AcGePoint3d& point, bool all /
     return entityIds;
 }
 
-AcDbExtents KTArxEntity::GetEntExtents(const AcDbObjectId& entityId) {
+AcDbExtents KTArxEntity::getEntExtents(const AcDbObjectId& entityId) {
     AcDbExtents extents;
     AcDbEntityPointer entity(entityId, AcDb::kForRead);
     if (Acad::eOk != entity.openStatus()) {
@@ -411,7 +411,7 @@ AcDbExtents KTArxEntity::GetEntExtents(const AcDbObjectId& entityId) {
     return extents;
 }
 
-AcDbExtents KTArxEntity::GetEntExtents(const AcArray<AcDbEntity*>& entities) {
+AcDbExtents KTArxEntity::getEntExtents(const AcArray<AcDbEntity*>& entities) {
     AcDbExtents extents;
     for (int i = 0; i < entities.length(); i++) {
         AcDbEntity* const entity = entities[i];
@@ -425,7 +425,7 @@ AcDbExtents KTArxEntity::GetEntExtents(const AcArray<AcDbEntity*>& entities) {
     return extents;
 }
 
-AcDbExtents KTArxEntity::GetEntExtents(const AcDbObjectIdArray& entityIds) {
+AcDbExtents KTArxEntity::getEntExtents(const AcDbObjectIdArray& entityIds) {
     AcDbExtents extents;
     for (int i = 0; i < entityIds.length(); i++) {
         AcDbEntityPointer entity(entityIds[i], AcDb::kForRead);
@@ -439,7 +439,7 @@ AcDbExtents KTArxEntity::GetEntExtents(const AcDbObjectIdArray& entityIds) {
     return extents;
 }
 
-bool KTArxEntity::GetExtentsPt(const AcDbObjectId& entityId, AcGePoint3d& maxPoint, AcGePoint3d& minPoint) {
+bool KTArxEntity::getExtentsPt(const AcDbObjectId& entityId, AcGePoint3d& maxPoint, AcGePoint3d& minPoint) {
     AcDbEntityPointer entity(entityId, AcDb::kForRead);
     if (Acad::eOk != entity.openStatus()) {
         return false;
@@ -451,7 +451,7 @@ bool KTArxEntity::GetExtentsPt(const AcDbObjectId& entityId, AcGePoint3d& maxPoi
     return true;
 }
 
-bool KTArxEntity::GetExtentsPt(const AcDbObjectIdArray& entityIds, AcGePoint3d& maxPoint, AcGePoint3d& minPoint) {
+bool KTArxEntity::getExtentsPt(const AcDbObjectIdArray& entityIds, AcGePoint3d& maxPoint, AcGePoint3d& minPoint) {
     AcDbExtents extents;
     for (int i = 0; i < entityIds.length(); i++) {
         AcDbEntityPointer entity(entityIds[i], AcDb::kForRead);
@@ -467,7 +467,7 @@ bool KTArxEntity::GetExtentsPt(const AcDbObjectIdArray& entityIds, AcGePoint3d& 
     return true;
 }
 
-bool KTArxEntity::GetExtentsPt(AcDbEntity* entity, AcGePoint3d& maxPoint, AcGePoint3d& minPoint) {
+bool KTArxEntity::getExtentsPt(AcDbEntity* entity, AcGePoint3d& maxPoint, AcGePoint3d& minPoint) {
     if (entity == nullptr) {
         return false;
     }
