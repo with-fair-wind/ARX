@@ -45,8 +45,8 @@ if(MSVC)
 endif()
 
 SET(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install CACHE PATH "installation path" FORCE)
+set(QT_PATH "D:/sdk/qt/Qt5.14.2/msvc2017_64" CACHE PATH "QT_PATH" FORCE)
 
 add_subdirectory(arxApi)
-
-# add_subdirectory(main)
+add_subdirectory(main)
 add_generate_compile_commands_target(7)
