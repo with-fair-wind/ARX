@@ -29,7 +29,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC UNICODE _UNICODE)
 target_precompile_headers(${PROJECT_NAME} PUBLIC inc/stdafx.h)
 
 if(MSVC)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _AFXEXT _WIN32_WINNT=0x0600 KT_EXPORTARX)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _AFXEXT KT_EXPORTARX)
 endif()
 
 target_include_directories(${PROJECT_NAME}
