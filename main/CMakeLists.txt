@@ -30,6 +30,11 @@ add_library(${PROJECT_NAME} SHARED ${INCS} ${SRCS} ${QRCS})
 
 if(MSVC)
     target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _WIN32_WINNT=0x0600)
+    set_target_properties(${PROJECT_NAME} PROPERTIES 
+        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/$<CONFIG>/bin
+        ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/$<CONFIG>/lib
+        LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/$<CONFIG>/bin
+    )
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE inc)

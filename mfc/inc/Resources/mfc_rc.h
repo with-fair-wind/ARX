@@ -1,3 +1,8 @@
 #pragma once
 
 #define IDD_MFC_TEST 101
+#define IDD_MFC_ARX_UI 102
+
+#define IDC_ARXUI_EDIT_INPUT 1001
+#define IDC_ARXUI_CHECK_CMD 1002
+#define IDC_ARXUI_BTN_SHOW 1003

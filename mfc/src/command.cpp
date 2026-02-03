@@ -1,4 +1,5 @@
 #include <Command/command.h>
+#include <Dialog/arxui_dialog.h>
 #include <Dialog/test_dialog.h>
 
 // 示例命令：显示MFC对话框
@@ -14,6 +15,19 @@ void MfcTestCommand() {
     if (dlg.DoModal() == IDOK) {
         acutPrintf(_T("\n对话框已关闭。"));
     }
+}
+
+// 示例命令：显示ZWCAD ARX UI对话框
+void MfcArxUiDialogCommand() {
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    acutPrintf(_T("\n执行ARX UI对话框命令..."));
+
+    // 获取CAD主窗口句柄
+    CWnd* pMainWnd = CWnd::FromHandle(adsw_acadMainWnd());
+
+    // 创建并显示对话框
+    CArxUiDemoDialog dlg(pMainWnd);
+    dlg.DoModal();
 }
 
 // 示例命令：创建简单实体

@@ -30,6 +30,11 @@ target_precompile_headers(${PROJECT_NAME} PUBLIC inc/stdafx.h)
 
 if(MSVC)
     target_compile_definitions(${PROJECT_NAME} PRIVATE _AFXDLL _AFXEXT KT_EXPORTARX)
+    set_target_properties(${PROJECT_NAME} PROPERTIES 
+        RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/$<CONFIG>/bin
+        ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/$<CONFIG>/lib
+        LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/$<CONFIG>/bin
+    )
 endif()
 
 target_include_directories(${PROJECT_NAME}
