@@ -46,7 +46,7 @@
 // dllex header (moved to the main module source to avoid duplicate symbol definitions)
 
 //- ObjectARX and OMF headers needs this
-#include <map>
+#include <map>  // IWYU pragma: keep
 
 //- Include ObjectDBX/ObjectARX headers
 //- Uncomment one of the following lines to bring a given library in your project.
@@ -57,17 +57,17 @@
 // #define _RENDER_SUPPORT_					//- Support for the AutoCAD Render API
 // #define _ARX_CUSTOM_DRAG_N_DROP_	        //- Support for the ObjectARX Drag'n Drop API
 // #define _INC_LEAGACY_HEADERS_			//- Include legacy headers in this project
-#include "arxHeaders.h"
+#include "arxHeaders.h"  // IWYU pragma: keep
 
 // TODO: 其他系统库include
-#include <memory>
-#include <thread>
-#include <unordered_map>
-#include <vector>
+#include <memory>         // IWYU pragma: keep
+#include <thread>         // IWYU pragma: keep
+#include <unordered_map>  // IWYU pragma: keep
+#include <vector>         // IWYU pragma: keep
 
 #pragma pack(pop)
 
 //- Declare extern here so that becomes available in all modules
 
 //-----------------------------------------------------------------------------
-#include "KTArxTool/KTArxDynamicLink.h"
+#include "KTArxTool/KTArxDynamicLink.h"  // IWYU pragma: keep

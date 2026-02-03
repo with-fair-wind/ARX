@@ -16,7 +16,8 @@
     {
       "name": "(Windows) 附加到 ZWCAD",
       "type": "lldb",
-      "request": "attach"
+      "request": "attach",
+      "pid": "${command:pickProcess}"
     }
   ]
 }

@@ -1,0 +1,13 @@
+#pragma code_page(65001)
+#include <Resources/mfc_rc.h>
+#include "afxres.h"
+
+IDD_MFC_TEST DIALOGEX 0, 0, 220, 120
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "MFC测试对话框"
+FONT 9, "MS Shell Dlg"
+BEGIN
+    LTEXT "这是一个MFC对话框示例！\r\n基于ARX二次开发", IDC_STATIC, 10, 10, 200, 30, SS_CENTER
+    DEFPUSHBUTTON "确定", IDOK, 85, 80, 50, 14
+    PUSHBUTTON "取消", IDCANCEL, 140, 80, 50, 14
+END
