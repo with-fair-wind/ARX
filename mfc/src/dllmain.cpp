@@ -44,8 +44,9 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCTEST"), _T("MFCTEST"), ACRX_CMD_MODAL, MfcTestCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCARXUI"), _T("MFCARXUI"), ACRX_CMD_MODAL, MfcArxUiDialogCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCENT"), _T("MFCENT"), ACRX_CMD_MODAL, MfcCreateEntity);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLOADDOC"), _T("MFCLOADDOC"), ACRX_CMD_MODAL, MfcLoadToDocCommand);
             acutPrintf(_T("\nMFC ARX 应用程序已加载。"));
-            acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT"));
+            acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC"));
             break;
 
         case AcRx::kUnloadAppMsg:

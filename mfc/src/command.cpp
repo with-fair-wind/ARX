@@ -1,5 +1,6 @@
 #include <Command/command.h>
 #include <Dialog/arxui_dialog.h>
+#include <Dialog/load_to_doc_dialog.h>
 #include <Dialog/test_dialog.h>
 
 // 示例命令：显示MFC对话框
@@ -71,4 +72,14 @@ void MfcCreateEntity() {
     // 显示MFC消息框确认
     CWnd* pMainWnd = CWnd::FromHandle(adsw_acadMainWnd());
     AfxMessageBox(_T("直线已成功创建！"), MB_OK | MB_ICONINFORMATION);
+}
+
+// 载入至文档命令
+void MfcLoadToDocCommand() {
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    acutPrintf(_T("\n执行载入至文档命令..."));
+
+    CWnd* pMainWnd = CWnd::FromHandle(adsw_acadMainWnd());
+    CLoadToDocDialog dlg(pMainWnd);
+    dlg.DoModal();
 }
