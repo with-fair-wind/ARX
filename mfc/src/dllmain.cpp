@@ -1,4 +1,6 @@
 #include <Command/command.h>
+#include <Services/app_editor_reactor.h>
+#include <Services/app_event_service.h>
 
 // CmfcApp
 class CmfcApp : public CWinApp {
@@ -14,7 +16,8 @@ class CmfcApp : public CWinApp {
 
 // 唯一的 CmfcApp 对象
 namespace {
-CmfcApp theApp;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables,cert-err58-cpp)
+CmfcApp theApp;                          // NOLINT(cppcoreguidelines-avoid-non-const-global-variables,cert-err58-cpp)
+AppEditorReactor* g_pReactor = nullptr;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 }  // namespace
 
 // CmfcApp 初始化
@@ -45,11 +48,23 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCARXUI"), _T("MFCARXUI"), ACRX_CMD_MODAL, MfcArxUiDialogCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCENT"), _T("MFCENT"), ACRX_CMD_MODAL, MfcCreateEntity);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLOADDOC"), _T("MFCLOADDOC"), ACRX_CMD_MODAL, MfcLoadToDocCommand);
+            // 注册 EditorReactor, 用于 commandEnded 时 flush 事件
+            g_pReactor = new AppEditorReactor();
+            acedEditor->addReactor(g_pReactor);
+
             acutPrintf(_T("\nMFC ARX 应用程序已加载。"));
             acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC"));
             break;
 
         case AcRx::kUnloadAppMsg:
+            // 注销 EditorReactor
+            if (g_pReactor != nullptr) {
+                acedEditor->removeReactor(g_pReactor);
+                delete g_pReactor;
+                g_pReactor = nullptr;
+            }
+            AppEventService::instance().reset();
+
             acedRegCmds->removeGroup(_T("MFCGROUP"));
             acutPrintf(_T("\nMFC ARX 应用程序已卸载。"));
             break;

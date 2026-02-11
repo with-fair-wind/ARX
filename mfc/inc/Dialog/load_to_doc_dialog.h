@@ -1,37 +1,34 @@
 #pragma once
 
-#include <Services/load_to_doc_backend.h>
+#include <memory>
 
-#include <vector>
+class ZcBmLoadToDocDialogImpl;
 
-class CLoadToDocDialog : public CZcUiDialog {
+class ZcBmLoadToDocDialog : public CZcUiDialog {
    public:
-    explicit CLoadToDocDialog(CWnd* pParent = nullptr);
-    ~CLoadToDocDialog() override = default;
-    CLoadToDocDialog(const CLoadToDocDialog&) = delete;
-    CLoadToDocDialog& operator=(const CLoadToDocDialog&) = delete;
-    CLoadToDocDialog(CLoadToDocDialog&&) = delete;
-    CLoadToDocDialog& operator=(CLoadToDocDialog&&) = delete;
+    explicit ZcBmLoadToDocDialog(CWnd* pParent = nullptr);
+    ~ZcBmLoadToDocDialog() override;
+    ZcBmLoadToDocDialog(const ZcBmLoadToDocDialog&) = delete;
+    ZcBmLoadToDocDialog& operator=(const ZcBmLoadToDocDialog&) = delete;
+    ZcBmLoadToDocDialog(ZcBmLoadToDocDialog&&) = delete;
+    ZcBmLoadToDocDialog& operator=(ZcBmLoadToDocDialog&&) = delete;
 
    protected:
     void DoDataExchange(CDataExchange* pDX) override;
     BOOL OnInitDialog() override;
 
-    afx_msg void OnBnClickedOk();
-    afx_msg void OnLvnItemChangedDocList(NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void onBnClickedOk();
+    afx_msg void onLvnItemChangedDocList(NMHDR* pNMHDR, LRESULT* pResult);
 
-    DECLARE_DYNAMIC(CLoadToDocDialog)
+    DECLARE_DYNAMIC(ZcBmLoadToDocDialog)
     DECLARE_MESSAGE_MAP()
 
    private:
-    void refreshDocuments();
-    void updateUiState();
-    [[nodiscard]] int getCheckedCount() const;
-    [[nodiscard]] std::vector<std::wstring> getCheckedDocIds() const;
+    friend class ZcBmLoadToDocDialogImpl;
 
     CWnd* m_parent = nullptr;
     CListCtrl m_docList;
     CButton m_chkPlace;
     CButton m_chkClose;
-    std::vector<LoadToDocTarget> m_docs;
+    std::unique_ptr<ZcBmLoadToDocDialogImpl> m_impl;
 };

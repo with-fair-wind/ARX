@@ -80,6 +80,6 @@ void MfcLoadToDocCommand() {
     acutPrintf(_T("\n执行载入至文档命令..."));
 
     CWnd* pMainWnd = CWnd::FromHandle(adsw_acadMainWnd());
-    CLoadToDocDialog dlg(pMainWnd);
+    ZcBmLoadToDocDialog dlg(pMainWnd);
     dlg.DoModal();
 }
