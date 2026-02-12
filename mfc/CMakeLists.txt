@@ -25,7 +25,7 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/delegate_event_cpp14/include>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/signalDelegate/include>
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC arxApi)

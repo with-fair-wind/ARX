@@ -1,48 +1,30 @@
 #pragma once
 
-#include <event_system.hpp>
-
-#include <memory>
+#include <functional>
+#include <generic/eventBus.hpp>
 #include <string>
-#include <typeindex>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 // ============================================================
 // 消息类型定义
-// 约定: 带脏标记管理的事件需提供 bool dirty 字段和 reset() 方法
+// 说明: 事件类型本身不需要实现任何固定字段或方法
 // ============================================================
 
 /// 族模板变更事件
 struct TemplateChangedEvent {
-    bool dirty = false;
     std::wstring template_name;
-
-    void markDirty(const std::wstring& name) {
-        dirty = true;
-        template_name = name;
-    }
-
-    void reset() {
-        dirty = false;
-        template_name.clear();
-    }
 };
-
-// 新增事件只需定义 struct, 提供 dirty + reset() 即可:
-// struct XxxEvent {
-//     bool dirty = false;
-//     void markDirty(...) { dirty = true; ... }
-//     void reset() { dirty = false; ... }
-// };
 
 // ============================================================
 // 应用级事件服务 (单例)
 //
 // 流程:
-//   业务层:  AppEventService::instance().event<TemplateChangedEvent>().markDirty(L"xxx");
+//   业务层:  AppEventService::instance().post(TemplateChangedEvent{L"xxx"});
 //   Reactor: AppEventService::instance().flush();
-//   UI 层:   conn = AppEventService::instance().bus()
-//                .subscribe<TemplateChangedEvent>([this](auto& e) { refresh(); });
+//   UI 层:   AppEventService::instance().subscribeManaged<TemplateChangedEvent>(this, [this](const auto&) { refresh(); });
+//   UI 析构: AppEventService::instance().unsubscribeOwner(this);
 // ============================================================
 class AppEventService {
    public:
@@ -54,59 +36,57 @@ class AppEventService {
     /// 消息总线 (UI 层订阅 / 也可用于即时 publish)
     evt::MessageBus& bus() { return bus_; }
 
-    /// 获取/自动注册一个带脏标记的事件 (首次调用时创建)
+    /// 延迟发布一个事件（在 flush() 时统一 publish）
     template <typename T>
-    T& event() {
-        const auto key = std::type_index(typeid(T));
-        auto it = holders_.find(key);
-        if (it == holders_.end()) {
-            auto* holder = new EventHolder<T>();
-            holders_.emplace(key, std::unique_ptr<IEventHolder>(holder));
-            return holder->data;
-        }
-        return static_cast<EventHolder<T>*>(it->second.get())->data;
+    void post(const T& event) {
+        pending_events_.emplace_back([event](evt::MessageBus& bus) { bus.publish(event); });
     }
 
-    /// Reactor 在 commandEnded 时调用: 检查所有脏事件, 通过 bus 发布
-    void flush() {
-        for (auto& pair : holders_) {
-            pair.second->flush(bus_);
+    /// 延迟构造并发布一个事件（在 flush() 时统一 publish）
+    template <typename T, typename... Args>
+    void emplace(Args&&... args) {
+        post<T>(T{std::forward<Args>(args)...});
+    }
+
+    /// 由服务托管订阅连接，owner 通常传 this
+    template <typename Message, typename F>
+    void subscribeManaged(const void* owner, F&& callback) {
+        if (owner == nullptr) {
+            return;
         }
+        auto connection = bus_.subscribe<Message>(std::forward<F>(callback));
+        managed_connections_[owner].push_back(std::move(connection));
+    }
+
+    /// 取消 owner 对应的全部订阅
+    void unsubscribeOwner(const void* owner) { managed_connections_.erase(owner); }
+
+    /// 取消全部托管订阅
+    void clearAllSubscriptions() { managed_connections_.clear(); }
+
+    /// Reactor 在 commandEnded 时调用: 发布队列中的全部事件
+    void flush() {
+        for (const auto& publish_fn : pending_events_) {
+            publish_fn(bus_);
+        }
+        pending_events_.clear();
     }
 
     void reset() {
-        for (auto& pair : holders_) {
-            pair.second->reset();
-        }
+        pending_events_.clear();
+        managed_connections_.clear();
     }
 
     AppEventService(const AppEventService&) = delete;
     AppEventService& operator=(const AppEventService&) = delete;
+    AppEventService(AppEventService&&) = delete;
+    AppEventService& operator=(AppEventService&&) = delete;
+    ~AppEventService() = default;
 
    private:
     AppEventService() = default;
 
-    struct IEventHolder {
-        virtual ~IEventHolder() = default;
-        virtual void flush(evt::MessageBus& bus) = 0;
-        virtual void reset() = 0;
-    };
-
-    /// EventHolder: 检查 dirty, 通过 bus 发布, 然后 reset
-    template <typename T>
-    struct EventHolder : IEventHolder {
-        T data;
-
-        void flush(evt::MessageBus& bus) override {
-            if (data.dirty) {
-                bus.publish(data);
-                data.reset();
-            }
-        }
-
-        void reset() override { data.reset(); }
-    };
-
     evt::MessageBus bus_;
-    std::unordered_map<std::type_index, std::unique_ptr<IEventHolder>> holders_;
+    std::vector<std::function<void(evt::MessageBus&)>> pending_events_;
+    std::unordered_map<const void*, std::vector<evt::ScopedConnection>> managed_connections_;
 };

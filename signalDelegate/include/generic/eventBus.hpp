@@ -6,6 +6,7 @@
 #include <functional>
 #include <memory>
 #include <stdexcept>
+#include <type_traits>
 #include <typeindex>
 #include <unordered_map>
 #include <utility>
@@ -19,9 +20,7 @@ template <typename... Ts>
 struct has_rvalue_ref : std::false_type {};
 
 template <typename T, typename... Rest>
-struct has_rvalue_ref<T, Rest...>
-    : std::integral_constant<bool,
-                             std::is_rvalue_reference<T>::value || has_rvalue_ref<Rest...>::value> {};
+struct has_rvalue_ref<T, Rest...> : std::integral_constant<bool, std::is_rvalue_reference<T>::value || has_rvalue_ref<Rest...>::value> {};
 
 }  // namespace detail
 
@@ -38,7 +37,12 @@ class ScopedConnection {
 
     ScopedConnection& operator=(ScopedConnection&& other) noexcept {
         if (this != &other) {
-            disconnect();
+            try {
+                disconnect();
+            } catch (...) {
+                // Keep noexcept guarantee for move assignment.
+                active_ = false;
+            }
             disconnect_fn_ = std::move(other.disconnect_fn_);
             active_ = other.active_;
             other.active_ = false;
@@ -46,7 +50,13 @@ class ScopedConnection {
         return *this;
     }
 
-    ~ScopedConnection() { disconnect(); }
+    ~ScopedConnection() noexcept {
+        try {
+            disconnect();
+        } catch (...) {
+            active_ = false;
+        }
+    }
 
     void disconnect() {
         if (active_ && disconnect_fn_) {
@@ -108,25 +118,24 @@ class Event {
 
     Event() : handlers_(std::make_shared<HandlerList>()) {}
 
+    ~Event() = default;
+
     Event(const Event&) = delete;
     Event& operator=(const Event&) = delete;
 
-    Event(Event&& other) : handlers_(std::move(other.handlers_)), next_id_(other.next_id_) {
-        other.handlers_ = std::make_shared<HandlerList>();
-        other.next_id_ = 1;
-    }
+    Event(Event&& other) noexcept : handlers_(std::move(other.handlers_)), next_id_(other.next_id_) { other.next_id_ = 1; }
 
-    Event& operator=(Event&& other) {
+    Event& operator=(Event&& other) noexcept {
         if (this != &other) {
             handlers_ = std::move(other.handlers_);
             next_id_ = other.next_id_;
-            other.handlers_ = std::make_shared<HandlerList>();
             other.next_id_ = 1;
         }
         return *this;
     }
 
     ScopedConnection subscribe(Handler handler) {
+        ensure_handlers();
         const Id id = next_id_++;
         handlers_->push_back(Slot{id, std::move(handler)});
 
@@ -146,9 +155,13 @@ class Event {
         return subscribe(Handler::from(std::forward<F>(f)));
     }
 
-    void clear() { handlers_->clear(); }
+    void clear() {
+        if (handlers_) {
+            handlers_->clear();
+        }
+    }
 
-    std::size_t size() const { return handlers_->size(); }
+    std::size_t size() const { return handlers_ ? handlers_->size() : 0; }
 
     /// 安全触发: 每个 handler 都以左值接收参数, 多订阅者安全.
     /// 不支持右值引用 Args (编译期报错), 请改用 emit_forward().
@@ -156,6 +169,9 @@ class Event {
         static_assert(!detail::has_rvalue_ref<Args...>::value,
                       "Event::emit() does not support rvalue reference Args. "
                       "Use emit_forward() instead.");
+        if (!handlers_) {
+            return;
+        }
         auto snapshot = *handlers_;
         for (const auto& slot : snapshot) {
             if (slot.handler.valid()) {
@@ -168,6 +184,9 @@ class Event {
     /// 注意: 对于值类型/右值引用, 第一个 handler 可能移走数据,
     ///       后续 handler 收到的是被移动后的对象. 单订阅者时完全安全.
     void emit_forward(Args... args) const {
+        if (!handlers_) {
+            return;
+        }
         auto snapshot = *handlers_;
         for (const auto& slot : snapshot) {
             if (slot.handler.valid()) {
@@ -186,6 +205,12 @@ class Event {
 
     using HandlerList = std::vector<Slot>;
 
+    void ensure_handlers() {
+        if (!handlers_) {
+            handlers_ = std::make_shared<HandlerList>();
+        }
+    }
+
     std::shared_ptr<HandlerList> handlers_;
     Id next_id_ = 1;
 };
@@ -194,11 +219,13 @@ class MessageBus {
    public:
     MessageBus() = default;
 
+    ~MessageBus() = default;
+
     MessageBus(const MessageBus&) = delete;
     MessageBus& operator=(const MessageBus&) = delete;
 
-    MessageBus(MessageBus&&) = default;
-    MessageBus& operator=(MessageBus&&) = default;
+    MessageBus(MessageBus&&) noexcept = default;
+    MessageBus& operator=(MessageBus&&) noexcept = default;
 
     template <typename Message>
     ScopedConnection subscribe(std::function<void(const Message&)> fn) {
@@ -235,7 +262,12 @@ class MessageBus {
 
    private:
     struct IChannel {
-        virtual ~IChannel() {}
+        IChannel() = default;
+        virtual ~IChannel() = default;
+        IChannel(const IChannel&) = default;
+        IChannel& operator=(const IChannel&) = default;
+        IChannel(IChannel&&) = default;
+        IChannel& operator=(IChannel&&) = default;
     };
 
     template <typename Message>

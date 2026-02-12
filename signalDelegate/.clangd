@@ -1,0 +1,58 @@
+Diagnostics:
+  ClangTidy:
+    Remove:
+      [
+        # ---- readability 系列（demo 代码噪音极高）----
+        readability-*,
+
+        # ---- google 系列 ----
+        google-*,
+
+        # ---- 其他高噪音框架规则 ----
+        llvm-*,
+        fuchsia-*,
+        hicpp-*,
+        altera-*,
+        abseil-*,
+        zircon-*,
+        llvmlibc-*,
+        android-*,
+        darwin-*,
+        linuxkernel-*,
+        objc-*,
+        portability-*,
+
+        # ---- cppcoreguidelines 中不适合的 ----
+        cppcoreguidelines-avoid-magic-numbers,
+        cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+        cppcoreguidelines-pro-type-reinterpret-cast,
+        cppcoreguidelines-owning-memory,
+        cppcoreguidelines-pro-type-vararg,
+        cppcoreguidelines-avoid-c-arrays,
+        cppcoreguidelines-pro-type-cstyle-cast,
+        cppcoreguidelines-avoid-non-const-global-variables,
+        cppcoreguidelines-pro-bounds-pointer-arithmetic,
+        cppcoreguidelines-special-member-functions,
+        cppcoreguidelines-macro-usage,
+
+        # ---- cert 中重复或不适合的 ----
+        cert-err58-cpp,
+
+        # ---- misc 中噪音高的 ----
+        misc-non-private-member-variables-in-classes,
+        misc-use-anonymous-namespace,
+        misc-include-cleaner,
+        misc-no-recursion,
+
+        # ---- modernize 中过于激进的 ----
+        modernize-use-trailing-return-type,
+        modernize-avoid-c-arrays,
+        modernize-concat-nested-namespaces,
+        modernize-use-nodiscard,
+
+        # ---- boost（不使用 boost）----
+        boost-*,
+
+        # ---- bugprone 中误报较多的 ----
+        bugprone-easily-swappable-parameters,
+      ]

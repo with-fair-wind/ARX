@@ -1,4 +1,0 @@
-Diagnostics:
-  ClangTidy:
-    Remove: ["*"]
-# 3rdparty 代码禁用 clang-tidy，避免噪声诊断。

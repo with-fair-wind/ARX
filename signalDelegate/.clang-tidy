@@ -1,0 +1,44 @@
+---
+# =========================
+# 核心缺陷检测（必须开启）
+# 性能误用检测（建议开启）
+# 现代化（低侵入、安全类）
+# 可靠性与维护性
+# 显式关闭高噪音规则
+# =========================
+Checks: >
+  clang-analyzer-*,
+  bugprone-*,
+  performance-*,
+  modernize-use-nullptr,
+  modernize-use-override,
+  modernize-use-using,
+  modernize-use-auto,
+  modernize-use-emplace,
+  modernize-redundant-void-arg,
+  misc-unused-parameters,
+  misc-unused-alias-decls,
+  misc-definitions-in-headers,
+  -google-*,
+  -llvm-*,
+  -fuchsia-*,
+  -hicpp-*,
+  -readability-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-pro-type-vararg,
+  -cppcoreguidelines-avoid-c-arrays,
+  -clang-analyzer-cplusplus.NewDeleteLeaks
+
+WarningsAsErrors: ""
+
+HeaderFilterRegex: ".*"
+
+AnalyzeTemporaryDtors: false
+
+FormatStyle: none
+
+User: ""
+...

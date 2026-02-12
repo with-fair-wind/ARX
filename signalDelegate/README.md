@@ -2,7 +2,7 @@
 
 一个兼容 **C++14** 的通用事件/消息机制库，目标是提供接近 C# 委托 + 事件的使用体验。
 
-纯头文件实现，只需 `#include "event_system.hpp"` 即可使用，零外部依赖。
+纯头文件实现，按使用场景选择 include 路径即可，零外部依赖。
 
 ## 功能概览
 
@@ -20,9 +20,15 @@ delegate_event_cpp14/
 ├── CMakeLists.txt            # 构建配置（C++14）
 ├── README.md
 ├── include/
-│   └── event_system.hpp      # 核心实现（纯头文件）
-└── src/
-    └── main.cpp              # 使用示例
+│   ├── generic/
+│   │   ├── event_system.hpp
+│   │   └── event_system_threadsafe.hpp
+│   └── zcbm/
+│       ├── event_system.hpp
+│       └── event_system_threadsafe.hpp
+└── demo/
+    ├── main.cpp
+    └── main_threadsafe.cpp
 ```
 
 ## 构建与运行
@@ -33,9 +39,11 @@ cmake --build build
 
 # Linux / macOS
 ./build/delegate_event_demo
+./build/delegate_event_threadsafe_demo
 
 # Windows (MSVC)
 .\build\Debug\delegate_event_demo.exe
+.\build\Debug\delegate_event_threadsafe_demo.exe
 ```
 
 ## 快速上手
@@ -45,7 +53,7 @@ cmake --build build
 将不同类型的可调用体统一为同一签名：
 
 ```cpp
-#include "event_system.hpp"
+#include "generic/event_system.hpp"
 
 // 自由函数
 void on_click(int x, int y) { /* ... */ }
@@ -162,7 +170,12 @@ bus.publish(LoginEvent{"bob"});
 
 ### 纯头文件
 
-整个实现在 `include/event_system.hpp` 中完成，任何 C++14 项目只需 `#include` 即可，无需链接额外库。
+核心实现为头文件模式，可按场景选择：
+
+- 通用版：`include/generic/event_system.hpp`
+- 通用线程安全版：`include/generic/event_system_threadsafe.hpp`
+- 内网 ZcBm 版：`include/zcbm/event_system.hpp`
+- 内网 ZcBm 线程安全版：`include/zcbm/event_system_threadsafe.hpp`
 
 ### 快照遍历
 
@@ -174,17 +187,17 @@ bus.publish(LoginEvent{"bob"});
 
 ### 线程安全
 
-当前实现为**单线程语义**，不含锁。若需在多线程环境下使用，建议：
+提供了独立线程安全头文件：
 
-- 在 `Event` 的 `subscribe()` / `emit()` 外围加 `std::mutex`
-- 或派生一个 `ThreadSafeEvent` 封装锁逻辑
+- `generic/event_system_threadsafe.hpp`
+- `zcbm/event_system_threadsafe.hpp`
 
 ### 在已有项目中集成
 
 只需两步：
 
-1. 将 `include/event_system.hpp` 拷贝到你的项目中
-2. 在需要的地方 `#include "event_system.hpp"`
+1. 将 `include/generic/` 或 `include/zcbm/` 拷贝到你的项目中
+2. 在需要的地方 `#include "generic/event_system.hpp"`（或对应线程安全/ZcBm版本）
 
 或者作为 CMake 子项目：
 
