@@ -9,9 +9,10 @@
 | 组件 | 说明 |
 |---|---|
 | `Delegate<R(Args...)>` | 统一封装自由函数、成员函数、lambda，等价于 C# 的 `delegate` |
-| `Event<Args...>` | 事件发布/订阅容器，支持多个监听器，等价于 C# 的 `event` |
+| `Event<R(Args...), CombinerT>` | 事件发布/订阅容器，支持多个监听器和返回值合并，等价于 C# 的 `event` |
+| `CollectAll<R>` / `LastValue<R>` | 内置合并策略：收集所有返回值 / 取最后一个返回值 |
 | `ScopedConnection` | RAII 连接句柄，析构时自动取消订阅，也可手动 `disconnect()` |
-| `MessageBus` | 按消息类型订阅/发布的全局总线，适合模块间解耦通信 |
+| `MessageBus` | 按消息类型订阅/发布的全局总线，支持 void 和非 void 返回值 |
 
 ## 项目结构
 
@@ -77,8 +78,10 @@ d3(10, 20);
 
 ### 2. Event — 事件（一对多广播）
 
+Event 使用函数签名语法 `Event<R(Args...), CombinerT>`。`R = void` 时行为与传统事件完全一致：
+
 ```cpp
-evt::Event<int, int> on_click;
+evt::Event<void(int, int)> on_click;
 
 // 订阅（返回 RAII 连接句柄）
 auto conn1 = on_click.subscribe([](int x, int y) {
@@ -100,7 +103,37 @@ conn1.disconnect();
 // conn2 出作用域时自动取消订阅（RAII）
 ```
 
-### 3. Event + 成员函数
+### 3. Event + 返回值 (Combiner)
+
+当 `R != void` 时，`emit()` 收集所有 handler 的返回值并通过 Combiner 合并：
+
+```cpp
+// CollectAll (默认): 返回 std::vector<int>
+evt::Event<int(int, int)> compute;
+auto c1 = compute.subscribe([](int a, int b) { return a + b; });
+auto c2 = compute.subscribe([](int a, int b) { return a * b; });
+auto results = compute.emit(3, 4);  // results = {7, 12}
+
+// LastValue: 返回最后一个 handler 的值
+evt::Event<int(int, int), evt::LastValue> last;
+auto c3 = last.subscribe([](int a, int b) { return a + b; });
+auto c4 = last.subscribe([](int a, int b) { return a * b; });
+int val = last.emit(3, 4);  // val = 12
+
+// 自定义 Combiner: 只需定义 result_type 和 static combine()
+template <typename R>
+struct SumCombiner {
+    using result_type = R;
+    static result_type combine(std::vector<R>&& results) {
+        R sum{};
+        for (auto& v : results) sum += v;
+        return sum;
+    }
+};
+evt::Event<int(int, int), SumCombiner> sum_event;
+```
+
+### 4. Event + 成员函数
 
 ```cpp
 struct Player {
@@ -111,7 +144,7 @@ struct Player {
     int hp = 100;
 };
 
-evt::Event<int> damage_event;
+evt::Event<void(int)> damage_event;
 Player player;
 
 // 绑定成员函数
@@ -122,7 +155,7 @@ auto conn = damage_event.subscribe(
 damage_event.emit(25);  // Player hp=75
 ```
 
-### 4. MessageBus — 消息总线（按类型路由）
+### 5. MessageBus — 消息总线（按类型路由）
 
 适合模块间不直接持有对方引用时的解耦通信：
 
@@ -139,7 +172,7 @@ struct LoginEvent {
 
 evt::MessageBus bus;
 
-// 按类型订阅
+// 按类型订阅 (void 返回, 1 个模板参数)
 auto conn1 = bus.subscribe<DamageEvent>([](const DamageEvent& e) {
     std::cout << "damage: " << e.amount << " from " << e.source << "\n";
 });
@@ -151,6 +184,13 @@ auto conn2 = bus.subscribe<LoginEvent>([](const LoginEvent& e) {
 // 发布 — 只有对应类型的订阅者会收到
 bus.emit(DamageEvent{30, "fire"});
 bus.emit(LoginEvent{"bob"});
+
+// 非 void 返回 (2+ 个模板参数: Message, R, [CombinerT])
+auto conn3 = bus.subscribe<DamageEvent, int>(
+    [](const DamageEvent& e) -> int { return e.amount * 2; }
+);
+auto results = bus.emit<DamageEvent, int>(DamageEvent{30, "fire"});
+// results = std::vector<int>{60}
 ```
 
 ## 与 C# 委托/事件的对照
@@ -159,7 +199,7 @@ bus.emit(LoginEvent{"bob"});
 |---|---|---|
 | `delegate void MyHandler(int x)` | `Delegate<void(int)>` | 声明可调用签名 |
 | `new MyHandler(obj.Method)` | `Delegate<void(int)>::from(&obj, &Obj::Method)` | 绑定成员函数 |
-| `event MyHandler OnDamage` | `Event<int> on_damage` | 声明事件 |
+| `event MyHandler OnDamage` | `Event<void(int)> on_damage` | 声明事件 |
 | `OnDamage += handler` | `auto conn = on_damage.subscribe(handler)` | 订阅，返回连接句柄 |
 | `OnDamage -= handler` | `conn.disconnect()` | 取消订阅 |
 | `OnDamage?.Invoke(12)` | `on_damage.emit(12)` 或 `on_damage(12)` | 触发事件 |

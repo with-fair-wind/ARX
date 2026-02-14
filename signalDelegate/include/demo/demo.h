@@ -87,12 +87,12 @@ void demo_address_const_ref_rvalue();
 void demo_delegate_rvalue_ref();
 
 // ============================================================
-// Demo 7g: Event<std::string&&> 右值引用
+// Demo 7g: Event<void(std::string&&)> 右值引用
 // ============================================================
 void demo_event_rvalue_ref();
 
 // ============================================================
-// Demo 7h: Event<const std::string&&> 常量右值引用
+// Demo 7h: Event<void(const std::string&&)> 常量右值引用
 // ============================================================
 void demo_event_const_rvalue_ref();
 
@@ -102,7 +102,7 @@ void demo_event_const_rvalue_ref();
 void demo_emit_rvalue_caveat();
 
 // ============================================================
-// Demo 7j: Event<std::string> + std::move 正确替代方案
+// Demo 7j: Event<void(std::string)> + std::move 正确替代方案
 // ============================================================
 void demo_event_value_with_move();
 
@@ -222,6 +222,11 @@ void demo_event_post_flush();
 void demo_event_post_flush_no_recurse();
 void demo_bus_post_flush();
 void demo_event_rvalue_post_flush();
+
+// ============================================================
+// Demo 16: Event 返回值 + Combiner
+// ============================================================
+void demo_event_return_value();
 
 // ============================================================
 // 运行所有 demo / 线程安全 demo

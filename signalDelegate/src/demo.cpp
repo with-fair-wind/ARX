@@ -65,7 +65,7 @@ void demo_event_basic() {
     separator("Demo 2: Event 基础");
     using namespace evt;
 
-    Event<int, const std::string&> on_message;
+    Event<void(int, const std::string&)> on_message;
 
     // 订阅三个监听器
     auto conn1 = on_message.subscribe([](int code, const std::string& msg) { std::cout << "  [监听器A] code=" << code << ", msg=" << msg << "\n"; });
@@ -115,8 +115,8 @@ void demo_event_member() {
     separator("Demo 3: Event + 成员函数");
     using namespace evt;
 
-    Event<int> damage_event;
-    Event<int> heal_event;
+    Event<void(int)> damage_event;
+    Event<void(int)> heal_event;
 
     Player warrior{"战士"};
     Player mage{"法师"};
@@ -139,7 +139,7 @@ void demo_event_reentrant() {
     separator("Demo 4: 回调中取消自己(快照安全)");
     using namespace evt;
 
-    Event<> on_trigger;  // 无参事件
+    Event<void()> on_trigger;  // 无参事件
 
     ScopedConnection self_conn;
     int call_count = 0;
@@ -167,7 +167,7 @@ void demo_event_nested_emit() {
     separator("Demo 5: 嵌套 emit");
     using namespace evt;
 
-    Event<int> on_level;
+    Event<void(int)> on_level;
 
     auto conn = on_level.subscribe([&](int level) {
         std::cout << "  收到 level=" << level << "\n";
@@ -215,10 +215,10 @@ void demo_message_bus() {
 // Demo 7: 地址追踪 —— 验证值传递 vs 引用传递
 // ============================================================
 void demo_address_by_value() {
-    separator("Demo 7a: Event<std::string> (按值传递)");
+    separator("Demo 7a: Event<void(std::string)> (按值传递)");
     using namespace evt;
 
-    Event<std::string> on_value;
+    Event<void(std::string)> on_value;
 
     auto conn = on_value.subscribe([](std::string s) { std::cout << "  handler 内 地址: " << (void*)s.c_str() << ", 值: \"" << s << "\"\n"; });
 
@@ -232,10 +232,10 @@ void demo_address_by_value() {
 }
 
 void demo_address_by_const_ref() {
-    separator("Demo 7b: Event<const std::string&> (按 const 左值引用传递)");
+    separator("Demo 7b: Event<void(const std::string&)> (按 const 左值引用传递)");
     using namespace evt;
 
-    Event<const std::string&> on_cref;
+    Event<void(const std::string&)> on_cref;
 
     auto conn = on_cref.subscribe([](const std::string& s) { std::cout << "  handler 内 地址: " << (void*)&s << ", c_str: " << (void*)s.c_str() << ", 值: \"" << s << "\"\n"; });
 
@@ -247,10 +247,10 @@ void demo_address_by_const_ref() {
 }
 
 void demo_address_by_mutable_ref() {
-    separator("Demo 7c: Event<std::string&> (按可变左值引用传递)");
+    separator("Demo 7c: Event<void(std::string&)> (按可变左值引用传递)");
     using namespace evt;
 
-    Event<std::string&> on_mref;
+    Event<void(std::string&)> on_mref;
 
     auto conn = on_mref.subscribe([](std::string& s) {
         std::cout << "  handler 内 地址: " << (void*)&s << ", 值: \"" << s << "\"\n";
@@ -271,8 +271,8 @@ void demo_address_rvalue() {
     separator("Demo 7d: 传递右值临时对象");
     using namespace evt;
 
-    // Event<std::string> 按值接收, 可以接受右值
-    Event<std::string> on_value;
+    // Event<void(std::string)> 按值接收, 可以接受右值
+    Event<void(std::string)> on_value;
 
     auto conn = on_value.subscribe([](std::string s) { std::cout << "  handler 内 地址: " << (void*)s.c_str() << ", 值: \"" << s << "\"\n"; });
 
@@ -284,11 +284,11 @@ void demo_address_rvalue() {
 }
 
 void demo_address_const_ref_rvalue() {
-    separator("Demo 7e: Event<const std::string&> 接收右值");
+    separator("Demo 7e: Event<void(const std::string&)> 接收右值");
     using namespace evt;
 
     // const 引用可以绑定到右值(临时对象)
-    Event<const std::string&> on_cref;
+    Event<void(const std::string&)> on_cref;
 
     auto conn = on_cref.subscribe([](const std::string& s) { std::cout << "  handler 内 地址: " << (void*)&s << ", 值: \"" << s << "\"\n"; });
 
@@ -323,13 +323,13 @@ void demo_delegate_rvalue_ref() {
 }
 
 // ============================================================
-// Demo 7g: Event<std::string&&> 右值引用
+// Demo 7g: Event<void(std::string&&)> 右值引用
 // ============================================================
 void demo_event_rvalue_ref() {
-    separator("Demo 7g: Event<std::string&&> 右值引用");
+    separator("Demo 7g: Event<void(std::string&&)> 右值引用");
     using namespace evt;
 
-    Event<std::string&&> on_rref;
+    Event<void(std::string&&)> on_rref;
 
     auto conn = on_rref.subscribe([](std::string&& s) {
         std::cout << "  handler 内 地址: " << (void*)&s << ", c_str: " << (void*)s.c_str() << ", 值: \"" << s << "\"\n";
@@ -349,14 +349,14 @@ void demo_event_rvalue_ref() {
 }
 
 // ============================================================
-// Demo 7h: Event<const std::string&&> 常量右值引用
+// Demo 7h: Event<void(const std::string&&)> 常量右值引用
 // ============================================================
 void demo_event_const_rvalue_ref() {
-    separator("Demo 7h: Event<const std::string&&> 常量右值引用");
+    separator("Demo 7h: Event<void(const std::string&&)> 常量右值引用");
     using namespace evt;
 
     // const std::string&& : 只接受右值, 但不允许移动(const), 实践中极少使用
-    Event<const std::string&&> on_crref;
+    Event<void(const std::string&&)> on_crref;
 
     auto conn = on_crref.subscribe([](const std::string&& s) {
         std::cout << "  handler 内 地址: " << (void*)&s << ", 值: \"" << s << "\"\n";
@@ -378,7 +378,7 @@ void demo_emit_rvalue_caveat() {
     separator("Demo 7i: 右值引用多订阅者注意事项");
     using namespace evt;
 
-    Event<std::string&&> on_rref;
+    Event<void(std::string&&)> on_rref;
 
     auto c1 = on_rref.subscribe([](std::string&& s) {
         // std::string taken = std::move(s);
@@ -398,13 +398,13 @@ void demo_emit_rvalue_caveat() {
 }
 
 // ============================================================
-// Demo 7j: Event<std::string> + std::move 正确替代方案
+// Demo 7j: Event<void(std::string)> + std::move 正确替代方案
 // ============================================================
 void demo_event_value_with_move() {
-    separator("Demo 7j: Event<std::string> + std::move (推荐替代方案)");
+    separator("Demo 7j: Event<void(std::string)> + std::move (推荐替代方案)");
     using namespace evt;
 
-    Event<std::string> on_value;
+    Event<void(std::string)> on_value;
 
     auto conn = on_value.subscribe([](std::string s) { std::cout << "  handler 收到 地址: " << (void*)s.c_str() << ", 值: \"" << s << "\"\n"; });
 
@@ -424,7 +424,7 @@ void demo_multi_subscriber_value_safety() {
     separator("Demo 8: 多订阅者值传递安全性");
     using namespace evt;
 
-    Event<std::string> on_value;
+    Event<void(std::string)> on_value;
 
     auto c1 = on_value.subscribe([](std::string s) { std::cout << "  [订阅者1] 地址: " << (void*)s.c_str() << ", 值: \"" << s << "\"\n"; });
 
@@ -443,14 +443,14 @@ void demo_event_move() {
     separator("Demo 9: Event 移动语义");
     using namespace evt;
 
-    Event<int> e1;
+    Event<void(int)> e1;
     auto conn = e1.subscribe([](int x) { std::cout << "  handler: x=" << x << "\n"; });
 
     std::cout << "e1 订阅数: " << e1.size() << "\n";
     e1.emit(1);
 
     std::cout << "\n--- 移动 e1 -> e2 ---\n";
-    Event<int> e2 = std::move(e1);
+    Event<void(int)> e2 = std::move(e1);
     std::cout << "e2 订阅数: " << e2.size() << "\n";
     std::cout << "e1 订阅数: " << e1.size() << " (移动后重置为空)\n";
 
@@ -635,7 +635,7 @@ void demo_event_post_flush() {
     separator("Demo 12: Event post + flush (延迟触发)");
     using namespace evt;
 
-    Event<int, const std::string&> on_message;
+    Event<void(int, const std::string&)> on_message;
 
     auto c1 = on_message.subscribe([](int code, const std::string& msg) { std::cout << "  [监听器A] code=" << code << ", msg=" << msg << "\n"; });
 
@@ -660,7 +660,7 @@ void demo_event_post_flush_no_recurse() {
     separator("Demo 13: post + flush 防递归 (对比 Demo 5)");
     using namespace evt;
 
-    Event<int> on_level;
+    Event<void(int)> on_level;
 
     auto conn = on_level.subscribe([&](int level) {
         std::cout << "  收到 level=" << level << "\n";
@@ -713,13 +713,13 @@ void demo_bus_post_flush() {
 }
 
 // ============================================================
-// Demo 15: Event<std::string&&> post + flush (右值引用支持)
+// Demo 15: Event<void(std::string&&)> post + flush (右值引用支持)
 // ============================================================
 void demo_event_rvalue_post_flush() {
-    separator("Demo 15: Event<std::string&&> post + flush (右值引用)");
+    separator("Demo 15: Event<void(std::string&&)> post + flush (右值引用)");
     using namespace evt;
 
-    Event<std::string&&> on_rref;
+    Event<void(std::string&&)> on_rref;
 
     // 单订阅者: 完全安全, 可以 move
     auto conn = on_rref.subscribe([](std::string&& s) {
@@ -742,6 +742,96 @@ void demo_event_rvalue_post_flush() {
     on_rref.post(std::move(named));
     std::cout << "  移动后: \"" << named << "\" (已掏空)\n";
     on_rref.flush();
+}
+
+// ============================================================
+// Demo 16: Event 返回值 + Combiner
+// ============================================================
+void demo_event_return_value() {
+    separator("Demo 16: Event 返回值 + Combiner");
+    using namespace evt;
+
+    // 16a. CollectAll (默认): 收集所有 handler 返回值
+    std::cout << "--- 16a: Event<int(int, int)> + CollectAll (默认) ---\n";
+    Event<int(int, int)> compute;
+
+    auto c1 = compute.subscribe([](int a, int b) -> int {
+        std::cout << "  [handler1] " << a << " + " << b << " = " << (a + b) << "\n";
+        return a + b;
+    });
+    auto c2 = compute.subscribe([](int a, int b) -> int {
+        std::cout << "  [handler2] " << a << " * " << b << " = " << (a * b) << "\n";
+        return a * b;
+    });
+    auto c3 = compute.subscribe([](int a, int b) -> int {
+        std::cout << "  [handler3] " << a << " - " << b << " = " << (a - b) << "\n";
+        return a - b;
+    });
+
+    auto results = compute.emit(10, 3);
+    std::cout << "  CollectAll 结果: [";
+    for (std::size_t i = 0; i < results.size(); ++i) {
+        if (i > 0) std::cout << ", ";
+        std::cout << results[i];
+    }
+    std::cout << "]\n";
+
+    // 16b. LastValue: 返回最后一个 handler 的值
+    std::cout << "\n--- 16b: Event<int(int, int), LastValue> ---\n";
+    Event<int(int, int), LastValue> last_compute;
+
+    auto lc1 = last_compute.subscribe([](int a, int b) -> int { return a + b; });
+    auto lc2 = last_compute.subscribe([](int a, int b) -> int { return a * b; });
+    auto lc3 = last_compute.subscribe([](int a, int b) -> int { return a - b; });
+
+    int last_result = last_compute.emit(10, 3);
+    std::cout << "  LastValue 结果: " << last_result << " (最后一个 handler: 10 - 3 = 7)\n";
+
+    // 16c. operator() 也返回值
+    std::cout << "\n--- 16c: operator() 也返回 ResultType ---\n";
+    auto op_results = compute(5, 2);
+    std::cout << "  operator() 结果: [";
+    for (std::size_t i = 0; i < op_results.size(); ++i) {
+        if (i > 0) std::cout << ", ";
+        std::cout << op_results[i];
+    }
+    std::cout << "]\n";
+
+    // 16d. post + flush 收集返回值
+    std::cout << "\n--- 16d: post + flush 收集返回值 ---\n";
+    compute.post(1, 2);
+    compute.post(3, 4);
+    auto flush_results = compute.flush();
+    std::cout << "  flush 返回 " << flush_results.size() << " 个批次:\n";
+    for (std::size_t i = 0; i < flush_results.size(); ++i) {
+        std::cout << "    批次" << (i + 1) << ": [";
+        for (std::size_t j = 0; j < flush_results[i].size(); ++j) {
+            if (j > 0) std::cout << ", ";
+            std::cout << flush_results[i][j];
+        }
+        std::cout << "]\n";
+    }
+
+    // 16e. MessageBus 返回值
+    std::cout << "\n--- 16e: MessageBus 非 void 返回 ---\n";
+    MessageBus bus;
+
+    auto bc1 = bus.subscribe<DamageEvent, int>([](const DamageEvent& e) -> int {
+        std::cout << "  [伤害计算1] base=" << e.amount << " -> " << e.amount * 2 << "\n";
+        return e.amount * 2;
+    });
+    auto bc2 = bus.subscribe<DamageEvent, int>([](const DamageEvent& e) -> int {
+        std::cout << "  [伤害计算2] base=" << e.amount << " -> " << e.amount + 10 << "\n";
+        return e.amount + 10;
+    });
+
+    auto bus_results = bus.emit<DamageEvent, int>(DamageEvent{30, "dragon"});
+    std::cout << "  MessageBus 结果: [";
+    for (std::size_t i = 0; i < bus_results.size(); ++i) {
+        if (i > 0) std::cout << ", ";
+        std::cout << bus_results[i];
+    }
+    std::cout << "]\n";
 }
 
 // ============================================================
@@ -779,6 +869,9 @@ void run_all_demos() {
     demo_bus_post_flush();
     demo_event_rvalue_post_flush();
 
+    // Event 返回值 + Combiner
+    demo_event_return_value();
+
     std::cout << "\n========== All demos done ==========\n";
 }
 
@@ -795,7 +888,7 @@ struct ParallelMsg {
 void demo_parallel_threadsafe() {
     separator("Demo 11: 并行 ThreadSafeEvent/MessageBus");
 
-    evt::ThreadSafeEvent<const ParallelMsg&> event;
+    evt::ThreadSafeEvent<void(const ParallelMsg&)> event;
     std::atomic<int> handled{0};
 
     auto h1 = event.subscribe([&](const ParallelMsg& m) {
