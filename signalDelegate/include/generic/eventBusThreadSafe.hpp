@@ -17,8 +17,6 @@
 
 namespace evt {
 
-namespace detail_ts {}  // namespace detail_ts
-
 class ThreadSafeScopedConnection {
    public:
     ThreadSafeScopedConnection() = default;
@@ -149,7 +147,6 @@ class ThreadSafeEvent {
     using Id = std::size_t;
 
     ThreadSafeEvent() : m_state(std::make_shared<State>()) {}
-    ~ThreadSafeEvent() = default;
 
     ThreadSafeEvent(const ThreadSafeEvent&) = delete;
     ThreadSafeEvent& operator=(const ThreadSafeEvent&) = delete;
@@ -173,7 +170,7 @@ class ThreadSafeEvent {
             }
             std::lock_guard<std::mutex> lock(shared_state->m_mutex);
             auto& items = shared_state->m_handlers;
-            items.erase(std::remove_if(items.begin(), items.end(), [handler_id](const Slot& slot) { return slot.m_id == handler_id; }), items.end());
+            items.erase(std::remove_if(items.begin(), items.end(), [handler_id](const Slot& slot) { return slot.id == handler_id; }), items.end());
         });
     }
 
@@ -206,9 +203,9 @@ class ThreadSafeEvent {
 
         std::exception_ptr first_exception;
         for (const auto& slot : snapshot) {
-            if (slot.m_handler.valid()) {
+            if (slot.handler.valid()) {
                 try {
-                    slot.m_handler(static_cast<Args>(args)...);
+                    slot.handler(static_cast<Args>(args)...);
                 } catch (...) {
                     if (!first_exception) {
                         first_exception = std::current_exception();
@@ -244,7 +241,7 @@ class ThreadSafeEvent {
         std::exception_ptr first_exception;
         for (auto& args_tuple : batch) {
             try {
-                flush_one_(args_tuple, std::index_sequence_for<Args...>{});
+                flush_one(args_tuple, std::index_sequence_for<Args...>{});
             } catch (...) {
                 if (!first_exception) {
                     first_exception = std::current_exception();
@@ -270,8 +267,8 @@ class ThreadSafeEvent {
 
    private:
     struct Slot {
-        Id m_id;
-        Handler m_handler;
+        Id id;
+        Handler handler;
     };
 
     using HandlerList = std::vector<Slot>;
@@ -285,7 +282,7 @@ class ThreadSafeEvent {
     };
 
     template <std::size_t... I>
-    void flush_one_(StoredArgs& stored, std::index_sequence<I...>) const {
+    void flush_one(StoredArgs& stored, std::index_sequence<I...>) const {
         HandlerList snapshot;
         {
             std::lock_guard<std::mutex> lock(m_state->m_mutex);
@@ -293,9 +290,9 @@ class ThreadSafeEvent {
         }
         std::exception_ptr first_exception;
         for (const auto& slot : snapshot) {
-            if (slot.m_handler.valid()) {
+            if (slot.handler.valid()) {
                 try {
-                    slot.m_handler(static_cast<Args>(std::get<I>(stored))...);
+                    slot.handler(static_cast<Args>(std::get<I>(stored))...);
                 } catch (...) {
                     if (!first_exception) {
                         first_exception = std::current_exception();
@@ -314,7 +311,6 @@ class ThreadSafeEvent {
 class ThreadSafeMessageBus {
    public:
     ThreadSafeMessageBus() = default;
-    ~ThreadSafeMessageBus() = default;
 
     ThreadSafeMessageBus(const ThreadSafeMessageBus&) = delete;
     ThreadSafeMessageBus& operator=(const ThreadSafeMessageBus&) = delete;
@@ -324,7 +320,7 @@ class ThreadSafeMessageBus {
     template <typename Message>
     ThreadSafeScopedConnection subscribe(std::function<void(const Message&)> func) {
         static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        auto* channel = find_or_create_channel<Message>();
+        auto* channel = ensure_channel<Message>();
         return channel->m_event.subscribe(std::move(func));
     }
 
@@ -358,7 +354,7 @@ class ThreadSafeMessageBus {
     template <typename Message>
     void post(Message&& message) {
         using DecayedMessage = std::decay_t<Message>;
-        auto* channel = find_or_create_channel<DecayedMessage>();
+        auto* channel = ensure_channel<DecayedMessage>();
         channel->m_event.post(std::forward<Message>(message));
     }
 
@@ -419,7 +415,7 @@ class ThreadSafeMessageBus {
     };
 
     template <typename Message>
-    TypedChannel<Message>* find_or_create_channel() {
+    TypedChannel<Message>* ensure_channel() {
         std::lock_guard<std::mutex> lock(m_channels_mutex);
         const auto key = std::type_index(typeid(Message));
         auto iter = m_channels.find(key);
