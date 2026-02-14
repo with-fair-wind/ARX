@@ -72,11 +72,11 @@ class Delegate<R(Args...)> {
    public:
     Delegate() = default;
 
-    explicit Delegate(std::function<R(Args...)> fn) : m_fn(std::move(fn)) {}
+    explicit Delegate(std::function<R(Args...)> func) : m_fn(std::move(func)) {}
 
     template <typename F>
-    static Delegate from(F&& f) {
-        return Delegate(std::function<R(Args...)>(std::forward<F>(f)));
+    static Delegate from(F&& func) {
+        return Delegate(std::function<R(Args...)>(std::forward<F>(func)));
     }
 
     static Delegate from(R (*func)(Args...)) { return Delegate(std::function<R(Args...)>(func)); }
@@ -142,8 +142,8 @@ class Event {
     }
 
     template <typename F>
-    ScopedConnection subscribe(F&& f) {
-        return subscribe(Handler::from(std::forward<F>(f)));
+    ScopedConnection subscribe(F&& func) {
+        return subscribe(Handler::from(std::forward<F>(func)));
     }
 
     void clear() {
@@ -271,16 +271,16 @@ class MessageBus {
     MessageBus& operator=(MessageBus&&) noexcept = default;
 
     template <typename Message>
-    ScopedConnection subscribe(std::function<void(const Message&)> fn) {
+    ScopedConnection subscribe(std::function<void(const Message&)> func) {
         static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
         auto* channel = ensure_channel<Message>();
-        return channel->m_event.subscribe(std::move(fn));
+        return channel->m_event.subscribe(std::move(func));
     }
 
     template <typename Message, typename F>
-    ScopedConnection subscribe(F&& f) {
+    ScopedConnection subscribe(F&& func) {
         static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        return subscribe<Message>(std::function<void(const Message&)>(std::forward<F>(f)));
+        return subscribe<Message>(std::function<void(const Message&)>(std::forward<F>(func)));
     }
 
     template <typename Message>

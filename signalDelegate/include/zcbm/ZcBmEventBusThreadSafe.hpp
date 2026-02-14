@@ -3,10 +3,12 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <exception>
 #include <functional>
 #include <memory>
 #include <mutex>
 #include <stdexcept>
+#include <tuple>
 #include <type_traits>
 #include <typeindex>
 #include <unordered_map>
@@ -14,16 +16,6 @@
 #include <vector>
 
 namespace evt {
-
-namespace detail_ts {
-
-template <typename... Ts>
-struct has_rvalue_ref : std::false_type {};
-
-template <typename T, typename... Rest>
-struct has_rvalue_ref<T, Rest...> : std::integral_constant<bool, std::is_rvalue_reference<T>::value || has_rvalue_ref<Rest...>::value> {};
-
-}  // namespace detail_ts
 
 class ZcBmTsScopedConnection {
    public:
@@ -68,8 +60,8 @@ class ZcBmTsScopedConnection {
         if (old_active && old_disconnect_fn) {
             try {
                 old_disconnect_fn();
-            } catch (...) {
-                old_active = false;
+            } catch (...) {  // NOLINT(bugprone-empty-catch)
+                // old connection's disconnect failed; best-effort under noexcept guarantee.
             }
         }
 
@@ -155,7 +147,6 @@ class ZcBmTsEvent {
     using Id = std::size_t;
 
     ZcBmTsEvent() : m_state(std::make_shared<State>()) {}
-    ~ZcBmTsEvent() = default;
 
     ZcBmTsEvent(const ZcBmTsEvent&) = delete;
     ZcBmTsEvent& operator=(const ZcBmTsEvent&) = delete;
@@ -179,7 +170,7 @@ class ZcBmTsEvent {
             }
             std::lock_guard<std::mutex> lock(shared_state->m_mutex);
             auto& items = shared_state->m_handlers;
-            items.erase(std::remove_if(items.begin(), items.end(), [handler_id](const Slot& slot) { return slot.m_id == handler_id; }), items.end());
+            items.erase(std::remove_if(items.begin(), items.end(), [handler_id](const Slot& slot) { return slot.id == handler_id; }), items.end());
         });
     }
 
@@ -198,53 +189,121 @@ class ZcBmTsEvent {
         return m_state->m_handlers.size();
     }
 
+    /// 触发事件: 通过 static_cast<Args> 传递参数, 支持所有 Args 类型.
+    /// 值类型 Args: 每个 handler 收到独立拷贝, 多订阅者安全.
+    /// 引用类型 Args: handler 共享引用.
+    /// 右值引用 Args(如 ZcBmTsEvent<T&&>): 等同 std::move, 单订阅者安全,
+    ///   多订阅者时后续 handler 可能收到被移动后的对象.
     void emit(Args... args) const {
-        static_assert(!detail_ts::has_rvalue_ref<Args...>::value,
-                      "ZcBmTsEvent::emit() does not support rvalue reference Args. "
-                      "Use emit_forward() instead.");
-
         HandlerList snapshot;
         {
             std::lock_guard<std::mutex> lock(m_state->m_mutex);
             snapshot = m_state->m_handlers;
         }
 
+        std::exception_ptr first_exception;
         for (const auto& slot : snapshot) {
-            if (slot.m_handler.valid()) {
-                slot.m_handler(args...);
+            if (slot.handler.valid()) {
+                try {
+                    slot.handler(static_cast<Args>(args)...);
+                } catch (...) {
+                    if (!first_exception) {
+                        first_exception = std::current_exception();
+                    }
+                }
             }
+        }
+        if (first_exception) {
+            std::rethrow_exception(first_exception);
         }
     }
 
-    void emit_forward(Args... args) const {
-        HandlerList snapshot;
+    void operator()(Args... args) const { emit(std::forward<Args>(args)...); }
+
+    /// 延迟触发: 将参数 decay 后存入队列, 调用 flush() 时统一派发.
+    /// 参数会被拷贝/移动到内部存储, 安全地延长生命周期.
+    /// 对于右值引用 Args(如 ZcBmTsEvent<T&&>), flush 时行为与 emit() 一致:
+    ///   单订阅者安全, 多订阅者时后续 handler 可能收到被移动后的对象.
+    template <typename... UArgs>
+    void post(UArgs&&... uargs) {
+        std::lock_guard<std::mutex> lock(m_state->m_mutex);
+        m_state->m_pending.emplace_back(std::decay_t<Args>(std::forward<UArgs>(uargs))...);
+    }
+
+    /// 派发所有挂起的事件, 行为与 emit() 一致.
+    /// flush 过程中新 post 的事件不会在本次 flush 中派发(防止无限循环).
+    void flush() {
+        std::vector<StoredArgs> batch;
         {
             std::lock_guard<std::mutex> lock(m_state->m_mutex);
-            snapshot = m_state->m_handlers;
+            batch = std::move(m_state->m_pending);
         }
-
-        for (const auto& slot : snapshot) {
-            if (slot.m_handler.valid()) {
-                slot.m_handler(std::forward<Args>(args)...);
+        std::exception_ptr first_exception;
+        for (auto& args_tuple : batch) {
+            try {
+                flush_one(args_tuple, std::index_sequence_for<Args...>{});
+            } catch (...) {
+                if (!first_exception) {
+                    first_exception = std::current_exception();
+                }
             }
+        }
+        if (first_exception) {
+            std::rethrow_exception(first_exception);
         }
     }
 
-    void operator()(Args... args) const { emit_forward(std::forward<Args>(args)...); }
+    /// 挂起事件数量.
+    std::size_t pending_count() const {
+        std::lock_guard<std::mutex> lock(m_state->m_mutex);
+        return m_state->m_pending.size();
+    }
+
+    /// 清空挂起的事件(不触发).
+    void clear_pending() {
+        std::lock_guard<std::mutex> lock(m_state->m_mutex);
+        m_state->m_pending.clear();
+    }
 
    private:
     struct Slot {
-        Id m_id;
-        Handler m_handler;
+        Id id;
+        Handler handler;
     };
 
     using HandlerList = std::vector<Slot>;
+    using StoredArgs = std::tuple<std::decay_t<Args>...>;
 
     struct State {
         mutable std::mutex m_mutex;
         HandlerList m_handlers;
         Id m_next_id = 1;
+        std::vector<StoredArgs> m_pending;
     };
+
+    template <std::size_t... I>
+    void flush_one(StoredArgs& stored, std::index_sequence<I...>) const {
+        HandlerList snapshot;
+        {
+            std::lock_guard<std::mutex> lock(m_state->m_mutex);
+            snapshot = m_state->m_handlers;
+        }
+        std::exception_ptr first_exception;
+        for (const auto& slot : snapshot) {
+            if (slot.handler.valid()) {
+                try {
+                    slot.handler(static_cast<Args>(std::get<I>(stored))...);
+                } catch (...) {
+                    if (!first_exception) {
+                        first_exception = std::current_exception();
+                    }
+                }
+            }
+        }
+        if (first_exception) {
+            std::rethrow_exception(first_exception);
+        }
+    }
 
     std::shared_ptr<State> m_state;
 };
@@ -252,7 +311,6 @@ class ZcBmTsEvent {
 class ZcBmTsMessageBus {
    public:
     ZcBmTsMessageBus() = default;
-    ~ZcBmTsMessageBus() = default;
 
     ZcBmTsMessageBus(const ZcBmTsMessageBus&) = delete;
     ZcBmTsMessageBus& operator=(const ZcBmTsMessageBus&) = delete;
@@ -261,17 +319,20 @@ class ZcBmTsMessageBus {
 
     template <typename Message>
     ZcBmTsScopedConnection subscribe(std::function<void(const Message&)> func) {
-        auto* channel = find_or_create_channel<Message>();
+        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
+        auto* channel = ensure_channel<Message>();
         return channel->m_event.subscribe(std::move(func));
     }
 
     template <typename Message, typename F>
     ZcBmTsScopedConnection subscribe(F&& func) {
+        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
         return subscribe<Message>(std::function<void(const Message&)>(std::forward<F>(func)));
     }
 
     template <typename Message>
     void publish(const Message& message) const {
+        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
         auto* channel = find_channel<Message>();
         if (!channel) {
             return;
@@ -281,11 +342,56 @@ class ZcBmTsMessageBus {
 
     template <typename Message>
     void clear() {
+        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
         auto* channel = find_channel<Message>();
         if (!channel) {
             return;
         }
         channel->m_event.clear();
+    }
+
+    /// 延迟发布: 将消息 decay 后存入队列, 调用 flush() 时统一派发.
+    template <typename Message>
+    void post(Message&& message) {
+        using DecayedMessage = std::decay_t<Message>;
+        auto* channel = ensure_channel<DecayedMessage>();
+        channel->m_event.post(std::forward<Message>(message));
+    }
+
+    /// 派发所有频道中挂起的消息.
+    /// 先快照频道指针再逐个 flush, 避免持锁期间回调导致死锁.
+    void flush() {
+        std::vector<IChannel*> channel_ptrs;
+        {
+            std::lock_guard<std::mutex> lock(m_channels_mutex);
+            channel_ptrs.reserve(m_channels.size());
+            for (auto& pair : m_channels) {
+                channel_ptrs.push_back(pair.second.get());
+            }
+        }
+        std::exception_ptr first_exception;
+        for (auto* channel : channel_ptrs) {
+            try {
+                channel->flush();
+            } catch (...) {
+                if (!first_exception) {
+                    first_exception = std::current_exception();
+                }
+            }
+        }
+        if (first_exception) {
+            std::rethrow_exception(first_exception);
+        }
+    }
+
+    /// 所有频道中挂起的消息总数.
+    std::size_t pending_count() const {
+        std::lock_guard<std::mutex> lock(m_channels_mutex);
+        std::size_t total = 0;
+        for (const auto& pair : m_channels) {
+            total += pair.second->pending_count();
+        }
+        return total;
     }
 
    private:
@@ -296,15 +402,20 @@ class ZcBmTsMessageBus {
         IChannel& operator=(const IChannel&) = default;
         IChannel(IChannel&&) = default;
         IChannel& operator=(IChannel&&) = default;
+
+        virtual void flush() = 0;
+        virtual std::size_t pending_count() const = 0;
     };
 
     template <typename Message>
     struct TypedChannel : IChannel {
         ZcBmTsEvent<const Message&> m_event;
+        void flush() override { m_event.flush(); }
+        std::size_t pending_count() const override { return m_event.pending_count(); }
     };
 
     template <typename Message>
-    TypedChannel<Message>* find_or_create_channel() {
+    TypedChannel<Message>* ensure_channel() {
         std::lock_guard<std::mutex> lock(m_channels_mutex);
         const auto key = std::type_index(typeid(Message));
         auto iter = m_channels.find(key);
