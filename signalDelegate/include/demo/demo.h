@@ -87,7 +87,7 @@ void demo_address_const_ref_rvalue();
 void demo_delegate_rvalue_ref();
 
 // ============================================================
-// Demo 7g: Event<std::string&&> 通过 emit_forward 支持右值引用
+// Demo 7g: Event<std::string&&> 右值引用
 // ============================================================
 void demo_event_rvalue_ref();
 
@@ -97,9 +97,9 @@ void demo_event_rvalue_ref();
 void demo_event_const_rvalue_ref();
 
 // ============================================================
-// Demo 7i: emit_forward 多订阅者的注意事项
+// Demo 7i: 右值引用多订阅者的注意事项
 // ============================================================
-void demo_emit_forward_caveat();
+void demo_emit_rvalue_caveat();
 
 // ============================================================
 // Demo 7j: Event<std::string> + std::move 正确替代方案
@@ -214,6 +214,14 @@ class LogService {
 };
 
 void demo_business_message_bus();
+
+// ============================================================
+// Demo 12~14: Event/MessageBus post + flush (延迟触发)
+// ============================================================
+void demo_event_post_flush();
+void demo_event_post_flush_no_recurse();
+void demo_bus_post_flush();
+void demo_event_rvalue_post_flush();
 
 // ============================================================
 // 运行所有 demo / 线程安全 demo

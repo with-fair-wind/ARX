@@ -3,9 +3,11 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <exception>
 #include <functional>
 #include <memory>
 #include <stdexcept>
+#include <tuple>
 #include <type_traits>
 #include <typeindex>
 #include <unordered_map>
@@ -14,15 +16,7 @@
 
 namespace evt {
 
-namespace detail {
-
-template <typename... Ts>
-struct has_rvalue_ref : std::false_type {};
-
-template <typename T, typename... Rest>
-struct has_rvalue_ref<T, Rest...> : std::integral_constant<bool, std::is_rvalue_reference<T>::value || has_rvalue_ref<Rest...>::value> {};
-
-}  // namespace detail
+namespace detail {}  // namespace detail
 
 class ScopedConnection {
    public:
@@ -39,9 +33,8 @@ class ScopedConnection {
         if (this != &other) {
             try {
                 disconnect();
-            } catch (...) {
-                // Keep noexcept guarantee for move assignment.
-                active_ = false;
+            } catch (...) {  // NOLINT(bugprone-empty-catch)
+                // disconnect() already set active_ = false before calling fn.
             }
             disconnect_fn_ = std::move(other.disconnect_fn_);
             active_ = other.active_;
@@ -53,15 +46,16 @@ class ScopedConnection {
     ~ScopedConnection() noexcept {
         try {
             disconnect();
-        } catch (...) {
-            active_ = false;
+        } catch (...) {  // NOLINT(bugprone-empty-catch)
+            // disconnect() already set active_ = false before calling fn.
         }
     }
 
     void disconnect() {
         if (active_ && disconnect_fn_) {
-            disconnect_fn_();
+            auto fn = std::move(disconnect_fn_);
             active_ = false;
+            fn();
         }
     }
 
@@ -123,12 +117,13 @@ class Event {
     Event(const Event&) = delete;
     Event& operator=(const Event&) = delete;
 
-    Event(Event&& other) noexcept : handlers_(std::move(other.handlers_)), next_id_(other.next_id_) { other.next_id_ = 1; }
+    Event(Event&& other) noexcept : handlers_(std::move(other.handlers_)), next_id_(other.next_id_), pending_(std::move(other.pending_)) { other.next_id_ = 1; }
 
     Event& operator=(Event&& other) noexcept {
         if (this != &other) {
             handlers_ = std::move(other.handlers_);
             next_id_ = other.next_id_;
+            pending_ = std::move(other.pending_);
             other.next_id_ = 1;
         }
         return *this;
@@ -163,39 +158,68 @@ class Event {
 
     std::size_t size() const { return handlers_ ? handlers_->size() : 0; }
 
-    /// 安全触发: 每个 handler 都以左值接收参数, 多订阅者安全.
-    /// 不支持右值引用 Args (编译期报错), 请改用 emit_forward().
+    /// 触发事件: 通过 static_cast<Args> 传递参数, 支持所有 Args 类型.
+    /// 值类型 Args: 每个 handler 收到独立拷贝, 多订阅者安全.
+    /// 引用类型 Args: handler 共享引用.
+    /// 右值引用 Args(如 Event<T&&>): 等同 std::move, 单订阅者安全,
+    ///   多订阅者时后续 handler 可能收到被移动后的对象.
     void emit(Args... args) const {
-        static_assert(!detail::has_rvalue_ref<Args...>::value,
-                      "Event::emit() does not support rvalue reference Args. "
-                      "Use emit_forward() instead.");
         if (!handlers_) {
             return;
         }
         auto snapshot = *handlers_;
+        std::exception_ptr first_exception;
         for (const auto& slot : snapshot) {
             if (slot.handler.valid()) {
-                slot.handler(args...);
+                try {
+                    slot.handler(static_cast<Args>(args)...);
+                } catch (...) {
+                    if (!first_exception) {
+                        first_exception = std::current_exception();
+                    }
+                }
             }
+        }
+        if (first_exception) {
+            std::rethrow_exception(first_exception);
         }
     }
 
-    /// 转发触发: 使用 std::forward 传递参数, 支持右值引用 Args.
-    /// 注意: 对于值类型/右值引用, 第一个 handler 可能移走数据,
-    ///       后续 handler 收到的是被移动后的对象. 单订阅者时完全安全.
-    void emit_forward(Args... args) const {
-        if (!handlers_) {
-            return;
-        }
-        auto snapshot = *handlers_;
-        for (const auto& slot : snapshot) {
-            if (slot.handler.valid()) {
-                slot.handler(std::forward<Args>(args)...);
+    void operator()(Args... args) const { emit(std::forward<Args>(args)...); }
+
+    /// 延迟触发: 将参数 decay 后存入队列, 调用 flush() 时统一派发.
+    /// 参数会被拷贝/移动到内部存储, 安全地延长生命周期.
+    /// 对于右值引用 Args(如 Event<T&&>), flush 时行为与 emit() 一致:
+    ///   单订阅者安全, 多订阅者时后续 handler 可能收到被移动后的对象.
+    template <typename... UArgs>
+    void post(UArgs&&... uargs) {
+        pending_.emplace_back(std::decay_t<Args>(std::forward<UArgs>(uargs))...);
+    }
+
+    /// 派发所有挂起的事件, 行为与 emit() 一致.
+    /// flush 过程中新 post 的事件不会在本次 flush 中派发(防止无限循环).
+    void flush() {
+        auto batch = std::move(pending_);
+        std::exception_ptr first_exception;
+        for (auto& args_tuple : batch) {
+            try {
+                flush_one_(args_tuple, std::index_sequence_for<Args...>{});
+            } catch (...) {
+                if (!first_exception) {
+                    first_exception = std::current_exception();
+                }
             }
+        }
+        if (first_exception) {
+            std::rethrow_exception(first_exception);
         }
     }
 
-    void operator()(Args... args) const { emit_forward(std::forward<Args>(args)...); }
+    /// 挂起事件数量.
+    std::size_t pending_count() const { return pending_.size(); }
+
+    /// 清空挂起的事件(不触发).
+    void clear_pending() { pending_.clear(); }
 
    private:
     struct Slot {
@@ -204,6 +228,7 @@ class Event {
     };
 
     using HandlerList = std::vector<Slot>;
+    using StoredArgs = std::tuple<std::decay_t<Args>...>;
 
     void ensure_handlers() {
         if (!handlers_) {
@@ -211,8 +236,32 @@ class Event {
         }
     }
 
+    template <std::size_t... I>
+    void flush_one_(StoredArgs& stored, std::index_sequence<I...>) const {
+        if (!handlers_) {
+            return;
+        }
+        auto snapshot = *handlers_;
+        std::exception_ptr first_exception;
+        for (const auto& slot : snapshot) {
+            if (slot.handler.valid()) {
+                try {
+                    slot.handler(static_cast<Args>(std::get<I>(stored))...);
+                } catch (...) {
+                    if (!first_exception) {
+                        first_exception = std::current_exception();
+                    }
+                }
+            }
+        }
+        if (first_exception) {
+            std::rethrow_exception(first_exception);
+        }
+    }
+
     std::shared_ptr<HandlerList> handlers_;
     Id next_id_ = 1;
+    std::vector<StoredArgs> pending_;
 };
 
 class MessageBus {
@@ -229,17 +278,20 @@ class MessageBus {
 
     template <typename Message>
     ScopedConnection subscribe(std::function<void(const Message&)> fn) {
+        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
         auto& channel = channel_for<Message>();
         return channel.event.subscribe(std::move(fn));
     }
 
     template <typename Message, typename F>
     ScopedConnection subscribe(F&& f) {
+        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
         return subscribe<Message>(std::function<void(const Message&)>(std::forward<F>(f)));
     }
 
     template <typename Message>
     void publish(const Message& message) const {
+        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
         const auto it = channels_.find(std::type_index(typeid(Message)));
         if (it == channels_.end()) {
             return;
@@ -251,6 +303,7 @@ class MessageBus {
 
     template <typename Message>
     void clear() {
+        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
         auto it = channels_.find(std::type_index(typeid(Message)));
         if (it == channels_.end()) {
             return;
@@ -258,6 +311,40 @@ class MessageBus {
         auto* channel = dynamic_cast<TypedChannel<Message>*>(it->second.get());
         assert(channel && "Message channel type mismatch");
         channel->event.clear();
+    }
+
+    /// 延迟发布: 将消息 decay 后存入队列, 调用 flush() 时统一派发.
+    template <typename Message>
+    void post(Message&& message) {
+        using DecayedMessage = std::decay_t<Message>;
+        auto& channel = channel_for<DecayedMessage>();
+        channel.event.post(std::forward<Message>(message));
+    }
+
+    /// 派发所有频道中挂起的消息.
+    void flush() {
+        std::exception_ptr first_exception;
+        for (auto& pair : channels_) {
+            try {
+                pair.second->flush();
+            } catch (...) {
+                if (!first_exception) {
+                    first_exception = std::current_exception();
+                }
+            }
+        }
+        if (first_exception) {
+            std::rethrow_exception(first_exception);
+        }
+    }
+
+    /// 所有频道中挂起的消息总数.
+    std::size_t pending_count() const {
+        std::size_t total = 0;
+        for (const auto& pair : channels_) {
+            total += pair.second->pending_count();
+        }
+        return total;
     }
 
    private:
@@ -268,11 +355,16 @@ class MessageBus {
         IChannel& operator=(const IChannel&) = default;
         IChannel(IChannel&&) = default;
         IChannel& operator=(IChannel&&) = default;
+
+        virtual void flush() = 0;
+        virtual std::size_t pending_count() const = 0;
     };
 
     template <typename Message>
     struct TypedChannel : IChannel {
         Event<const Message&> event;
+        void flush() override { event.flush(); }
+        std::size_t pending_count() const override { return event.pending_count(); }
     };
 
     template <typename Message>

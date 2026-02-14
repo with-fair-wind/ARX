@@ -323,13 +323,12 @@ void demo_delegate_rvalue_ref() {
 }
 
 // ============================================================
-// Demo 7g: Event<std::string&&> 通过 emit_forward 支持右值引用
+// Demo 7g: Event<std::string&&> 右值引用
 // ============================================================
 void demo_event_rvalue_ref() {
-    separator("Demo 7g: Event<std::string&&> 右值引用 (emit_forward)");
+    separator("Demo 7g: Event<std::string&&> 右值引用");
     using namespace evt;
 
-    // Event<std::string&&>: emit() 会触发 static_assert, 必须用 emit_forward()
     Event<std::string&&> on_rref;
 
     auto conn = on_rref.subscribe([](std::string&& s) {
@@ -340,23 +339,20 @@ void demo_event_rvalue_ref() {
     });
 
     std::cout << "--- 传入临时对象 ---\n";
-    on_rref.emit_forward(std::string("rvalue-to-event"));
+    on_rref.emit(std::string("rvalue-to-event"));
 
     std::cout << "\n--- 用 std::move 传入具名变量 ---\n";
     std::string named = "named-then-moved";
     std::cout << "移动前 named 地址: " << (void*)&named << ", c_str: " << (void*)named.c_str() << ", 值: \"" << named << "\"\n";
-    on_rref.emit_forward(std::move(named));
+    on_rref.emit(std::move(named));
     std::cout << "移动后 named 值  : \"" << named << "\" (已被掏空)\n";
-
-    // 注意: emit() 会编译报错 (static_assert), 取消下行注释可验证:
-    // on_rref.emit(std::string("will not compile"));
 }
 
 // ============================================================
 // Demo 7h: Event<const std::string&&> 常量右值引用
 // ============================================================
 void demo_event_const_rvalue_ref() {
-    separator("Demo 7h: Event<const std::string&&> 常量右值引用 (emit_forward)");
+    separator("Demo 7h: Event<const std::string&&> 常量右值引用");
     using namespace evt;
 
     // const std::string&& : 只接受右值, 但不允许移动(const), 实践中极少使用
@@ -369,24 +365,24 @@ void demo_event_const_rvalue_ref() {
     });
 
     std::cout << "--- 传入临时对象 ---\n";
-    on_crref.emit_forward(std::string("const-rvalue-ref-test"));
+    on_crref.emit(std::string("const-rvalue-ref-test"));
 
     // std::string named = "test";
-    // on_crref.emit_forward(named);  // ❌ 左值不能绑定到 const std::string&&
+    // on_crref.emit(named);  // ❌ 左值不能绑定到 const std::string&&
 }
 
 // ============================================================
-// Demo 7i: emit_forward 多订阅者的注意事项
+// Demo 7i: 右值引用多订阅者的注意事项
 // ============================================================
-void demo_emit_forward_caveat() {
-    separator("Demo 7i: emit_forward 多订阅者注意事项");
+void demo_emit_rvalue_caveat() {
+    separator("Demo 7i: 右值引用多订阅者注意事项");
     using namespace evt;
 
     Event<std::string&&> on_rref;
 
     auto c1 = on_rref.subscribe([](std::string&& s) {
-        std::string taken = std::move(s);
-        std::cout << "  [订阅者1] 移走了: \"" << taken << "\"\n";
+        // std::string taken = std::move(s);
+        std::cout << "  [订阅者1] 移走了: \"" << s << "\"\n";
     });
 
     auto c2 = on_rref.subscribe([](std::string&& s) {
@@ -394,8 +390,8 @@ void demo_emit_forward_caveat() {
         std::cout << "  (第一个订阅者已经 move 走了, 所以这里是空的!)\n";
     });
 
-    std::cout << "--- emit_forward 多订阅者: 第一个 move 后, 后续收到空值 ---\n";
-    on_rref.emit_forward(std::string("only-first-gets-it"));
+    std::cout << "--- emit 多订阅者: 第一个 move 后, 后续收到空值 ---\n";
+    on_rref.emit(std::string("only-first-gets-it"));
 
     std::cout << "\n建议: Event<T&&> 仅用于单订阅者场景 (所有权转移)\n";
     std::cout << "      多订阅者请使用 Event<const T&> 或 Event<T>\n";
@@ -633,6 +629,122 @@ void demo_business_message_bus() {
 }
 
 // ============================================================
+// Demo 12: Event post + flush (延迟触发)
+// ============================================================
+void demo_event_post_flush() {
+    separator("Demo 12: Event post + flush (延迟触发)");
+    using namespace evt;
+
+    Event<int, const std::string&> on_message;
+
+    auto c1 = on_message.subscribe([](int code, const std::string& msg) { std::cout << "  [监听器A] code=" << code << ", msg=" << msg << "\n"; });
+
+    auto c2 = on_message.subscribe([](int code, const std::string& msg) { std::cout << "  [监听器B] code=" << code << ", msg=" << msg << "\n"; });
+
+    std::cout << "--- post 三条消息 (不会立刻触发) ---\n";
+    on_message.post(200, "OK");
+    on_message.post(404, "Not Found");
+    on_message.post(500, "Error");
+    std::cout << "  pending_count = " << on_message.pending_count() << "\n";
+    std::cout << "  (无 handler 输出 = 正确, 消息已入队但未派发)\n";
+
+    std::cout << "\n--- flush() 统一派发 ---\n";
+    on_message.flush();
+    std::cout << "  pending_count = " << on_message.pending_count() << " (flush 后清空)\n";
+}
+
+// ============================================================
+// Demo 13: Event post + flush 防递归 (对比 Demo 5)
+// ============================================================
+void demo_event_post_flush_no_recurse() {
+    separator("Demo 13: post + flush 防递归 (对比 Demo 5)");
+    using namespace evt;
+
+    Event<int> on_level;
+
+    auto conn = on_level.subscribe([&](int level) {
+        std::cout << "  收到 level=" << level << "\n";
+        if (level < 3) {
+            std::cout << "  -> post(" << level + 1 << ") 入队\n";
+            on_level.post(level + 1);
+        }
+    });
+
+    std::cout << "--- post(1) + 循环 flush: 广度优先, 不递归 ---\n";
+    on_level.post(1);
+
+    int round = 1;
+    while (on_level.pending_count() > 0) {
+        std::cout << "  [第 " << round++ << " 轮 flush, pending=" << on_level.pending_count() << "]\n";
+        on_level.flush();
+    }
+    std::cout << "  所有事件处理完毕, pending=" << on_level.pending_count() << "\n";
+}
+
+// ============================================================
+// Demo 14: MessageBus post + flush
+// ============================================================
+void demo_bus_post_flush() {
+    separator("Demo 14: MessageBus post + flush");
+    using namespace evt;
+
+    MessageBus bus;
+
+    auto c1 = bus.subscribe<DamageEvent>([](const DamageEvent& e) { std::cout << "  [伤害系统] amount=" << e.amount << ", source=" << e.source << "\n"; });
+
+    auto c2 = bus.subscribe<LoginEvent>([](const LoginEvent& e) { std::cout << "  [登录系统] user=" << e.user << "\n"; });
+
+    std::cout << "--- post 多条不同类型消息 ---\n";
+    bus.post(DamageEvent{30, "dragon"});
+    bus.post(DamageEvent{15, "goblin"});
+    bus.post(LoginEvent{"Alice", 1700000000});
+    std::cout << "  pending_count = " << bus.pending_count() << "\n";
+
+    std::cout << "\n--- flush() 统一派发所有类型 ---\n";
+    bus.flush();
+    std::cout << "  pending_count = " << bus.pending_count() << "\n";
+
+    std::cout << "\n--- 支持 move 语义: post(std::move(msg)) ---\n";
+    DamageEvent big_hit{999, "final-boss"};
+    std::cout << "  移动前 source: \"" << big_hit.source << "\"\n";
+    bus.post(std::move(big_hit));
+    std::cout << "  移动后 source: \"" << big_hit.source << "\" (已被移走)\n";
+    bus.flush();
+}
+
+// ============================================================
+// Demo 15: Event<std::string&&> post + flush (右值引用支持)
+// ============================================================
+void demo_event_rvalue_post_flush() {
+    separator("Demo 15: Event<std::string&&> post + flush (右值引用)");
+    using namespace evt;
+
+    Event<std::string&&> on_rref;
+
+    // 单订阅者: 完全安全, 可以 move
+    auto conn = on_rref.subscribe([](std::string&& s) {
+        std::string taken = std::move(s);
+        std::cout << "  [handler] 移走了: \"" << taken << "\"\n";
+    });
+
+    std::cout << "--- post 右值到队列 ---\n";
+    on_rref.post(std::string("deferred-rvalue-1"));
+    on_rref.post(std::string("deferred-rvalue-2"));
+    std::cout << "  pending_count = " << on_rref.pending_count() << "\n";
+
+    std::cout << "\n--- flush: handler 通过 std::move 拿到数据 ---\n";
+    on_rref.flush();
+    std::cout << "  pending_count = " << on_rref.pending_count() << "\n";
+
+    std::cout << "\n--- 也支持从具名变量 move 进 post ---\n";
+    std::string named = "named-then-posted";
+    std::cout << "  移动前: \"" << named << "\"\n";
+    on_rref.post(std::move(named));
+    std::cout << "  移动后: \"" << named << "\" (已掏空)\n";
+    on_rref.flush();
+}
+
+// ============================================================
 // 运行所有 demo
 // ============================================================
 void run_all_demos() {
@@ -652,7 +764,7 @@ void run_all_demos() {
     demo_delegate_rvalue_ref();
     demo_event_rvalue_ref();
     demo_event_const_rvalue_ref();
-    demo_emit_forward_caveat();
+    demo_emit_rvalue_caveat();
     demo_event_value_with_move();
     demo_multi_subscriber_value_safety();
 
@@ -660,6 +772,12 @@ void run_all_demos() {
 
     // 复杂业务场景
     demo_business_message_bus();
+
+    // post + flush 延迟触发
+    demo_event_post_flush();
+    demo_event_post_flush_no_recurse();
+    demo_bus_post_flush();
+    demo_event_rvalue_post_flush();
 
     std::cout << "\n========== All demos done ==========\n";
 }
