@@ -149,8 +149,8 @@ auto conn2 = bus.subscribe<LoginEvent>([](const LoginEvent& e) {
 });
 
 // 发布 — 只有对应类型的订阅者会收到
-bus.publish(DamageEvent{30, "fire"});
-bus.publish(LoginEvent{"bob"});
+bus.emit(DamageEvent{30, "fire"});
+bus.emit(LoginEvent{"bob"});
 ```
 
 ## 与 C# 委托/事件的对照

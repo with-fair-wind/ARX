@@ -197,18 +197,18 @@ void demo_message_bus() {
     auto c3 = bus.subscribe<LoginEvent>([](const LoginEvent& e) { std::cout << "  [登录系统] user=" << e.user << ", time=" << e.login_time << "\n"; });
 
     std::cout << "--- publish DamageEvent ---\n";
-    bus.publish(DamageEvent{30, "dragon"});
+    bus.emit(DamageEvent{30, "dragon"});
 
     std::cout << "--- publish LoginEvent ---\n";
-    bus.publish(LoginEvent{"Alice", 1700000000});
+    bus.emit(LoginEvent{"Alice", 1700000000});
 
     std::cout << "--- publish LogoutEvent(无人订阅, 静默跳过) ---\n";
-    bus.publish(LogoutEvent{"Bob"});
+    bus.emit(LogoutEvent{"Bob"});
     std::cout << "(无输出 = 正确)\n";
 
     std::cout << "\n--- 取消伤害系统订阅 ---\n";
     c1.disconnect();
-    bus.publish(DamageEvent{15, "goblin"});
+    bus.emit(DamageEvent{15, "goblin"});
 }
 
 // ============================================================
@@ -494,7 +494,7 @@ void InventoryService::tick() {
         }
 
         // 发布扣减结果，通知下游
-        bus_.publish(StockDeductedMsg{
+        bus_.emit(StockDeductedMsg{
             item.msg.order_id,
             ok,
             ok ? "OK" : "库存不足",
@@ -586,19 +586,19 @@ void demo_business_message_bus() {
     // 2. 模拟业务流程: 正常订单
     std::cout << "\n>>> 场景A: 正常订单 (数量=3, 库存充足)\n";
     std::cout << "--- [发布] OrderCreatedMsg ---\n";
-    bus.publish(OrderCreatedMsg{1001, "Alice", 299.0, 3});
+    bus.emit(OrderCreatedMsg{1001, "Alice", 299.0, 3});
 
     std::cout << "\n--- [延迟] 库存服务 tick() 处理待办队列 ---\n";
     std::cout << "  (此时 pending_count=" << inventory.pending_count() << ")\n";
     inventory.tick();  // 扣减成功 → 自动发布 StockDeductedMsg → 支付服务收到
 
     std::cout << "\n--- [发布] OrderPaidMsg (用户完成支付) ---\n";
-    bus.publish(OrderPaidMsg{1001, "微信支付", 299.0});
+    bus.emit(OrderPaidMsg{1001, "微信支付", 299.0});
 
     // 3. 模拟业务流程: 库存不足的订单
     std::cout << "\n\n>>> 场景B: 库存不足的订单 (数量=50, 超过库存)\n";
     std::cout << "--- [发布] OrderCreatedMsg ---\n";
-    bus.publish(OrderCreatedMsg{1002, "Bob", 5999.0, 50});
+    bus.emit(OrderCreatedMsg{1002, "Bob", 5999.0, 50});
 
     std::cout << "\n--- [延迟] 库存服务 tick() ---\n";
     inventory.tick();  // 扣减失败 → StockDeductedMsg(success=false) → 支付服务忽略
@@ -607,9 +607,9 @@ void demo_business_message_bus() {
 
     // 4. 模拟多个订单批量到达, 延迟统一处理
     std::cout << "\n\n>>> 场景C: 批量订单 → 先收集 → 统一 tick 处理\n";
-    bus.publish(OrderCreatedMsg{2001, "Charlie", 99.0, 1});
-    bus.publish(OrderCreatedMsg{2002, "Dave", 199.0, 2});
-    bus.publish(OrderCreatedMsg{2003, "Eve", 599.0, 5});
+    bus.emit(OrderCreatedMsg{2001, "Charlie", 99.0, 1});
+    bus.emit(OrderCreatedMsg{2002, "Dave", 199.0, 2});
+    bus.emit(OrderCreatedMsg{2003, "Eve", 599.0, 5});
     std::cout << "  (三个订单入队, pending_count=" << inventory.pending_count() << ")\n";
 
     std::cout << "\n--- [延迟] 库存服务 tick() 一次性处理所有待办 ---\n";
@@ -620,11 +620,11 @@ void demo_business_message_bus() {
     {
         NotificationService temp_notifier(bus);
         std::cout << "--- temp_notifier 存在, 发布一个订单 ---\n";
-        bus.publish(OrderCreatedMsg{9999, "Temp", 1.0, 1});
+        bus.emit(OrderCreatedMsg{9999, "Temp", 1.0, 1});
         std::cout << "  (通知服务收到了两次: notification + temp_notifier)\n";
     }  // temp_notifier 析构 → 其订阅全部断开
     std::cout << "--- temp_notifier 已销毁, 再发布 ---\n";
-    bus.publish(OrderCreatedMsg{9998, "AfterDestroy", 1.0, 1});
+    bus.emit(OrderCreatedMsg{9998, "AfterDestroy", 1.0, 1});
     std::cout << "  (通知服务只收到一次: 只剩 notification)\n";
 }
 
@@ -836,9 +836,9 @@ void demo_parallel_threadsafe() {
         std::cout << "[BUS] login " << e.user << "\n";
     });
 
-    std::thread t1([&]() { bus.publish(LoginEvent{"U1", 1}); });
-    std::thread t2([&]() { bus.publish(LoginEvent{"U2", 2}); });
-    std::thread t3([&]() { bus.publish(LoginEvent{"U3", 3}); });
+    std::thread t1([&]() { bus.emit(LoginEvent{"U1", 1}); });
+    std::thread t2([&]() { bus.emit(LoginEvent{"U2", 2}); });
+    std::thread t3([&]() { bus.emit(LoginEvent{"U3", 3}); });
     t1.join();
     t2.join();
     t3.join();

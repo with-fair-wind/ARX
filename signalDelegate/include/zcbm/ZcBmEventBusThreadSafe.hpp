@@ -331,7 +331,7 @@ class ZcBmTsMessageBus {
     }
 
     template <typename Message>
-    void publish(const Message& message) const {
+    void emit(const Message& message) const {
         static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
         auto* channel = find_channel<Message>();
         if (!channel) {
