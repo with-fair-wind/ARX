@@ -1,12 +1,13 @@
 #pragma once
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cstddef>
 #include <exception>
 #include <functional>
 #include <memory>
-#include <stdexcept>
+#include <shared_mutex>
 #include <tuple>
 #include <type_traits>
 #include <typeindex>
@@ -15,6 +16,134 @@
 #include <vector>
 
 namespace evt {
+
+// ============================================================
+// Lock Policies — 策略模式统一线程安全/非安全版本
+// ============================================================
+
+/// 无锁策略: 零开销, 用于单线程场景.
+struct NoLock {
+    void lock() const noexcept {}
+    void unlock() const noexcept {}
+    void lock_shared() const noexcept {}
+    void unlock_shared() const noexcept {}
+};
+
+/// shared_mutex 策略: 支持读写分离, 用于多线程场景.
+struct SharedMutexLock {
+    mutable std::shared_mutex m_mutex;
+    void lock() const { m_mutex.lock(); }
+    void unlock() const { m_mutex.unlock(); }
+    void lock_shared() const { m_mutex.lock_shared(); }
+    void unlock_shared() const { m_mutex.unlock_shared(); }
+};
+
+namespace detail {
+
+// ---- RAII 锁守卫 ----
+
+template <typename L>
+struct UniqueLockGuard {
+    const L& lk;
+    explicit UniqueLockGuard(const L& l) : lk(l) { lk.lock(); }
+    ~UniqueLockGuard() { lk.unlock(); }
+    UniqueLockGuard(const UniqueLockGuard&) = delete;
+    UniqueLockGuard& operator=(const UniqueLockGuard&) = delete;
+};
+
+template <>
+struct UniqueLockGuard<NoLock> {
+    explicit UniqueLockGuard(const NoLock&) {}
+};
+
+template <typename L>
+struct SharedLockGuard {
+    const L& lk;
+    explicit SharedLockGuard(const L& l) : lk(l) { lk.lock_shared(); }
+    ~SharedLockGuard() { lk.unlock_shared(); }
+    SharedLockGuard(const SharedLockGuard&) = delete;
+    SharedLockGuard& operator=(const SharedLockGuard&) = delete;
+};
+
+template <>
+struct SharedLockGuard<NoLock> {
+    explicit SharedLockGuard(const NoLock&) {}
+};
+
+// ---- 条件删除 move ----
+
+template <bool AllowMove>
+struct MovePolicy {
+    MovePolicy() = default;
+    ~MovePolicy() = default;
+    MovePolicy(const MovePolicy&) = delete;
+    MovePolicy& operator=(const MovePolicy&) = delete;
+    MovePolicy(MovePolicy&&) noexcept = default;
+    MovePolicy& operator=(MovePolicy&&) noexcept = default;
+};
+
+template <>
+struct MovePolicy<false> {
+    MovePolicy() = default;
+    ~MovePolicy() = default;
+    MovePolicy(const MovePolicy&) = delete;
+    MovePolicy& operator=(const MovePolicy&) = delete;
+    MovePolicy(MovePolicy&&) = delete;
+    MovePolicy& operator=(MovePolicy&&) = delete;
+};
+
+// ---- 异常安全遍历 ----
+
+/// 对 [begin, end) 中每个元素调用 fn, 捕获并保留第一个异常, 遍历完成后重新抛出.
+template <typename Iter, typename Fn>
+void for_each_safe(Iter begin, Iter end, Fn&& fn) {
+    std::exception_ptr first_ex;
+    for (auto it = begin; it != end; ++it) {
+        try {
+            fn(*it);
+        } catch (...) {
+            if (!first_ex) {
+                first_ex = std::current_exception();
+            }
+        }
+    }
+    if (first_ex) {
+        std::rethrow_exception(first_ex);
+    }
+}
+
+// ---- Combiner Accumulator 适配 ----
+
+template <typename C, typename R, typename = void>
+struct HasAccumulator : std::false_type {};
+
+template <typename C, typename R>
+struct HasAccumulator<C, R, std::void_t<typename C::Accumulator>> : std::true_type {};
+
+template <typename Combiner, typename R, bool HasAccum>
+struct CombinerAdapter;
+
+template <typename Combiner, typename R>
+struct CombinerAdapter<Combiner, R, true> {
+    using Accumulator = typename Combiner::Accumulator;
+};
+
+template <typename Combiner, typename R>
+struct CombinerAdapter<Combiner, R, false> {
+    struct Accumulator {
+        std::vector<R> results;
+        void reserve(std::size_t n) { results.reserve(n); }
+        void add(R&& val) { results.push_back(std::move(val)); }
+        bool should_stop() const { return false; }
+        typename Combiner::result_type finalize() { return Combiner::combine(std::move(results)); }
+    };
+};
+
+}  // namespace detail
+
+// ============================================================
+// ScopedConnection — 使用 atomic<bool> 保证 disconnect 仅执行一次
+// ============================================================
 
 class ScopedConnection {
    public:
@@ -25,44 +154,45 @@ class ScopedConnection {
     ScopedConnection(const ScopedConnection&) = delete;
     ScopedConnection& operator=(const ScopedConnection&) = delete;
 
-    ScopedConnection(ScopedConnection&& other) noexcept : m_disconnect_fn(std::move(other.m_disconnect_fn)), m_active(other.m_active) { other.m_active = false; }
+    ScopedConnection(ScopedConnection&& other) noexcept : m_disconnect_fn(std::move(other.m_disconnect_fn)), m_active(other.m_active.exchange(false, std::memory_order_acq_rel)) {}
 
     ScopedConnection& operator=(ScopedConnection&& other) noexcept {
         if (this != &other) {
-            try {
-                disconnect();
-            } catch (...) {  // NOLINT(bugprone-empty-catch)
-                // disconnect() already set m_active = false before calling fn.
-            }
+            disconnect_noexcept();
             m_disconnect_fn = std::move(other.m_disconnect_fn);
-            m_active = other.m_active;
-            other.m_active = false;
+            m_active.store(other.m_active.exchange(false, std::memory_order_acq_rel), std::memory_order_release);
         }
         return *this;
     }
 
-    ~ScopedConnection() noexcept {
+    ~ScopedConnection() noexcept { disconnect_noexcept(); }
+
+    void disconnect() {
+        if (m_active.exchange(false, std::memory_order_acq_rel)) {
+            if (m_disconnect_fn) {
+                auto fn = std::move(m_disconnect_fn);
+                fn();
+            }
+        }
+    }
+
+    bool is_active() const { return m_active.load(std::memory_order_acquire); }
+
+   private:
+    void disconnect_noexcept() noexcept {
         try {
             disconnect();
         } catch (...) {  // NOLINT(bugprone-empty-catch)
-            // disconnect() already set m_active = false before calling fn.
         }
     }
 
-    void disconnect() {
-        if (m_active && m_disconnect_fn) {
-            auto fn = std::move(m_disconnect_fn);
-            m_active = false;
-            fn();
-        }
-    }
-
-    bool is_active() const { return m_active; }
-
-   private:
     std::function<void()> m_disconnect_fn;
-    bool m_active = false;
+    std::atomic<bool> m_active{false};
 };
+
+// ============================================================
+// Delegate — 类型安全的可调用对象包装
+// ============================================================
 
 template <typename Signature>
 class Delegate;
@@ -102,67 +232,188 @@ class Delegate<R(Args...)> {
     std::function<R(Args...)> m_fn;
 };
 
-// ---- Combiners ----
+// ============================================================
+// Combiners — 合并策略
+// ============================================================
 
-/// 默认合并策略: 收集所有 handler 返回值到 std::vector.
+/// 默认: 收集所有返回值到 std::vector.
 template <typename R>
 struct CollectAll {
     using result_type = std::vector<R>;
     static result_type combine(std::vector<R>&& results) { return std::move(results); }
 };
 
-/// 返回最后一个 handler 的值. 要求至少一个 handler, 否则 assert 失败.
+/// 返回最后一个 handler 的值.
 template <typename R>
 struct LastValue {
     using result_type = R;
-    static result_type combine(std::vector<R>&& results) {  // NOLINT(cppcoreguidelines-rvalue-reference-param-not-moved) : we move an element, not the container
+    static result_type combine(std::vector<R>&& results) {  // NOLINT(cppcoreguidelines-rvalue-reference-param-not-moved)
         assert(!results.empty() && "LastValue combiner requires at least one handler");
         return std::move(results.back());
     }
 };
 
-// ---- Event ----
+/// 短路求值: 遇到 true 立即停止.
+template <typename R>
+struct StopOnTrue {
+    using result_type = R;
+    struct Accumulator {
+        R last_value{};
+        bool stopped = false;
+        void reserve(std::size_t) {}
+        void add(R&& val) {
+            last_value = std::move(val);
+            if (last_value) {
+                stopped = true;
+            }
+        }
+        bool should_stop() const { return stopped; }
+        R finalize() { return std::move(last_value); }
+    };
+};
 
-template <typename Signature, template <typename> class CombinerT = CollectAll>
+/// 短路求值: 遇到 false 立即停止.
+template <typename R>
+struct StopOnFalse {
+    using result_type = R;
+    struct Accumulator {
+        R last_value{};
+        bool stopped = false;
+        void reserve(std::size_t) {}
+        void add(R&& val) {
+            last_value = std::move(val);
+            if (!last_value) {
+                stopped = true;
+            }
+        }
+        bool should_stop() const { return stopped; }
+        R finalize() { return std::move(last_value); }
+    };
+};
+
+// ============================================================
+// EventCore — COW 快照 + 锁策略 (Event 的内部共享状态)
+// ============================================================
+
+namespace detail {
+
+template <typename Handler, typename LockPolicy, typename... Args>
+class EventCore {
+   public:
+    using Id = std::size_t;
+
+    struct Slot {
+        Id id;
+        Handler handler;
+    };
+
+    using HandlerList = std::vector<Slot>;
+    using StoredArgs = std::tuple<std::decay_t<Args>...>;
+
+    EventCore() : m_handlers(std::make_shared<HandlerList>()) {}
+
+    /// COW 快照: O(1), 仅增加 shared_ptr 引用计数.
+    std::shared_ptr<HandlerList> snapshot() const {
+        SharedLockGuard<LockPolicy> guard(m_lock);
+        return m_handlers;
+    }
+
+    Id add_handler(Handler handler) {
+        UniqueLockGuard<LockPolicy> guard(m_lock);
+        cow_detach();
+        Id id = m_next_id++;
+        m_handlers->push_back(Slot{id, std::move(handler)});
+        return id;
+    }
+
+    void remove_handler(Id id) {
+        UniqueLockGuard<LockPolicy> guard(m_lock);
+        cow_detach();
+        auto& items = *m_handlers;
+        items.erase(std::remove_if(items.begin(), items.end(), [id](const Slot& s) { return s.id == id; }), items.end());
+    }
+
+    void clear_handlers() {
+        UniqueLockGuard<LockPolicy> guard(m_lock);
+        cow_detach();
+        m_handlers->clear();
+    }
+
+    std::size_t handler_count() const {
+        SharedLockGuard<LockPolicy> guard(m_lock);
+        return m_handlers ? m_handlers->size() : 0;
+    }
+
+    template <typename... UArgs>
+    void push_pending(UArgs&&... uargs) {
+        UniqueLockGuard<LockPolicy> guard(m_lock);
+        m_pending.emplace_back(std::decay_t<Args>(std::forward<UArgs>(uargs))...);
+    }
+
+    std::vector<StoredArgs> take_pending() {
+        UniqueLockGuard<LockPolicy> guard(m_lock);
+        return std::move(m_pending);
+    }
+
+    std::size_t pending_count() const {
+        SharedLockGuard<LockPolicy> guard(m_lock);
+        return m_pending.size();
+    }
+
+    void clear_pending() {
+        UniqueLockGuard<LockPolicy> guard(m_lock);
+        m_pending.clear();
+    }
+
+   private:
+    void cow_detach() {
+        if (!m_handlers) {
+            m_handlers = std::make_shared<HandlerList>();
+        } else if (m_handlers.use_count() > 1) {
+            m_handlers = std::make_shared<HandlerList>(*m_handlers);
+        }
+    }
+
+    mutable LockPolicy m_lock;
+    std::shared_ptr<HandlerList> m_handlers;
+    Id m_next_id = 1;
+    std::vector<StoredArgs> m_pending;
+};
+
+}  // namespace detail
+
+// ============================================================
+// Event — 主模板声明
+// ============================================================
+
+template <typename Signature, template <typename> class CombinerT = CollectAll, typename LockPolicy = NoLock>
 class Event;
 
-/// Event 特化: void 返回值 — 行为与传统 Event 完全一致, CombinerT 被忽略.
-template <typename... Args, template <typename> class CombinerT>
-class Event<void(Args...), CombinerT> {
+// ============================================================
+// Event 特化: void 返回值
+// ============================================================
+
+template <typename... Args, template <typename> class CombinerT, typename LockPolicy>
+class Event<void(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<std::is_same_v<LockPolicy, NoLock>> {
    public:
     using Handler = Delegate<void(Args...)>;
     using Id = std::size_t;
 
-    Event() : m_handlers(std::make_shared<HandlerList>()) {}
+   private:
+    using Core = detail::EventCore<Handler, LockPolicy, Args...>;
+    using StoredArgs = typename Core::StoredArgs;
 
-    Event(const Event&) = delete;
-    Event& operator=(const Event&) = delete;
-
-    Event(Event&& other) noexcept : m_handlers(std::move(other.m_handlers)), m_next_id(other.m_next_id), m_pending(std::move(other.m_pending)) { other.m_next_id = 1; }
-
-    Event& operator=(Event&& other) noexcept {
-        if (this != &other) {
-            m_handlers = std::move(other.m_handlers);
-            m_next_id = other.m_next_id;
-            m_pending = std::move(other.m_pending);
-            other.m_next_id = 1;
-        }
-        return *this;
-    }
+   public:
+    Event() : m_core(std::make_shared<Core>()) {}
 
     ScopedConnection subscribe(Handler handler) {
-        ensure_handlers();
-        const Id id = m_next_id++;
-        m_handlers->push_back(Slot{id, std::move(handler)});
-
-        std::weak_ptr<HandlerList> weak_handlers = m_handlers;
-        return ScopedConnection([weak_handlers, id]() {
-            const auto shared_handlers = weak_handlers.lock();
-            if (!shared_handlers) {
-                return;
+        ensure_core();
+        Id id = m_core->add_handler(std::move(handler));
+        std::weak_ptr<Core> weak = m_core;
+        return ScopedConnection([weak, id]() {
+            if (auto core = weak.lock()) {
+                core->remove_handler(id);
             }
-            auto& items = *shared_handlers;
-            items.erase(std::remove_if(items.begin(), items.end(), [id](const Slot& slot) { return slot.id == id; }), items.end());
         });
     }
 
@@ -172,159 +423,94 @@ class Event<void(Args...), CombinerT> {
     }
 
     void clear() {
-        if (m_handlers) {
-            m_handlers->clear();
+        if (m_core) {
+            m_core->clear_handlers();
         }
     }
 
-    std::size_t size() const { return m_handlers ? m_handlers->size() : 0; }
+    std::size_t size() const { return m_core ? m_core->handler_count() : 0; }
 
-    /// 触发事件: 通过 static_cast<Args> 传递参数, 支持所有 Args 类型.
-    /// 值类型 Args: 每个 handler 收到独立拷贝, 多订阅者安全.
-    /// 引用类型 Args: handler 共享引用.
-    /// 右值引用 Args(如 Event<void(T&&)>): 等同 std::move, 单订阅者安全,
-    ///   多订阅者时后续 handler 可能收到被移动后的对象.
+    /// 触发事件: COW 快照 O(1), 遍历时不受 subscribe/disconnect 影响.
     void emit(Args... args) const {
-        if (!m_handlers) {
+        if (!m_core) {
             return;
         }
-        auto snapshot = *m_handlers;
-        std::exception_ptr first_exception;
-        for (const auto& slot : snapshot) {
+        auto snap = m_core->snapshot();
+        if (!snap || snap->empty()) {
+            return;
+        }
+        detail::for_each_safe(snap->begin(), snap->end(), [&](const auto& slot) {
             if (slot.handler.valid()) {
-                try {
-                    slot.handler(static_cast<Args>(args)...);
-                } catch (...) {
-                    if (!first_exception) {
-                        first_exception = std::current_exception();
-                    }
-                }
+                slot.handler(static_cast<Args>(args)...);
             }
-        }
-        if (first_exception) {
-            std::rethrow_exception(first_exception);
-        }
+        });
     }
 
     void operator()(Args... args) const { emit(std::forward<Args>(args)...); }
 
-    /// 延迟触发: 将参数 decay 后存入队列, 调用 flush() 时统一派发.
-    /// 参数会被拷贝/移动到内部存储, 安全地延长生命周期.
-    /// 对于右值引用 Args(如 Event<void(T&&)>), flush 时行为与 emit() 一致:
-    ///   单订阅者安全, 多订阅者时后续 handler 可能收到被移动后的对象.
     template <typename... UArgs>
     void post(UArgs&&... uargs) {
-        m_pending.emplace_back(std::decay_t<Args>(std::forward<UArgs>(uargs))...);
+        ensure_core();
+        m_core->push_pending(std::forward<UArgs>(uargs)...);
     }
 
-    /// 派发所有挂起的事件, 行为与 emit() 一致.
-    /// flush 过程中新 post 的事件不会在本次 flush 中派发(防止无限循环).
+    /// 派发所有挂起的事件. flush 过程中新 post 的事件不会在本次 flush 中派发.
     void flush() {
-        auto batch = std::move(m_pending);
-        std::exception_ptr first_exception;
-        for (auto& args_tuple : batch) {
-            try {
-                flush_one(args_tuple, std::index_sequence_for<Args...>{});
-            } catch (...) {
-                if (!first_exception) {
-                    first_exception = std::current_exception();
-                }
-            }
-        }
-        if (first_exception) {
-            std::rethrow_exception(first_exception);
-        }
-    }
-
-    /// 挂起事件数量.
-    std::size_t pending_count() const { return m_pending.size(); }
-
-    /// 清空挂起的事件(不触发).
-    void clear_pending() { m_pending.clear(); }
-
-   private:
-    struct Slot {
-        Id id;
-        Handler handler;
-    };
-
-    using HandlerList = std::vector<Slot>;
-    using StoredArgs = std::tuple<std::decay_t<Args>...>;
-
-    void ensure_handlers() {
-        if (!m_handlers) {
-            m_handlers = std::make_shared<HandlerList>();
-        }
-    }
-
-    template <std::size_t... I>
-    void flush_one(StoredArgs& stored, std::index_sequence<I...>) const {
-        if (!m_handlers) {
+        if (!m_core) {
             return;
         }
-        auto snapshot = *m_handlers;
-        std::exception_ptr first_exception;
-        for (const auto& slot : snapshot) {
-            if (slot.handler.valid()) {
-                try {
-                    slot.handler(static_cast<Args>(std::get<I>(stored))...);
-                } catch (...) {
-                    if (!first_exception) {
-                        first_exception = std::current_exception();
-                    }
-                }
-            }
-        }
-        if (first_exception) {
-            std::rethrow_exception(first_exception);
+        auto batch = m_core->take_pending();
+        detail::for_each_safe(batch.begin(), batch.end(), [this](auto& stored) {
+            std::apply([this](auto&... args) { emit(static_cast<Args>(args)...); }, stored);
+        });
+    }
+
+    std::size_t pending_count() const { return m_core ? m_core->pending_count() : 0; }
+
+    void clear_pending() {
+        if (m_core) {
+            m_core->clear_pending();
         }
     }
 
-    std::shared_ptr<HandlerList> m_handlers;
-    Id m_next_id = 1;
-    std::vector<StoredArgs> m_pending;
+   private:
+    void ensure_core() {
+        if (!m_core) {
+            m_core = std::make_shared<Core>();
+        }
+    }
+
+    std::shared_ptr<Core> m_core;
 };
 
-/// Event 特化: 非 void 返回值 — handler 返回值通过 CombinerT 合并.
-/// emit() 返回 Combiner::result_type, flush() 返回 std::vector<result_type>.
-template <typename R, typename... Args, template <typename> class CombinerT>
-class Event<R(Args...), CombinerT> {
+// ============================================================
+// Event 特化: 非 void 返回值 — 支持 Combiner + 短路求值
+// ============================================================
+
+template <typename R, typename... Args, template <typename> class CombinerT, typename LockPolicy>
+class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<std::is_same_v<LockPolicy, NoLock>> {
    public:
     using Handler = Delegate<R(Args...)>;
     using Id = std::size_t;
     using Combiner = CombinerT<R>;
     using ResultType = typename Combiner::result_type;
 
-    Event() : m_handlers(std::make_shared<HandlerList>()) {}
+   private:
+    using Core = detail::EventCore<Handler, LockPolicy, Args...>;
+    using StoredArgs = typename Core::StoredArgs;
+    using Adapter = detail::CombinerAdapter<Combiner, R, detail::HasAccumulator<Combiner, R>::value>;
 
-    Event(const Event&) = delete;
-    Event& operator=(const Event&) = delete;
-
-    Event(Event&& other) noexcept : m_handlers(std::move(other.m_handlers)), m_next_id(other.m_next_id), m_pending(std::move(other.m_pending)) { other.m_next_id = 1; }
-
-    Event& operator=(Event&& other) noexcept {
-        if (this != &other) {
-            m_handlers = std::move(other.m_handlers);
-            m_next_id = other.m_next_id;
-            m_pending = std::move(other.m_pending);
-            other.m_next_id = 1;
-        }
-        return *this;
-    }
+   public:
+    Event() : m_core(std::make_shared<Core>()) {}
 
     ScopedConnection subscribe(Handler handler) {
-        ensure_handlers();
-        const Id id = m_next_id++;
-        m_handlers->push_back(Slot{id, std::move(handler)});
-
-        std::weak_ptr<HandlerList> weak_handlers = m_handlers;
-        return ScopedConnection([weak_handlers, id]() {
-            const auto shared_handlers = weak_handlers.lock();
-            if (!shared_handlers) {
-                return;
+        ensure_core();
+        Id id = m_core->add_handler(std::move(handler));
+        std::weak_ptr<Core> weak = m_core;
+        return ScopedConnection([weak, id]() {
+            if (auto core = weak.lock()) {
+                core->remove_handler(id);
             }
-            auto& items = *shared_handlers;
-            items.erase(std::remove_if(items.begin(), items.end(), [id](const Slot& slot) { return slot.id == id; }), items.end());
         });
     }
 
@@ -334,255 +520,207 @@ class Event<R(Args...), CombinerT> {
     }
 
     void clear() {
-        if (m_handlers) {
-            m_handlers->clear();
+        if (m_core) {
+            m_core->clear_handlers();
         }
     }
 
-    std::size_t size() const { return m_handlers ? m_handlers->size() : 0; }
+    std::size_t size() const { return m_core ? m_core->handler_count() : 0; }
 
-    /// 触发事件: 调用所有 handler, 收集返回值, 通过 Combiner 合并.
-    /// 值类型 Args: 每个 handler 收到独立拷贝, 多订阅者安全.
-    /// 引用类型 Args: handler 共享引用.
-    /// 右值引用 Args(如 Event<int(T&&)>): 等同 std::move, 单订阅者安全,
-    ///   多订阅者时后续 handler 可能收到被移动后的对象.
+    /// 触发事件: 调用所有 handler, 通过 Combiner 合并返回值.
+    /// 支持短路求值: 如果 Combiner 提供 Accumulator, 可提前终止遍历.
     ResultType emit(Args... args) const {
-        if (!m_handlers) {
-            return Combiner::combine(std::vector<R>{});
+        if (!m_core) {
+            return empty_result();
         }
-        auto snapshot = *m_handlers;
-        std::vector<R> results;
-        std::exception_ptr first_exception;
-        for (const auto& slot : snapshot) {
+        auto snap = m_core->snapshot();
+        if (!snap || snap->empty()) {
+            return empty_result();
+        }
+        typename Adapter::Accumulator acc;
+        acc.reserve(snap->size());
+        std::exception_ptr first_ex;
+        for (const auto& slot : *snap) {
             if (slot.handler.valid()) {
                 try {
-                    results.push_back(slot.handler(static_cast<Args>(args)...));
+                    acc.add(slot.handler(static_cast<Args>(args)...));
+                    if (acc.should_stop()) {
+                        break;
+                    }
                 } catch (...) {
-                    if (!first_exception) {
-                        first_exception = std::current_exception();
+                    if (!first_ex) {
+                        first_ex = std::current_exception();
                     }
                 }
             }
         }
-        if (first_exception) {
-            std::rethrow_exception(first_exception);
+        if (first_ex) {
+            std::rethrow_exception(first_ex);
         }
-        return Combiner::combine(std::move(results));
+        return acc.finalize();
     }
 
     ResultType operator()(Args... args) const { return emit(std::forward<Args>(args)...); }
 
-    /// 延迟触发: 将参数 decay 后存入队列, 调用 flush() 时统一派发.
-    /// 参数会被拷贝/移动到内部存储, 安全地延长生命周期.
     template <typename... UArgs>
     void post(UArgs&&... uargs) {
-        m_pending.emplace_back(std::decay_t<Args>(std::forward<UArgs>(uargs))...);
+        ensure_core();
+        m_core->push_pending(std::forward<UArgs>(uargs)...);
     }
 
     /// 派发所有挂起的事件, 每个批次产生一个合并结果.
-    /// flush 过程中新 post 的事件不会在本次 flush 中派发(防止无限循环).
     std::vector<ResultType> flush() {
-        auto batch = std::move(m_pending);
+        if (!m_core) {
+            return {};
+        }
+        auto batch = m_core->take_pending();
         std::vector<ResultType> all_results;
-        std::exception_ptr first_exception;
-        for (auto& args_tuple : batch) {
-            try {
-                all_results.push_back(flush_one(args_tuple, std::index_sequence_for<Args...>{}));
-            } catch (...) {
-                if (!first_exception) {
-                    first_exception = std::current_exception();
-                }
-            }
-        }
-        if (first_exception) {
-            std::rethrow_exception(first_exception);
-        }
+        all_results.reserve(batch.size());
+        detail::for_each_safe(batch.begin(), batch.end(), [&](auto& stored) {
+            all_results.push_back(std::apply([this](auto&... args) { return emit(static_cast<Args>(args)...); }, stored));
+        });
         return all_results;
     }
 
-    /// 挂起事件数量.
-    std::size_t pending_count() const { return m_pending.size(); }
+    std::size_t pending_count() const { return m_core ? m_core->pending_count() : 0; }
 
-    /// 清空挂起的事件(不触发).
-    void clear_pending() { m_pending.clear(); }
+    void clear_pending() {
+        if (m_core) {
+            m_core->clear_pending();
+        }
+    }
 
    private:
-    struct Slot {
-        Id id;
-        Handler handler;
-    };
-
-    using HandlerList = std::vector<Slot>;
-    using StoredArgs = std::tuple<std::decay_t<Args>...>;
-
-    void ensure_handlers() {
-        if (!m_handlers) {
-            m_handlers = std::make_shared<HandlerList>();
+    void ensure_core() {
+        if (!m_core) {
+            m_core = std::make_shared<Core>();
         }
     }
 
-    template <std::size_t... I>
-    ResultType flush_one(StoredArgs& stored, std::index_sequence<I...>) const {
-        if (!m_handlers) {
-            return Combiner::combine(std::vector<R>{});
-        }
-        auto snapshot = *m_handlers;
-        std::vector<R> results;
-        std::exception_ptr first_exception;
-        for (const auto& slot : snapshot) {
-            if (slot.handler.valid()) {
-                try {
-                    results.push_back(slot.handler(static_cast<Args>(std::get<I>(stored))...));
-                } catch (...) {
-                    if (!first_exception) {
-                        first_exception = std::current_exception();
-                    }
-                }
-            }
-        }
-        if (first_exception) {
-            std::rethrow_exception(first_exception);
-        }
-        return Combiner::combine(std::move(results));
+    static ResultType empty_result() {
+        typename Adapter::Accumulator acc;
+        return acc.finalize();
     }
 
-    std::shared_ptr<HandlerList> m_handlers;
-    Id m_next_id = 1;
-    std::vector<StoredArgs> m_pending;
+    std::shared_ptr<Core> m_core;
 };
 
-// ---- MessageBus ----
+// ============================================================
+// ThreadSafeEvent — 便捷别名
+// ============================================================
 
-class MessageBus {
+template <typename Signature, template <typename> class CombinerT = CollectAll>
+using ThreadSafeEvent = Event<Signature, CombinerT, SharedMutexLock>;
+
+// ============================================================
+// MessageBus — 基于类型的消息总线 (策略模式支持线程安全)
+// ============================================================
+
+template <typename LockPolicy = NoLock>
+class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, NoLock>> {
    public:
-    MessageBus() = default;
+    BasicMessageBus() = default;
 
-    MessageBus(const MessageBus&) = delete;
-    MessageBus& operator=(const MessageBus&) = delete;
-
-    MessageBus(MessageBus&&) noexcept = default;
-    MessageBus& operator=(MessageBus&&) noexcept = default;
-
-    // ---- void 返回 (向后兼容) ----
+    // ---- void 返回 ----
 
     template <typename Message>
     ScopedConnection subscribe(std::function<void(const Message&)> func) {
-        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        auto* channel = ensure_channel<Message>();
-        return channel->m_event.subscribe(std::move(func));
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
+        return ensure_channel<Message>()->m_event.subscribe(std::move(func));
     }
 
     template <typename Message, typename F>
     ScopedConnection subscribe(F&& func) {
-        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
         return subscribe<Message>(std::function<void(const Message&)>(std::forward<F>(func)));
     }
 
     template <typename Message>
     void emit(const Message& message) const {
-        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        auto* channel = find_channel<Message>();
-        if (!channel) {
-            return;
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
+        if (auto* ch = find_channel<Message>()) {
+            ch->m_event.emit(message);
         }
-        channel->m_event.emit(message);
     }
 
     template <typename Message>
     void clear() {
-        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        auto* channel = find_channel<Message>();
-        if (!channel) {
-            return;
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
+        if (auto* ch = find_channel<Message>()) {
+            ch->m_event.clear();
         }
-        channel->m_event.clear();
     }
 
-    // ---- 非 void 返回 (R 必须显式指定) ----
+    // ---- 非 void 返回 ----
 
     template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              typename std::enable_if<!std::is_void<R>::value, int>::type = 0>
+              std::enable_if_t<!std::is_void_v<R>, int> = 0>
     ScopedConnection subscribe(std::function<R(const Message&)> func) {
-        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        auto* channel = ensure_ret_channel<Message, R, CombinerTC>();
-        return channel->m_event.subscribe(std::move(func));
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
+        return ensure_ret_channel<Message, R, CombinerTC>()->m_event.subscribe(std::move(func));
     }
 
     template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              typename std::enable_if<!std::is_void<R>::value, int>::type = 0>
+              std::enable_if_t<!std::is_void_v<R>, int> = 0>
     typename CombinerTC<R>::result_type emit(const Message& message) const {
-        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        auto* channel = find_ret_channel<Message, R, CombinerTC>();
-        if (!channel) {
-            return typename CombinerTC<R>::result_type{};
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
+        if (auto* ch = find_ret_channel<Message, R, CombinerTC>()) {
+            return ch->m_event.emit(message);
         }
-        return channel->m_event.emit(message);
+        return typename CombinerTC<R>::result_type{};
     }
 
     template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              typename std::enable_if<!std::is_void<R>::value, int>::type = 0>
+              std::enable_if_t<!std::is_void_v<R>, int> = 0>
     void clear() {
-        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        auto* channel = find_ret_channel<Message, R, CombinerTC>();
-        if (!channel) {
-            return;
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
+        if (auto* ch = find_ret_channel<Message, R, CombinerTC>()) {
+            ch->m_event.clear();
         }
-        channel->m_event.clear();
     }
 
     // ---- post / flush ----
 
-    /// 延迟发布 (void 频道).
     template <typename Message>
     void post(Message&& message) {
-        using DecayedMessage = std::decay_t<Message>;
-        auto* channel = ensure_channel<DecayedMessage>();
-        channel->m_event.post(std::forward<Message>(message));
+        using Decayed = std::decay_t<Message>;
+        ensure_channel<Decayed>()->m_event.post(std::forward<Message>(message));
     }
 
-    /// 延迟发布 (非 void 频道, R 必须显式指定).
     template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              typename std::enable_if<!std::is_void<R>::value, int>::type = 0>
+              std::enable_if_t<!std::is_void_v<R>, int> = 0>
     void post(const Message& message) {
-        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        auto* channel = ensure_ret_channel<Message, R, CombinerTC>();
-        channel->m_event.post(message);
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
+        ensure_ret_channel<Message, R, CombinerTC>()->m_event.post(message);
     }
 
-    /// 派发所有频道中挂起的消息 (非 void 频道的返回值被丢弃).
     void flush() {
-        std::exception_ptr first_exception;
-        for (auto& pair : m_channels) {
-            try {
-                pair.second->flush();
-            } catch (...) {
-                if (!first_exception) {
-                    first_exception = std::current_exception();
-                }
+        std::vector<IChannel*> ptrs;
+        {
+            detail::SharedLockGuard<LockPolicy> guard(m_lock);
+            ptrs.reserve(m_channels.size());
+            for (auto& [key, ch] : m_channels) {
+                ptrs.push_back(ch.get());
             }
         }
-        if (first_exception) {
-            std::rethrow_exception(first_exception);
-        }
+        detail::for_each_safe(ptrs.begin(), ptrs.end(), [](auto* ch) { ch->flush(); });
     }
 
-    /// 按频道 flush 并返回结果 (非 void 频道).
     template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              typename std::enable_if<!std::is_void<R>::value, int>::type = 0>
+              std::enable_if_t<!std::is_void_v<R>, int> = 0>
     std::vector<typename CombinerTC<R>::result_type> flush() {
-        static_assert(std::is_same<Message, std::decay_t<Message>>::value, "Message type must not be cv-qualified or a reference. Use the base type.");
-        auto* channel = find_ret_channel<Message, R, CombinerTC>();
-        if (!channel) {
-            return {};
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
+        if (auto* ch = find_ret_channel<Message, R, CombinerTC>()) {
+            return ch->m_event.flush();
         }
-        return channel->m_event.flush();
+        return {};
     }
 
-    /// 所有频道中挂起的消息总数.
     std::size_t pending_count() const {
+        detail::SharedLockGuard<LockPolicy> guard(m_lock);
         std::size_t total = 0;
-        for (const auto& pair : m_channels) {
-            total += pair.second->pending_count();
+        for (const auto& [key, ch] : m_channels) {
+            total += ch->pending_count();
         }
         return total;
     }
@@ -602,73 +740,63 @@ class MessageBus {
 
     template <typename Message>
     struct TypedChannel : IChannel {
-        Event<void(const Message&)> m_event;
+        Event<void(const Message&), CollectAll, LockPolicy> m_event;
         void flush() override { m_event.flush(); }
         std::size_t pending_count() const override { return m_event.pending_count(); }
     };
 
     template <typename Message, typename R, template <typename> class CombinerTC>
     struct TypedRetChannel : IChannel {
-        Event<R(const Message&), CombinerTC> m_event;
+        Event<R(const Message&), CombinerTC, LockPolicy> m_event;
         void flush() override { m_event.flush(); }
         std::size_t pending_count() const override { return m_event.pending_count(); }
     };
 
     template <typename Message>
     TypedChannel<Message>* ensure_channel() {
+        detail::UniqueLockGuard<LockPolicy> guard(m_lock);
         const auto key = std::type_index(typeid(Message));
         auto it = m_channels.find(key);
         if (it == m_channels.end()) {
-            auto inserted = m_channels.emplace(key, std::unique_ptr<IChannel>(new TypedChannel<Message>()));
-            it = inserted.first;
+            it = m_channels.emplace(key, std::make_unique<TypedChannel<Message>>()).first;
         }
-
-        auto* typed = dynamic_cast<TypedChannel<Message>*>(it->second.get());
-        if (!typed) {
-            throw std::logic_error("Message channel type mismatch");
-        }
-        return typed;
+        return static_cast<TypedChannel<Message>*>(it->second.get());
     }
 
     template <typename Message>
     TypedChannel<Message>* find_channel() const {
-        const auto it = m_channels.find(std::type_index(typeid(Message)));
-        if (it == m_channels.end()) {
-            return nullptr;
-        }
-        auto* typed = dynamic_cast<TypedChannel<Message>*>(it->second.get());
-        assert(typed && "Message channel type mismatch");
-        return typed;
+        detail::SharedLockGuard<LockPolicy> guard(m_lock);
+        auto it = m_channels.find(std::type_index(typeid(Message)));
+        return it != m_channels.end() ? static_cast<TypedChannel<Message>*>(it->second.get()) : nullptr;
     }
 
     template <typename Message, typename R, template <typename> class CombinerTC>
     TypedRetChannel<Message, R, CombinerTC>* ensure_ret_channel() {
+        detail::UniqueLockGuard<LockPolicy> guard(m_lock);
         const auto key = std::type_index(typeid(Message));
         auto it = m_channels.find(key);
         if (it == m_channels.end()) {
-            auto inserted = m_channels.emplace(key, std::unique_ptr<IChannel>(new TypedRetChannel<Message, R, CombinerTC>()));
-            it = inserted.first;
+            it = m_channels.emplace(key, std::make_unique<TypedRetChannel<Message, R, CombinerTC>>()).first;
         }
-
-        auto* typed = dynamic_cast<TypedRetChannel<Message, R, CombinerTC>*>(it->second.get());
-        if (!typed) {
-            throw std::logic_error("Message channel type/return-type mismatch");
-        }
-        return typed;
+        return static_cast<TypedRetChannel<Message, R, CombinerTC>*>(it->second.get());
     }
 
     template <typename Message, typename R, template <typename> class CombinerTC>
     TypedRetChannel<Message, R, CombinerTC>* find_ret_channel() const {
-        const auto it = m_channels.find(std::type_index(typeid(Message)));
-        if (it == m_channels.end()) {
-            return nullptr;
-        }
-        auto* typed = dynamic_cast<TypedRetChannel<Message, R, CombinerTC>*>(it->second.get());
-        assert(typed && "Message channel type/return-type mismatch");
-        return typed;
+        detail::SharedLockGuard<LockPolicy> guard(m_lock);
+        auto it = m_channels.find(std::type_index(typeid(Message)));
+        return it != m_channels.end() ? static_cast<TypedRetChannel<Message, R, CombinerTC>*>(it->second.get()) : nullptr;
     }
 
+    mutable LockPolicy m_lock;
     std::unordered_map<std::type_index, std::unique_ptr<IChannel>> m_channels;
 };
+
+// ============================================================
+// 便捷别名
+// ============================================================
+
+using MessageBus = BasicMessageBus<NoLock>;
+using ThreadSafeMessageBus = BasicMessageBus<SharedMutexLock>;
 
 }  // namespace evt

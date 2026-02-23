@@ -53,5 +53,6 @@
     "ratio": "cpp"
   },
   "cmake.generator": "Visual Studio 18 2026",
+  // "cmake.generator": "Ninja",
   "cmake.outputLogEncoding": "utf8"
 }
