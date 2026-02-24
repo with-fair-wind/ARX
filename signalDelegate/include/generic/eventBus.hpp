@@ -247,6 +247,13 @@ struct CollectAll {
 template <typename R>
 struct LastValue {
     using result_type = R;
+    struct Accumulator {
+        R last_value{};
+        void reserve(std::size_t) {}
+        void add(R&& val) { last_value = std::move(val); }
+        bool should_stop() const { return false; }
+        R finalize() { return std::move(last_value); }
+    };
     static result_type combine(std::vector<R>&& results) {  // NOLINT(cppcoreguidelines-rvalue-reference-param-not-moved)
         assert(!results.empty() && "LastValue combiner requires at least one handler");
         return std::move(results.back());
@@ -394,7 +401,7 @@ class Event;
 // ============================================================
 
 template <typename... Args, template <typename> class CombinerT, typename LockPolicy>
-class Event<void(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<std::is_same_v<LockPolicy, NoLock>> {
+class Event<void(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true> {
    public:
     using Handler = Delegate<void(Args...)>;
     using Id = std::size_t;
@@ -460,9 +467,7 @@ class Event<void(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<s
             return;
         }
         auto batch = m_core->take_pending();
-        detail::for_each_safe(batch.begin(), batch.end(), [this](auto& stored) {
-            std::apply([this](auto&... args) { emit(static_cast<Args>(args)...); }, stored);
-        });
+        detail::for_each_safe(batch.begin(), batch.end(), [this](auto& stored) { std::apply([this](auto&... args) { emit(static_cast<Args>(args)...); }, stored); });
     }
 
     std::size_t pending_count() const { return m_core ? m_core->pending_count() : 0; }
@@ -488,7 +493,7 @@ class Event<void(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<s
 // ============================================================
 
 template <typename R, typename... Args, template <typename> class CombinerT, typename LockPolicy>
-class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<std::is_same_v<LockPolicy, NoLock>> {
+class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true> {
    public:
     using Handler = Delegate<R(Args...)>;
     using Id = std::size_t;
@@ -576,9 +581,7 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<std:
         auto batch = m_core->take_pending();
         std::vector<ResultType> all_results;
         all_results.reserve(batch.size());
-        detail::for_each_safe(batch.begin(), batch.end(), [&](auto& stored) {
-            all_results.push_back(std::apply([this](auto&... args) { return emit(static_cast<Args>(args)...); }, stored));
-        });
+        detail::for_each_safe(batch.begin(), batch.end(), [&](auto& stored) { all_results.push_back(std::apply([this](auto&... args) { return emit(static_cast<Args>(args)...); }, stored)); });
         return all_results;
     }
 
@@ -653,15 +656,13 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
 
     // ---- 非 void 返回 ----
 
-    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              std::enable_if_t<!std::is_void_v<R>, int> = 0>
+    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll, std::enable_if_t<!std::is_void_v<R>, int> = 0>
     ScopedConnection subscribe(std::function<R(const Message&)> func) {
         static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
         return ensure_ret_channel<Message, R, CombinerTC>()->m_event.subscribe(std::move(func));
     }
 
-    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              std::enable_if_t<!std::is_void_v<R>, int> = 0>
+    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll, std::enable_if_t<!std::is_void_v<R>, int> = 0>
     typename CombinerTC<R>::result_type emit(const Message& message) const {
         static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
         if (auto* ch = find_ret_channel<Message, R, CombinerTC>()) {
@@ -670,8 +671,7 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
         return typename CombinerTC<R>::result_type{};
     }
 
-    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              std::enable_if_t<!std::is_void_v<R>, int> = 0>
+    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll, std::enable_if_t<!std::is_void_v<R>, int> = 0>
     void clear() {
         static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
         if (auto* ch = find_ret_channel<Message, R, CombinerTC>()) {
@@ -687,8 +687,7 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
         ensure_channel<Decayed>()->m_event.post(std::forward<Message>(message));
     }
 
-    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              std::enable_if_t<!std::is_void_v<R>, int> = 0>
+    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll, std::enable_if_t<!std::is_void_v<R>, int> = 0>
     void post(const Message& message) {
         static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
         ensure_ret_channel<Message, R, CombinerTC>()->m_event.post(message);
@@ -706,8 +705,7 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
         detail::for_each_safe(ptrs.begin(), ptrs.end(), [](auto* ch) { ch->flush(); });
     }
 
-    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll,
-              std::enable_if_t<!std::is_void_v<R>, int> = 0>
+    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll, std::enable_if_t<!std::is_void_v<R>, int> = 0>
     std::vector<typename CombinerTC<R>::result_type> flush() {
         static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
         if (auto* ch = find_ret_channel<Message, R, CombinerTC>()) {
@@ -755,7 +753,7 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
     template <typename Message>
     TypedChannel<Message>* ensure_channel() {
         detail::UniqueLockGuard<LockPolicy> guard(m_lock);
-        const auto key = std::type_index(typeid(Message));
+        const auto key = std::type_index(typeid(TypedChannel<Message>));
         auto it = m_channels.find(key);
         if (it == m_channels.end()) {
             it = m_channels.emplace(key, std::make_unique<TypedChannel<Message>>()).first;
@@ -766,14 +764,14 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
     template <typename Message>
     TypedChannel<Message>* find_channel() const {
         detail::SharedLockGuard<LockPolicy> guard(m_lock);
-        auto it = m_channels.find(std::type_index(typeid(Message)));
+        auto it = m_channels.find(std::type_index(typeid(TypedChannel<Message>)));
         return it != m_channels.end() ? static_cast<TypedChannel<Message>*>(it->second.get()) : nullptr;
     }
 
     template <typename Message, typename R, template <typename> class CombinerTC>
     TypedRetChannel<Message, R, CombinerTC>* ensure_ret_channel() {
         detail::UniqueLockGuard<LockPolicy> guard(m_lock);
-        const auto key = std::type_index(typeid(Message));
+        const auto key = std::type_index(typeid(TypedRetChannel<Message, R, CombinerTC>));
         auto it = m_channels.find(key);
         if (it == m_channels.end()) {
             it = m_channels.emplace(key, std::make_unique<TypedRetChannel<Message, R, CombinerTC>>()).first;
@@ -784,7 +782,7 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
     template <typename Message, typename R, template <typename> class CombinerTC>
     TypedRetChannel<Message, R, CombinerTC>* find_ret_channel() const {
         detail::SharedLockGuard<LockPolicy> guard(m_lock);
-        auto it = m_channels.find(std::type_index(typeid(Message)));
+        auto it = m_channels.find(std::type_index(typeid(TypedRetChannel<Message, R, CombinerTC>)));
         return it != m_channels.end() ? static_cast<TypedRetChannel<Message, R, CombinerTC>*>(it->second.get()) : nullptr;
     }
 

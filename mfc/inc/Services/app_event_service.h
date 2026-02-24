@@ -39,7 +39,7 @@ class AppEventService {
     /// 延迟发布一个事件（在 flush() 时统一 publish）
     template <typename T>
     void post(const T& event) {
-        pending_events_.emplace_back([event](evt::MessageBus& bus) { bus.publish(event); });
+        pending_events_.emplace_back([event](evt::MessageBus& bus) { bus.emit(event); });
     }
 
     /// 延迟构造并发布一个事件（在 flush() 时统一 publish）
