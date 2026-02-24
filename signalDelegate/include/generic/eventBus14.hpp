@@ -16,9 +16,9 @@
 #include <cassert>
 #include <cstddef>
 #include <exception>
+#include <stdexcept>
 #include <functional>
 #include <memory>
-#include <mutex>
 #include <shared_mutex>
 #include <tuple>
 #include <type_traits>
@@ -143,8 +143,7 @@ decltype(auto) apply_impl(F&& f, Tuple&& t, std::index_sequence<I...>) {
 
 template <typename F, typename Tuple>
 decltype(auto) apply(F&& f, Tuple&& t) {
-    return apply_impl(std::forward<F>(f), std::forward<Tuple>(t),
-                      std::make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{});
+    return apply_impl(std::forward<F>(f), std::forward<Tuple>(t), std::make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{});
 }
 
 // ---- Combiner Accumulator 适配 ----
@@ -172,6 +171,29 @@ struct CombinerAdapter<Combiner, R, false> {
         bool should_stop() const { return false; }
         typename Combiner::result_type finalize() { return Combiner::combine(std::move(results)); }
     };
+};
+
+// ---- Combiner empty_result 适配 ----
+
+template <typename C, typename = void>
+struct HasEmptyResult : std::false_type {};
+
+template <typename C>
+struct HasEmptyResult<C, void_t<decltype(C::empty_result())>> : std::true_type {};
+
+template <typename Combiner, bool Has>
+struct EmptyResultAdapter;
+
+template <typename Combiner>
+struct EmptyResultAdapter<Combiner, true> {
+    static typename Combiner::result_type get() { return Combiner::empty_result(); }
+};
+
+template <typename Combiner>
+struct EmptyResultAdapter<Combiner, false> {
+    [[noreturn]] static typename Combiner::result_type get() {
+        throw std::logic_error("evt::Event::emit() called with no handlers on a Combiner that requires at least one");
+    }
 };
 
 }  // namespace detail
@@ -284,6 +306,7 @@ class Delegate<R(Args...)> {
 template <typename R>
 struct CollectAll {
     using result_type = std::vector<R>;
+    static result_type empty_result() { return {}; }
     static result_type combine(std::vector<R>&& results) { return std::move(results); }
 };
 
@@ -520,9 +543,7 @@ class Event<void(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<t
             return;
         }
         auto batch = m_core->take_pending();
-        detail::for_each_safe(batch.begin(), batch.end(), [this](auto& stored) {
-            detail::apply([this](auto&... args) { emit(static_cast<Args>(args)...); }, stored);
-        });
+        detail::for_each_safe(batch.begin(), batch.end(), [this](auto& stored) { detail::apply([this](auto&... args) { emit(static_cast<Args>(args)...); }, stored); });
     }
 
     std::size_t pending_count() const { return m_core ? m_core->pending_count() : 0; }
@@ -636,9 +657,7 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true
         auto batch = m_core->take_pending();
         std::vector<ResultType> all_results;
         all_results.reserve(batch.size());
-        detail::for_each_safe(batch.begin(), batch.end(), [&](auto& stored) {
-            all_results.push_back(detail::apply([this](auto&... args) { return emit(static_cast<Args>(args)...); }, stored));
-        });
+        detail::for_each_safe(batch.begin(), batch.end(), [&](auto& stored) { all_results.push_back(detail::apply([this](auto&... args) { return emit(static_cast<Args>(args)...); }, stored)); });
         return all_results;
     }
 
@@ -657,7 +676,9 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true
         }
     }
 
-    static ResultType empty_result() { return ResultType{}; }
+    static ResultType empty_result() {
+        return detail::EmptyResultAdapter<Combiner, detail::HasEmptyResult<Combiner>::value>::get();
+    }
 
     std::shared_ptr<Core> m_core;
 };

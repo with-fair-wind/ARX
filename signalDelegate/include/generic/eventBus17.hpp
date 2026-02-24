@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cstddef>
 #include <exception>
+#include <stdexcept>
 #include <functional>
 #include <memory>
 #include <optional>
@@ -140,6 +141,29 @@ struct CombinerAdapter<Combiner, R, false> {
     };
 };
 
+// ---- Combiner empty_result 适配 ----
+
+template <typename C, typename = void>
+struct HasEmptyResult : std::false_type {};
+
+template <typename C>
+struct HasEmptyResult<C, std::void_t<decltype(C::empty_result())>> : std::true_type {};
+
+template <typename Combiner, bool Has>
+struct EmptyResultAdapter;
+
+template <typename Combiner>
+struct EmptyResultAdapter<Combiner, true> {
+    static typename Combiner::result_type get() { return Combiner::empty_result(); }
+};
+
+template <typename Combiner>
+struct EmptyResultAdapter<Combiner, false> {
+    [[noreturn]] static typename Combiner::result_type get() {
+        throw std::logic_error("evt::Event::emit() called with no handlers on a Combiner that requires at least one");
+    }
+};
+
 }  // namespace detail
 
 // ============================================================
@@ -250,6 +274,7 @@ class Delegate<R(Args...)> {
 template <typename R>
 struct CollectAll {
     using result_type = std::vector<R>;
+    static result_type empty_result() { return {}; }
     static result_type combine(std::vector<R>&& results) { return std::move(results); }
 };
 
@@ -619,7 +644,9 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true
         }
     }
 
-    static ResultType empty_result() { return ResultType{}; }
+    static ResultType empty_result() {
+        return detail::EmptyResultAdapter<Combiner, detail::HasEmptyResult<Combiner>::value>::get();
+    }
 
     std::shared_ptr<Core> m_core;
 };

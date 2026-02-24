@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(signalDelegate LANGUAGES CXX)
 
-option(EVT_USE_CPP14 "Use C++14 event bus implementation" OFF)
+option(EVT_USE_CPP14 "Use C++14 event bus implementation" ON)
 
 if(EVT_USE_CPP14)
     set(CMAKE_CXX_STANDARD 14)
