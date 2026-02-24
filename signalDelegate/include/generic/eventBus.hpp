@@ -7,6 +7,7 @@
 #include <exception>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <shared_mutex>
 #include <tuple>
 #include <type_traits>
@@ -154,13 +155,22 @@ class ScopedConnection {
     ScopedConnection(const ScopedConnection&) = delete;
     ScopedConnection& operator=(const ScopedConnection&) = delete;
 
-    ScopedConnection(ScopedConnection&& other) noexcept : m_disconnect_fn(std::move(other.m_disconnect_fn)), m_active(other.m_active.exchange(false, std::memory_order_acq_rel)) {}
+    ScopedConnection(ScopedConnection&& other) noexcept {
+        if (other.m_active.exchange(false, std::memory_order_acq_rel)) {
+            m_disconnect_fn = std::move(other.m_disconnect_fn);
+            m_active.store(true, std::memory_order_release);
+        }
+    }
 
     ScopedConnection& operator=(ScopedConnection&& other) noexcept {
         if (this != &other) {
             disconnect_noexcept();
-            m_disconnect_fn = std::move(other.m_disconnect_fn);
-            m_active.store(other.m_active.exchange(false, std::memory_order_acq_rel), std::memory_order_release);
+            if (other.m_active.exchange(false, std::memory_order_acq_rel)) {
+                m_disconnect_fn = std::move(other.m_disconnect_fn);
+                m_active.store(true, std::memory_order_release);
+            } else {
+                m_disconnect_fn = nullptr;
+            }
         }
         return *this;
     }
@@ -248,17 +258,13 @@ template <typename R>
 struct LastValue {
     using result_type = R;
     struct Accumulator {
-        R last_value{};
-        bool has_value_ = false;
+        std::optional<R> last_value;
         void reserve(std::size_t) {}
-        void add(R&& val) {
-            last_value = std::move(val);
-            has_value_ = true;
-        }
+        void add(R&& val) { last_value.emplace(std::move(val)); }
         bool should_stop() const { return false; }
         R finalize() {
-            assert(has_value_ && "LastValue combiner requires at least one handler");
-            return std::move(last_value);
+            assert(last_value.has_value() && "LastValue combiner requires at least one handler");
+            return std::move(*last_value);
         }
     };
     static result_type combine(std::vector<R>&& results) {  // NOLINT(cppcoreguidelines-rvalue-reference-param-not-moved)
@@ -272,21 +278,19 @@ template <typename R>
 struct StopOnTrue {
     using result_type = R;
     struct Accumulator {
-        R last_value{};
+        std::optional<R> last_value;
         bool stopped = false;
-        bool has_value_ = false;
         void reserve(std::size_t) {}
         void add(R&& val) {
-            last_value = std::move(val);
-            has_value_ = true;
-            if (last_value) {
+            last_value.emplace(std::move(val));
+            if (*last_value) {
                 stopped = true;
             }
         }
         bool should_stop() const { return stopped; }
         R finalize() {
-            assert(has_value_ && "StopOnTrue combiner requires at least one handler");
-            return std::move(last_value);
+            assert(last_value.has_value() && "StopOnTrue combiner requires at least one handler");
+            return std::move(*last_value);
         }
     };
 };
@@ -296,21 +300,19 @@ template <typename R>
 struct StopOnFalse {
     using result_type = R;
     struct Accumulator {
-        R last_value{};
+        std::optional<R> last_value;
         bool stopped = false;
-        bool has_value_ = false;
         void reserve(std::size_t) {}
         void add(R&& val) {
-            last_value = std::move(val);
-            has_value_ = true;
-            if (!last_value) {
+            last_value.emplace(std::move(val));
+            if (!*last_value) {
                 stopped = true;
             }
         }
         bool should_stop() const { return stopped; }
         R finalize() {
-            assert(has_value_ && "StopOnFalse combiner requires at least one handler");
-            return std::move(last_value);
+            assert(last_value.has_value() && "StopOnFalse combiner requires at least one handler");
+            return std::move(*last_value);
         }
     };
 };
@@ -566,13 +568,13 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true
             if (slot.handler.valid()) {
                 try {
                     acc.add(slot.handler(static_cast<Args>(args)...));
+                    if (acc.should_stop()) {
+                        break;
+                    }
                 } catch (...) {
                     if (!first_ex) {
                         first_ex = std::current_exception();
                     }
-                }
-                if (acc.should_stop()) {
-                    break;
                 }
             }
         }
@@ -617,10 +619,7 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true
         }
     }
 
-    static ResultType empty_result() {
-        typename Adapter::Accumulator acc;
-        return acc.finalize();
-    }
+    static ResultType empty_result() { return ResultType{}; }
 
     std::shared_ptr<Core> m_core;
 };
@@ -726,7 +725,21 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
     std::vector<typename CombinerTC<R>::result_type> flush() {
         static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
         if (auto* ch = find_ret_channel<Message, R, CombinerTC>()) {
-            return ch->m_event.flush();
+            auto results = ch->m_event.flush();
+            if (!results.empty()) {
+                return results;
+            }
+            return ch->take_results();
+        }
+        return {};
+    }
+
+    /// 获取上次通用 flush() 时非 void 通道缓存的返回值 (move 语义, 仅取一次).
+    template <typename Message, typename R, template <typename> class CombinerTC = CollectAll, std::enable_if_t<!std::is_void_v<R>, int> = 0>
+    std::vector<typename CombinerTC<R>::result_type> take_flush_results() {
+        static_assert(std::is_same_v<Message, std::decay_t<Message>>, "Message type must not be cv-qualified or a reference.");
+        if (auto* ch = find_ret_channel<Message, R, CombinerTC>()) {
+            return ch->take_results();
         }
         return {};
     }
@@ -763,7 +776,20 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
     template <typename Message, typename R, template <typename> class CombinerTC>
     struct TypedRetChannel : IChannel {
         Event<R(const Message&), CombinerTC, LockPolicy> m_event;
-        void flush() override { m_event.flush(); }
+        mutable LockPolicy m_result_lock;
+        std::vector<typename CombinerTC<R>::result_type> m_last_flush_results;
+
+        void flush() override {
+            auto results = m_event.flush();
+            detail::UniqueLockGuard<LockPolicy> guard(m_result_lock);
+            m_last_flush_results = std::move(results);
+        }
+
+        std::vector<typename CombinerTC<R>::result_type> take_results() {
+            detail::UniqueLockGuard<LockPolicy> guard(m_result_lock);
+            return std::move(m_last_flush_results);
+        }
+
         std::size_t pending_count() const override { return m_event.pending_count(); }
     };
 
