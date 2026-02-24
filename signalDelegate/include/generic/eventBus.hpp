@@ -249,10 +249,17 @@ struct LastValue {
     using result_type = R;
     struct Accumulator {
         R last_value{};
+        bool has_value_ = false;
         void reserve(std::size_t) {}
-        void add(R&& val) { last_value = std::move(val); }
+        void add(R&& val) {
+            last_value = std::move(val);
+            has_value_ = true;
+        }
         bool should_stop() const { return false; }
-        R finalize() { return std::move(last_value); }
+        R finalize() {
+            assert(has_value_ && "LastValue combiner requires at least one handler");
+            return std::move(last_value);
+        }
     };
     static result_type combine(std::vector<R>&& results) {  // NOLINT(cppcoreguidelines-rvalue-reference-param-not-moved)
         assert(!results.empty() && "LastValue combiner requires at least one handler");
@@ -267,15 +274,20 @@ struct StopOnTrue {
     struct Accumulator {
         R last_value{};
         bool stopped = false;
+        bool has_value_ = false;
         void reserve(std::size_t) {}
         void add(R&& val) {
             last_value = std::move(val);
+            has_value_ = true;
             if (last_value) {
                 stopped = true;
             }
         }
         bool should_stop() const { return stopped; }
-        R finalize() { return std::move(last_value); }
+        R finalize() {
+            assert(has_value_ && "StopOnTrue combiner requires at least one handler");
+            return std::move(last_value);
+        }
     };
 };
 
@@ -286,15 +298,20 @@ struct StopOnFalse {
     struct Accumulator {
         R last_value{};
         bool stopped = false;
+        bool has_value_ = false;
         void reserve(std::size_t) {}
         void add(R&& val) {
             last_value = std::move(val);
+            has_value_ = true;
             if (!last_value) {
                 stopped = true;
             }
         }
         bool should_stop() const { return stopped; }
-        R finalize() { return std::move(last_value); }
+        R finalize() {
+            assert(has_value_ && "StopOnFalse combiner requires at least one handler");
+            return std::move(last_value);
+        }
     };
 };
 
@@ -549,13 +566,13 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true
             if (slot.handler.valid()) {
                 try {
                     acc.add(slot.handler(static_cast<Args>(args)...));
-                    if (acc.should_stop()) {
-                        break;
-                    }
                 } catch (...) {
                     if (!first_ex) {
                         first_ex = std::current_exception();
                     }
+                }
+                if (acc.should_stop()) {
+                    break;
                 }
             }
         }
