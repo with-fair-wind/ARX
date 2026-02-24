@@ -63,11 +63,6 @@ struct UniqueLockGuard {
     UniqueLockGuard& operator=(const UniqueLockGuard&) = delete;
 };
 
-template <>
-struct UniqueLockGuard<NoLock> {
-    explicit UniqueLockGuard(const NoLock&) {}
-};
-
 template <typename L>
 struct SharedLockGuard {
     const L& lk;
@@ -75,11 +70,6 @@ struct SharedLockGuard {
     ~SharedLockGuard() { lk.unlock_shared(); }
     SharedLockGuard(const SharedLockGuard&) = delete;
     SharedLockGuard& operator=(const SharedLockGuard&) = delete;
-};
-
-template <>
-struct SharedLockGuard<NoLock> {
-    explicit SharedLockGuard(const NoLock&) {}
 };
 
 // ---- void_t (CWG 1558 safe) ----
@@ -684,14 +674,7 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true
 };
 
 // ============================================================
-// ThreadSafeEvent — 便捷别名
-// ============================================================
-
-template <typename Signature, template <typename> class CombinerT = CollectAll>
-using ThreadSafeEvent = Event<Signature, CombinerT, SharedMutexLock>;
-
-// ============================================================
-// MessageBus — 基于类型的消息总线 (策略模式支持线程安全)
+// BasicMessageBus — 基于类型的消息总线 (策略模式支持线程安全)
 // ============================================================
 
 template <typename LockPolicy = NoLock>
@@ -743,7 +726,7 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same<LockPolicy, NoLo
         if (auto* ch = find_ret_channel<Message, R, CombinerTC>()) {
             return ch->m_event.emit(message);
         }
-        return typename CombinerTC<R>::result_type{};
+        return detail::EmptyResultAdapter<CombinerTC<R>, detail::HasEmptyResult<CombinerTC<R>>::value>::get();
     }
 
     template <typename Message, typename R, template <typename> class CombinerTC = CollectAll, typename std::enable_if<!std::is_void<R>::value, int>::type = 0>
@@ -816,10 +799,8 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same<LockPolicy, NoLo
     struct IChannel {
         IChannel() = default;
         virtual ~IChannel() = default;
-        IChannel(const IChannel&) = default;
-        IChannel& operator=(const IChannel&) = default;
-        IChannel(IChannel&&) = default;
-        IChannel& operator=(IChannel&&) = default;
+        IChannel(const IChannel&) = delete;
+        IChannel& operator=(const IChannel&) = delete;
 
         virtual void flush() = 0;
         virtual std::size_t pending_count() const = 0;
@@ -891,12 +872,5 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same<LockPolicy, NoLo
     mutable LockPolicy m_lock;
     std::unordered_map<std::type_index, std::unique_ptr<IChannel>> m_channels;
 };
-
-// ============================================================
-// 便捷别名
-// ============================================================
-
-using MessageBus = BasicMessageBus<NoLock>;
-using ThreadSafeMessageBus = BasicMessageBus<SharedMutexLock>;
 
 }  // namespace evt

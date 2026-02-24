@@ -25,6 +25,6 @@ template <typename Signature, template <typename> class CombinerT = CollectAll>
 using ZcBmEvent = Event<Signature, CombinerT, NoLock>;
 
 // ---- MessageBus ----
-using ZcBmMessageBus = MessageBus;
+using ZcBmMessageBus = BasicMessageBus<>;
 
 }  // namespace evt

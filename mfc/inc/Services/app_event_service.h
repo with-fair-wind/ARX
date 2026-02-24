@@ -34,12 +34,12 @@ class AppEventService {
     }
 
     /// 消息总线 (UI 层订阅 / 也可用于即时 publish)
-    evt::MessageBus& bus() { return bus_; }
+    evt::BasicMessageBus<>& bus() { return bus_; }
 
     /// 延迟发布一个事件（在 flush() 时统一 publish）
     template <typename T>
     void post(const T& event) {
-        pending_events_.emplace_back([event](evt::MessageBus& bus) { bus.emit(event); });
+        pending_events_.emplace_back([event](evt::BasicMessageBus<>& bus) { bus.emit(event); });
     }
 
     /// 延迟构造并发布一个事件（在 flush() 时统一 publish）
@@ -86,7 +86,7 @@ class AppEventService {
    private:
     AppEventService() = default;
 
-    evt::MessageBus bus_;
-    std::vector<std::function<void(evt::MessageBus&)>> pending_events_;
+    evt::BasicMessageBus<> bus_;
+    std::vector<std::function<void(evt::BasicMessageBus<>&)>> pending_events_;
     std::unordered_map<const void*, std::vector<evt::ScopedConnection>> managed_connections_;
 };

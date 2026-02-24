@@ -154,7 +154,7 @@ struct OrderFulfilledMsg {
 
 class InventoryService {
    public:
-    explicit InventoryService(evt::MessageBus& bus);
+    explicit InventoryService(evt::BasicMessageBus<>& bus);
     void tick();
     std::size_t pending_count() const;
 
@@ -167,7 +167,7 @@ class InventoryService {
         bool success;
     };
 
-    evt::MessageBus& bus_;
+    evt::BasicMessageBus<>& bus_;
     std::vector<PendingDeduct> pending_;
     std::vector<evt::ScopedConnection> conns_;
 };
@@ -176,7 +176,7 @@ class InventoryService {
 
 class PaymentService {
    public:
-    explicit PaymentService(evt::MessageBus& bus);
+    explicit PaymentService(evt::BasicMessageBus<>& bus);
     std::size_t awaiting_count() const;
 
    private:
@@ -188,7 +188,7 @@ class PaymentService {
         bool confirmed;
     };
 
-    evt::MessageBus& bus_;
+    evt::BasicMessageBus<>& bus_;
     std::vector<PendingPayment> awaiting_payment_;
     std::vector<evt::ScopedConnection> conns_;
 };
@@ -197,7 +197,7 @@ class PaymentService {
 
 class NotificationService {
    public:
-    explicit NotificationService(evt::MessageBus& bus);
+    explicit NotificationService(evt::BasicMessageBus<>& bus);
 
    private:
     std::vector<evt::ScopedConnection> conns_;
@@ -207,7 +207,7 @@ class NotificationService {
 
 class LogService {
    public:
-    explicit LogService(evt::MessageBus& bus);
+    explicit LogService(evt::BasicMessageBus<>& bus);
 
    private:
     std::vector<evt::ScopedConnection> conns_;

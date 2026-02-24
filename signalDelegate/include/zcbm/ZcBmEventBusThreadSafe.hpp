@@ -25,6 +25,6 @@ template <typename Signature, template <typename> class CombinerT = CollectAll>
 using ZcBmTsEvent = Event<Signature, CombinerT, SharedMutexLock>;
 
 // ---- MessageBus (线程安全) ----
-using ZcBmTsMessageBus = ThreadSafeMessageBus;
+using ZcBmTsMessageBus = BasicMessageBus<SharedMutexLock>;
 
 }  // namespace evt

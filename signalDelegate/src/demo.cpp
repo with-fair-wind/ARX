@@ -188,7 +188,7 @@ void demo_message_bus() {
     separator("Demo 6: MessageBus");
     using namespace evt;
 
-    MessageBus bus;
+    BasicMessageBus<> bus;
 
     auto c1 = bus.subscribe<DamageEvent>([](const DamageEvent& e) { std::cout << "  [伤害系统] amount=" << e.amount << ", source=" << e.source << "\n"; });
 
@@ -472,7 +472,7 @@ void demo_event_move() {
 
 // ---------- 库存服务 ----------
 
-InventoryService::InventoryService(evt::MessageBus& bus) : bus_(bus) {
+InventoryService::InventoryService(evt::BasicMessageBus<>& bus) : bus_(bus) {
     conns_.push_back(bus_.subscribe<OrderCreatedMsg>([this](const OrderCreatedMsg& msg) { on_order_created(msg); }));
 }
 
@@ -515,7 +515,7 @@ void InventoryService::on_order_created(const OrderCreatedMsg& msg) {
 
 // ---------- 支付服务 ----------
 
-PaymentService::PaymentService(evt::MessageBus& bus) : bus_(bus) {
+PaymentService::PaymentService(evt::BasicMessageBus<>& bus) : bus_(bus) {
     conns_.push_back(bus_.subscribe<StockDeductedMsg>([this](const StockDeductedMsg& msg) { on_stock_deducted(msg); }));
     conns_.push_back(bus_.subscribe<OrderPaidMsg>([this](const OrderPaidMsg& msg) { on_order_paid(msg); }));
 }
@@ -546,7 +546,7 @@ void PaymentService::on_order_paid(const OrderPaidMsg& msg) {
 
 // ---------- 通知服务 ----------
 
-NotificationService::NotificationService(evt::MessageBus& bus) {
+NotificationService::NotificationService(evt::BasicMessageBus<>& bus) {
     conns_.push_back(bus.subscribe<OrderCreatedMsg>([](const OrderCreatedMsg& msg) { std::cout << "  [通知服务] -> 用户 " << msg.user_id << ": 您的订单 #" << msg.order_id << " 已创建\n"; }));
 
     conns_.push_back(bus.subscribe<StockDeductedMsg>([](const StockDeductedMsg& msg) {
@@ -560,7 +560,7 @@ NotificationService::NotificationService(evt::MessageBus& bus) {
 
 // ---------- 日志服务 ----------
 
-LogService::LogService(evt::MessageBus& bus) {
+LogService::LogService(evt::BasicMessageBus<>& bus) {
     conns_.push_back(bus.subscribe<OrderCreatedMsg>(
         [](const OrderCreatedMsg& msg) { std::cout << "  [日志] ORDER_CREATED  id=" << msg.order_id << " user=" << msg.user_id << " amount=¥" << msg.total_amount << "\n"; }));
 
@@ -577,7 +577,7 @@ void demo_business_message_bus() {
     using namespace evt;
 
     // 1. 创建总线 & 各服务
-    MessageBus bus;
+    BasicMessageBus<> bus;
     InventoryService inventory(bus);
     PaymentService payment(bus);
     NotificationService notification(bus);
@@ -688,7 +688,7 @@ void demo_bus_post_flush() {
     separator("Demo 14: MessageBus post + flush");
     using namespace evt;
 
-    MessageBus bus;
+    BasicMessageBus<> bus;
 
     auto c1 = bus.subscribe<DamageEvent>([](const DamageEvent& e) { std::cout << "  [伤害系统] amount=" << e.amount << ", source=" << e.source << "\n"; });
 
@@ -814,7 +814,7 @@ void demo_event_return_value() {
 
     // 16e. MessageBus 返回值
     std::cout << "\n--- 16e: MessageBus 非 void 返回 ---\n";
-    MessageBus bus;
+    BasicMessageBus<> bus;
 
     auto bc1 = bus.subscribe<DamageEvent, int>([](const DamageEvent& e) -> int {
         std::cout << "  [伤害计算1] base=" << e.amount << " -> " << e.amount * 2 << "\n";
@@ -888,7 +888,7 @@ struct ParallelMsg {
 void demo_parallel_threadsafe() {
     separator("Demo 11: 并行 ThreadSafeEvent/MessageBus");
 
-    evt::ThreadSafeEvent<void(const ParallelMsg&)> event;
+    evt::Event<void(const ParallelMsg&), evt::CollectAll, evt::SharedMutexLock> event;
     std::atomic<int> handled{0};
 
     auto h1 = event.subscribe([&](const ParallelMsg& m) {
@@ -922,7 +922,7 @@ void demo_parallel_threadsafe() {
     h1.disconnect();
     h2.disconnect();
 
-    evt::ThreadSafeMessageBus bus;
+    evt::BasicMessageBus<evt::SharedMutexLock> bus;
     std::atomic<int> login_count{0};
     auto c = bus.subscribe<LoginEvent>([&](const LoginEvent& e) {
         ++login_count;
