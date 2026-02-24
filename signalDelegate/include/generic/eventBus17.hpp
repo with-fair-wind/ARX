@@ -154,13 +154,6 @@ struct EmptyResultAdapter<Combiner, false> {
     }
 };
 
-// ---- subscribe_once 支持 ----
-
-struct OnceToken {
-    std::atomic<bool> called{false};
-    std::size_t handler_id = 0;
-};
-
 }  // namespace detail
 
 // ============================================================
@@ -469,29 +462,6 @@ class Event<void(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<t
         return subscribe(Handler::from(std::forward<F>(func)));
     }
 
-    /// 订阅一次性 handler: 首次触发后自动移除.
-    template <typename F>
-    ScopedConnection subscribe_once(F&& func) {
-        ensure_core();
-        auto token = std::make_shared<detail::OnceToken>();
-        std::weak_ptr<Core> weak = m_core;
-        Id id = m_core->add_handler(Handler::from(
-            [token, weak, f = std::decay_t<F>(std::forward<F>(func))](Args... args) {
-                if (!token->called.exchange(true, std::memory_order_acq_rel)) {
-                    f(std::forward<Args>(args)...);
-                    if (auto core = weak.lock()) {
-                        core->remove_handler(token->handler_id);
-                    }
-                }
-            }));
-        token->handler_id = id;
-        return ScopedConnection([weak, id]() {
-            if (auto core = weak.lock()) {
-                core->remove_handler(id);
-            }
-        });
-    }
-
     void clear() {
         if (m_core) {
             m_core->clear_handlers();
@@ -532,7 +502,7 @@ class Event<void(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<t
             return;
         }
         auto batch = m_core->take_pending();
-        detail::for_each_safe(batch.begin(), batch.end(), [this](auto& stored) { std::apply([this](auto&&... args) { emit(static_cast<Args>(std::move(args))...); }, std::move(stored)); });
+        detail::for_each_safe(batch.begin(), batch.end(), [this](auto& stored) { std::apply([this](auto&... args) { emit(static_cast<Args>(args)...); }, stored); });
     }
 
     std::size_t pending_count() const { return m_core ? m_core->pending_count() : 0; }
@@ -587,31 +557,6 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true
     template <typename F>
     ScopedConnection subscribe(F&& func) {
         return subscribe(Handler::from(std::forward<F>(func)));
-    }
-
-    /// 订阅一次性 handler: 首次触发后自动移除.
-    template <typename F>
-    ScopedConnection subscribe_once(F&& func) {
-        ensure_core();
-        auto token = std::make_shared<detail::OnceToken>();
-        std::weak_ptr<Core> weak = m_core;
-        Id id = m_core->add_handler(Handler::from(
-            [token, weak, f = std::decay_t<F>(std::forward<F>(func))](Args... args) -> R {
-                if (token->called.exchange(true, std::memory_order_acq_rel)) {
-                    throw std::logic_error("subscribe_once handler invoked more than once");
-                }
-                R result = f(std::forward<Args>(args)...);
-                if (auto core = weak.lock()) {
-                    core->remove_handler(token->handler_id);
-                }
-                return result;
-            }));
-        token->handler_id = id;
-        return ScopedConnection([weak, id]() {
-            if (auto core = weak.lock()) {
-                core->remove_handler(id);
-            }
-        });
     }
 
     void clear() {
@@ -673,7 +618,7 @@ class Event<R(Args...), CombinerT, LockPolicy> : private detail::MovePolicy<true
         auto batch = m_core->take_pending();
         std::vector<ResultType> all_results;
         all_results.reserve(batch.size());
-        detail::for_each_safe(batch.begin(), batch.end(), [&](auto& stored) { all_results.push_back(std::apply([this](auto&&... args) { return emit(static_cast<Args>(std::move(args))...); }, std::move(stored))); });
+        detail::for_each_safe(batch.begin(), batch.end(), [&](auto& stored) { all_results.push_back(std::apply([this](auto&... args) { return emit(static_cast<Args>(args)...); }, stored)); });
         return all_results;
     }
 
@@ -819,18 +764,6 @@ class BasicMessageBus : private detail::MovePolicy<std::is_same_v<LockPolicy, No
             total += ch->pending_count();
         }
         return total;
-    }
-
-    /// 清除所有通道(包括订阅和挂起事件).
-    void clear_all() {
-        detail::UniqueLockGuard<LockPolicy> guard(m_lock);
-        m_channels.clear();
-    }
-
-    /// 已注册的通道数量.
-    std::size_t channel_count() const {
-        detail::SharedLockGuard<LockPolicy> guard(m_lock);
-        return m_channels.size();
     }
 
    private:
