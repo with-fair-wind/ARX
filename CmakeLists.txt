@@ -29,7 +29,7 @@ include(UsefulFuncs)
 
 set(ZRX_VERSION "2026" CACHE STRING "ZRX SDK version to use (e.g., 2024, 2025, 2026)")
 set_property(CACHE ZRX_VERSION PROPERTY STRINGS 2024 2025 2026)
-set(zrxsdk_dir "${CMAKE_CURRENT_LIST_DIR}/3rdparty/ZrxSDK/ZWCAD_${ZRX_VERSION}_ZRXSDK" CACHE PATH "Path to the ZRX SDK")
+set(zrxsdk_dir "D:/code/3rdparty/ZrxSDK/ZWCAD_${ZRX_VERSION}_ZRXSDK" CACHE PATH "Path to the ZRX SDK")
 message(STATUS "zrxsdk_dir: ${zrxsdk_dir}")
 set(ZWCAD_INSTALL_PATH "D:/soft/ZWCAD 2025" CACHE PATH "Path to the ZWCAD")
 

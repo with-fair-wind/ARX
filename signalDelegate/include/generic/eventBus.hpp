@@ -312,11 +312,17 @@ class MessageBus {
     }
 
     /// 派发所有频道中挂起的消息.
+    /// 先对 channel 列表做快照再遍历, 防止 handler 内注册新消息类型导致迭代器失效.
     void flush() {
-        std::exception_ptr first_exception;
+        std::vector<IChannel*> snapshot;
+        snapshot.reserve(m_channels.size());
         for (auto& pair : m_channels) {
+            snapshot.push_back(pair.second.get());
+        }
+        std::exception_ptr first_exception;
+        for (auto* ch : snapshot) {
             try {
-                pair.second->flush();
+                ch->flush();
             } catch (...) {
                 if (!first_exception) {
                     first_exception = std::current_exception();

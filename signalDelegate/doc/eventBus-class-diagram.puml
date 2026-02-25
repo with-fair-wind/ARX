@@ -1,0 +1,160 @@
+@startuml evt-class-diagram
+
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 13
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam linetype ortho
+skinparam groupInheritance 2
+
+title **evt — 事件/委托/消息总线框架 类图**\n<size:11>eventBus.hpp</size>
+
+namespace evt {
+
+    class ScopedConnection <<move-only>> {
+        - m_disconnect_fn : function<void()>
+        - m_active : bool
+        __
+        + ScopedConnection()
+        + ScopedConnection(disconnect_fn)
+        + ~ScopedConnection() <<noexcept>>
+        + ScopedConnection(ScopedConnection&&) <<noexcept>>
+        + operator=(ScopedConnection&&) <<noexcept>>
+        __ 禁止拷贝 __
+        {method} ScopedConnection(const&) = delete
+        {method} operator=(const&) = delete
+        __
+        + disconnect() : void
+        + is_active() : bool
+    }
+
+    class "Delegate<R(Args...)>" as Delegate <<template>> {
+        - m_fn : function<R(Args...)>
+        __
+        + Delegate()
+        + Delegate(func)
+        + {static} from(F&&) : Delegate
+        + {static} from(R(*)(Args...)) : Delegate
+        + {static} from(T*, R(T::*)(Args...)) : Delegate
+        + {static} from(const T*, R(T::*)(Args...) const) : Delegate
+        + operator()(Args...) : R
+        + valid() : bool
+    }
+
+    class "Event<Args...>" as Event <<template, move-only>> {
+        - m_handlers : shared_ptr<HandlerList>
+        - m_next_id : Id
+        - m_pending : vector<StoredArgs>
+        __
+        + {static} Handler = Delegate<void(Args...)>
+        + {static} Id = size_t
+        .. 内部类型 ..
+        - {static} HandlerList = vector<Slot>
+        - {static} StoredArgs = tuple<decay_t<Args>...>
+        __
+        + Event()
+        + Event(Event&&) <<noexcept>>
+        + operator=(Event&&) <<noexcept>>
+        __ 禁止拷贝 __
+        {method} Event(const&) = delete
+        {method} operator=(const&) = delete
+        __ 订阅 __
+        + subscribe(Handler) : ScopedConnection
+        + subscribe(F&&) : ScopedConnection
+        + clear() : void
+        + size() : size_t
+        __ 即时触发 __
+        + emit(Args...) : void
+        + operator()(Args...) : void
+        __ 延迟触发 __
+        + post(UArgs&&...) : void
+        + flush() : void
+        + pending_count() : size_t
+        + clear_pending() : void
+        __
+        - ensure_handlers() : void
+        - flush_one(StoredArgs&, index_sequence) : void
+    }
+
+    class "Event::Slot" as Slot <<private>> {
+        + id : Id
+        + handler : Handler
+    }
+
+    class MessageBus <<move-only>> {
+        - m_channels : unordered_map<type_index, unique_ptr<IChannel>>
+        __
+        + MessageBus()
+        + MessageBus(MessageBus&&) <<noexcept>>
+        + operator=(MessageBus&&) <<noexcept>>
+        __ 禁止拷贝 __
+        {method} MessageBus(const&) = delete
+        {method} operator=(const&) = delete
+        __ 订阅 & 发布 __
+        + subscribe<Msg>(func) : ScopedConnection
+        + subscribe<Msg, F>(F&&) : ScopedConnection
+        + emit<Msg>(const Msg&) : void
+        + clear<Msg>() : void
+        __ 延迟发布 __
+        + post<Msg>(Msg&&) : void
+        + flush() : void
+        + pending_count() : size_t
+        __
+        - ensure_channel<Msg>() : TypedChannel<Msg>*
+        - find_channel<Msg>() : TypedChannel<Msg>*
+    }
+
+    interface "MessageBus::IChannel" as IChannel <<private>> {
+        + {abstract} flush() : void
+        + {abstract} pending_count() : size_t
+    }
+
+    class "MessageBus::TypedChannel<Msg>" as TypedChannel <<private, template>> {
+        + m_event : Event<const Msg&>
+        __
+        + flush() : void
+        + pending_count() : size_t
+    }
+
+    ' ========== 关系 ==========
+
+    Event *-down- "0..*" Slot : 包含
+    Slot *-left- Delegate : handler
+
+    Event .right.> ScopedConnection : <<create>>\nsubscribe() 返回
+
+    MessageBus *-down- "0..*" IChannel : m_channels\nunique_ptr
+    TypedChannel -up-|> IChannel
+    TypedChannel *-left- Event : m_event
+
+    MessageBus .right.> ScopedConnection : <<create>>\nsubscribe() 返回
+
+    ' ========== 注释 ==========
+
+    note bottom of ScopedConnection
+      **RAII 守卫**
+      析构自动 disconnect()
+      内部通过 weak_ptr
+      防止 Event 先销毁时悬空
+    end note
+
+    note bottom of Event
+      **快照遍历**: emit() 先拷贝 handler 列表
+      回调中 subscribe/disconnect 安全
+      ——
+      **first-exception**: 所有 handler 都会调用
+      最后重抛第一个异常
+      ——
+      **post/flush 防递归**: flush() 先
+      move 出队列, 新 post 不在本轮派发
+    end note
+
+    note right of MessageBus
+      按 **type_index** 路由
+      每种消息类型独立 Channel
+      无订阅者时静默跳过
+    end note
+}
+
+@enduml
