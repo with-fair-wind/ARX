@@ -15,12 +15,20 @@ class ZcBmLoadToDocDialogImpl {
     void onOkClicked();
     void onDocListItemChanged(LRESULT* pResult);
 
+    [[nodiscard]] const std::vector<std::wstring>& selectedDocIds() const { return m_selectedDocIds; }
+    [[nodiscard]] bool placeAfterLoad() const { return m_placeAfterLoad; }
+    [[nodiscard]] bool closeAfterLoad() const { return m_closeAfterLoad; }
+
    private:
+    friend class ZcBmLoadToDocDialog;
     [[nodiscard]] int getCheckedCount() const;
     [[nodiscard]] std::vector<std::wstring> getCheckedDocIds() const;
 
     ZcBmLoadToDocDialog* m_owner = nullptr;
     std::vector<LoadToDocTarget> m_docs;
+    std::vector<std::wstring> m_selectedDocIds;
+    bool m_placeAfterLoad = false;
+    bool m_closeAfterLoad = false;
 };
 
 ZcBmLoadToDocDialogImpl::ZcBmLoadToDocDialogImpl(ZcBmLoadToDocDialog& owner) : m_owner(&owner) {}
@@ -78,19 +86,9 @@ void ZcBmLoadToDocDialogImpl::onOkClicked() {
         return;
     }
 
-    // 模态对话框中与 CAD 交互：切换到编辑器命令环境
-    m_owner->BeginEditorCommand();
-
-    std::wstring error;
-    const bool ok = executeLoadToDocuments(selectedIds, m_owner->m_chkPlace.GetCheck() == BST_CHECKED, m_owner->m_chkClose.GetCheck() == BST_CHECKED, &error);
-    if (!ok) {
-        m_owner->CancelEditorCommand();
-        CString message(error.empty() ? _T("载入失败。") : error.c_str());
-        AfxMessageBox(message, MB_OK | MB_ICONWARNING);
-        return;
-    }
-
-    m_owner->CompleteEditorCommand();
+    m_selectedDocIds = selectedIds;
+    m_placeAfterLoad = m_owner->m_chkPlace.GetCheck() == BST_CHECKED;
+    m_closeAfterLoad = m_owner->m_chkClose.GetCheck() == BST_CHECKED;
     m_owner->EndDialog(IDOK);
 }
 
@@ -126,6 +124,10 @@ std::vector<std::wstring> ZcBmLoadToDocDialogImpl::getCheckedDocIds() const {
 ZcBmLoadToDocDialog::ZcBmLoadToDocDialog(CWnd* pParent) : CZcUiDialog(IDD_MFC_LOAD_TO_DOC, pParent), m_parent(pParent), m_impl(std::make_unique<ZcBmLoadToDocDialogImpl>(*this)) {}
 
 ZcBmLoadToDocDialog::~ZcBmLoadToDocDialog() = default;
+
+const std::vector<std::wstring>& ZcBmLoadToDocDialog::selectedDocIds() const { return m_impl->selectedDocIds(); }
+bool ZcBmLoadToDocDialog::placeAfterLoad() const { return m_impl->placeAfterLoad(); }
+bool ZcBmLoadToDocDialog::closeAfterLoad() const { return m_impl->closeAfterLoad(); }
 
 void ZcBmLoadToDocDialog::DoDataExchange(CDataExchange* pDX) {
     CZcUiDialog::DoDataExchange(pDX);

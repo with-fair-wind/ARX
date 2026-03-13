@@ -14,10 +14,16 @@
       "console": "externalTerminal"
     },
     {
-      "name": "(Windows) 附加到 ZWCAD",
+      "name": "lldb(Windows) 附加到 ZWCAD",
       "type": "lldb",
       "request": "attach",
       "pid": "${command:pickProcess}"
+    },
+    {
+      "name": "cppvsdbg(Windows) 附加到 ZWCAD",
+      "type": "cppvsdbg",
+      "request": "attach",
+      "processId": "${command:pickProcess}"
     }
   ]
 }

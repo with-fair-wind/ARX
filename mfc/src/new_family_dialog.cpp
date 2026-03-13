@@ -1,0 +1,186 @@
+#include <Dialog/new_family_dialog.h>
+#include <Resources/mfc_rc.h>
+#ifndef IDD_MFC_NEW_FAMILY
+#include "../inc/Resources/mfc_rc.h"
+#endif
+#include <acedads.h>
+#include <aduiFileDialog.h>
+
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+IMPLEMENT_DYNAMIC(ZcBmNewFamilyDialog, CZcUiDialog)
+
+namespace {
+std::wstring trimCopy(const std::wstring& text) {
+    const std::wstring kWhitespace = L" \t\r\n";
+    const std::size_t begin = text.find_first_not_of(kWhitespace);
+    if (begin == std::wstring::npos) {
+        return L"";
+    }
+    const std::size_t end = text.find_last_not_of(kWhitespace);
+    return text.substr(begin, end - begin + 1);
+}
+}  // namespace
+
+class ZcBmNewFamilyDialogImpl {
+   public:
+    explicit ZcBmNewFamilyDialogImpl(ZcBmNewFamilyDialog& owner);
+
+    void initDialog();
+    void onCategoryChanged();
+    void onBrowseTemplateClicked();
+    void onOkClicked();
+
+    [[nodiscard]] const NewFamilyRequest& request() const { return m_request; }
+
+   private:
+    void fillCategoryCombo();
+    void applyCategoryDefaultTemplate();
+    [[nodiscard]] std::wstring getTemplateText() const;
+    [[nodiscard]] std::wstring getFamilyNameText() const;
+    [[nodiscard]] std::wstring getSelectedCategoryKey() const;
+    [[nodiscard]] std::wstring getSelectedCategoryDisplayName() const;
+
+    ZcBmNewFamilyDialog* m_owner = nullptr;
+    std::vector<FamilyCategoryOption> m_categories;
+    NewFamilyRequest m_request;
+    bool m_lockTemplateByCustomSelection = false;
+};
+
+ZcBmNewFamilyDialogImpl::ZcBmNewFamilyDialogImpl(ZcBmNewFamilyDialog& owner) : m_owner(&owner) {}
+
+void ZcBmNewFamilyDialogImpl::fillCategoryCombo() {
+    m_owner->m_categoryCombo.ResetContent();
+    m_categories = listFamilyCategories();
+    for (const auto& item : m_categories) {
+        m_owner->m_categoryCombo.AddString(item.display_name.c_str());
+    }
+
+    if (!m_categories.empty()) {
+        m_owner->m_categoryCombo.SetCurSel(0);
+    }
+}
+
+void ZcBmNewFamilyDialogImpl::applyCategoryDefaultTemplate() {
+    if (m_lockTemplateByCustomSelection) {
+        return;
+    }
+
+    const std::wstring suggestion = suggestTemplateFileForCategoryKey(getSelectedCategoryKey());
+    if (!suggestion.empty()) {
+        m_owner->m_templateEdit.SetWindowTextW(suggestion.c_str());
+    }
+}
+
+std::wstring ZcBmNewFamilyDialogImpl::getTemplateText() const {
+    CString text;
+    m_owner->m_templateEdit.GetWindowTextW(text);
+    return trimCopy(std::wstring(text.GetString()));
+}
+
+std::wstring ZcBmNewFamilyDialogImpl::getFamilyNameText() const {
+    CString text;
+    m_owner->m_familyNameEdit.GetWindowTextW(text);
+    return trimCopy(std::wstring(text.GetString()));
+}
+
+std::wstring ZcBmNewFamilyDialogImpl::getSelectedCategoryKey() const {
+    const int index = m_owner->m_categoryCombo.GetCurSel();
+    if (index < 0 || index >= static_cast<int>(m_categories.size())) {
+        return L"generic";
+    }
+    return m_categories[static_cast<size_t>(index)].key;
+}
+
+std::wstring ZcBmNewFamilyDialogImpl::getSelectedCategoryDisplayName() const {
+    const int index = m_owner->m_categoryCombo.GetCurSel();
+    if (index < 0 || index >= static_cast<int>(m_categories.size())) {
+        return L"常规";
+    }
+    return m_categories[static_cast<size_t>(index)].display_name;
+}
+
+void ZcBmNewFamilyDialogImpl::initDialog() {
+    fillCategoryCombo();
+    applyCategoryDefaultTemplate();
+}
+
+void ZcBmNewFamilyDialogImpl::onCategoryChanged() { applyCategoryDefaultTemplate(); }
+
+void ZcBmNewFamilyDialogImpl::onBrowseTemplateClicked() {
+    CWnd* main_wnd = CWnd::FromHandle(adsw_acadMainWnd());
+    CAdUiFileDialog dlg(TRUE, _T("ztt"), _T(""), OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST, _T("模板文件 (*.ztt)|*.ztt|所有文件 (*.*)|*.*||"), main_wnd);
+    if (dlg.DoModal() != IDOK) {
+        return;
+    }
+
+    CString path = dlg.GetPathName();
+    if (path.IsEmpty()) {
+        return;
+    }
+    m_owner->m_templateEdit.SetWindowTextW(path);
+    m_lockTemplateByCustomSelection = !isPredefinedTemplateFile(std::wstring(path.GetString()));
+}
+
+void ZcBmNewFamilyDialogImpl::onOkClicked() {
+    NewFamilyRequest req;
+    req.category_key = getSelectedCategoryKey();
+    req.category_display_name = getSelectedCategoryDisplayName();
+    req.template_key = resolveTemplateKeyByPath(getTemplateText());
+    req.template_path = getTemplateText();
+    req.family_name = getFamilyNameText();
+    if (req.template_path.empty()) {
+        AfxMessageBox(_T("请选择样板文件。"), MB_OK | MB_ICONWARNING);
+        return;
+    }
+    m_request = std::move(req);
+    m_owner->EndDialog(IDOK);
+}
+
+ZcBmNewFamilyDialog::ZcBmNewFamilyDialog(CWnd* pParent)
+    : CZcUiDialog(IDD_MFC_NEW_FAMILY, pParent), m_parent(pParent), m_impl(std::make_unique<ZcBmNewFamilyDialogImpl>(*this)) {}
+
+ZcBmNewFamilyDialog::~ZcBmNewFamilyDialog() = default;
+
+const NewFamilyRequest& ZcBmNewFamilyDialog::request() const { return m_impl->request(); }
+
+void ZcBmNewFamilyDialog::DoDataExchange(CDataExchange* pDX) {
+    CZcUiDialog::DoDataExchange(pDX);
+    DDX_Control(pDX, IDC_NEW_FAMILY_CATEGORY_COMBO, m_categoryCombo);
+    DDX_Control(pDX, IDC_NEW_FAMILY_TEMPLATE_EDIT, m_templateEdit);
+    DDX_Control(pDX, IDC_NEW_FAMILY_TEMPLATE_BROWSE, m_browseButton);
+    DDX_Control(pDX, IDC_NEW_FAMILY_NAME_EDIT, m_familyNameEdit);
+}
+
+BOOL ZcBmNewFamilyDialog::OnInitDialog() {
+    CZcUiDialog::OnInitDialog();
+    if (m_parent != nullptr) {
+        CenterWindow(m_parent);
+    }
+
+    m_impl->initDialog();
+    m_familyNameEdit.SetCueBanner(_T("选填项"), TRUE);
+    m_templateEdit.SetFocus();
+    return FALSE;
+}
+
+void ZcBmNewFamilyDialog::onCbnSelChangeCategory() { m_impl->onCategoryChanged(); }
+
+void ZcBmNewFamilyDialog::onBnClickedBrowseTemplate() { m_impl->onBrowseTemplateClicked(); }
+
+void ZcBmNewFamilyDialog::onEnChangeTemplateFile() {}
+
+void ZcBmNewFamilyDialog::onEnChangeFamilyName() {}
+
+void ZcBmNewFamilyDialog::onBnClickedOk() { m_impl->onOkClicked(); }
+
+BEGIN_MESSAGE_MAP(ZcBmNewFamilyDialog, CZcUiDialog)
+ON_CBN_SELCHANGE(IDC_NEW_FAMILY_CATEGORY_COMBO, &ZcBmNewFamilyDialog::onCbnSelChangeCategory)
+ON_BN_CLICKED(IDC_NEW_FAMILY_TEMPLATE_BROWSE, &ZcBmNewFamilyDialog::onBnClickedBrowseTemplate)
+ON_EN_CHANGE(IDC_NEW_FAMILY_TEMPLATE_EDIT, &ZcBmNewFamilyDialog::onEnChangeTemplateFile)
+ON_EN_CHANGE(IDC_NEW_FAMILY_NAME_EDIT, &ZcBmNewFamilyDialog::onEnChangeFamilyName)
+ON_BN_CLICKED(IDOK, &ZcBmNewFamilyDialog::onBnClickedOk)
+END_MESSAGE_MAP()

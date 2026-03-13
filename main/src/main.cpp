@@ -18,7 +18,9 @@ void initApp() {
     acedRegCmds->addCommand(_T("TestCMD"), _T("test3"), _T("test3"), ACRX_CMD_TRANSPARENT, Test_Command::test3);
     acedRegCmds->addCommand(_T("TestCMD"), _T("test4"), _T("test4"), ACRX_CMD_TRANSPARENT, Test_Command::test4);
     acedRegCmds->addCommand(_T("TestCMD"), _T("test5"), _T("test5"), ACRX_CMD_TRANSPARENT, Test_Command::test5);
-
+    acedRegCmds->addCommand(_T("TestCMD"), _T("test6"), _T("test6"), ACRX_CMD_TRANSPARENT, Test_Command::test6);
+    acedRegCmds->addCommand(_T("TestCMD"), _T("_test6_place"), _T("_test6_place"), ACRX_CMD_MODAL, Test_Command::test6Place);
+    acedRegCmds->addCommand(_T("TestCMD"), _T("test7"), _T("test7"), ACRX_CMD_MODAL, Test_Command::test7);
     registerEntity();
     acrxBuildClassHierarchy();
 }

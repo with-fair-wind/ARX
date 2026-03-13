@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <vector>
 
 class ZcBmLoadToDocDialogImpl;
 
@@ -12,6 +14,10 @@ class ZcBmLoadToDocDialog : public CZcUiDialog {
     ZcBmLoadToDocDialog& operator=(const ZcBmLoadToDocDialog&) = delete;
     ZcBmLoadToDocDialog(ZcBmLoadToDocDialog&&) = delete;
     ZcBmLoadToDocDialog& operator=(ZcBmLoadToDocDialog&&) = delete;
+
+    [[nodiscard]] const std::vector<std::wstring>& selectedDocIds() const;
+    [[nodiscard]] bool placeAfterLoad() const;
+    [[nodiscard]] bool closeAfterLoad() const;
 
    protected:
     void DoDataExchange(CDataExchange* pDX) override;

@@ -11,3 +11,21 @@ void MfcCreateEntity();
 
 // 载入至文档命令
 void MfcLoadToDocCommand();
+
+// 构件浏览器命令
+void MfcComponentBrowserCommand();
+
+// 另存为测试命令
+void MfcSaveAsDialogCommand();
+
+// 重命名模板对话框测试命令
+void MfcTestRenameDialogCommand();
+
+// 覆盖确认对话框测试命令
+void MfcTestOverwriteDialogCommand();
+
+// 属性权限设置对话框命令
+void MfcPropertyPermissionCommand();
+
+// 新建族对话框命令
+void MfcNewFamilyCommand();

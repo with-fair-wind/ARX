@@ -48,12 +48,18 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCARXUI"), _T("MFCARXUI"), ACRX_CMD_MODAL, MfcArxUiDialogCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCENT"), _T("MFCENT"), ACRX_CMD_MODAL, MfcCreateEntity);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLOADDOC"), _T("MFCLOADDOC"), ACRX_CMD_MODAL, MfcLoadToDocCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCBROWSER"), _T("MFCBROWSER"), ACRX_CMD_MODAL, MfcComponentBrowserCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCSAVEAS"), _T("MFCSAVEAS"), ACRX_CMD_MODAL, MfcSaveAsDialogCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCTESTRENAME"), _T("MFCTESTRENAME"), ACRX_CMD_MODAL, MfcTestRenameDialogCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCTESTOVERWRITE"), _T("MFCTESTOVERWRITE"), ACRX_CMD_MODAL, MfcTestOverwriteDialogCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCPROPPERM"), _T("MFCPROPPERM"), ACRX_CMD_MODAL, MfcPropertyPermissionCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCNEWFAMILY"), _T("MFCNEWFAMILY"), ACRX_CMD_MODAL, MfcNewFamilyCommand);
             // 注册 EditorReactor, 用于 commandEnded 时 flush 事件
             g_pReactor = new AppEditorReactor();
             acedEditor->addReactor(g_pReactor);
 
             acutPrintf(_T("\nMFC ARX 应用程序已加载。"));
-            acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC"));
+            acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC, MFCBROWSER, MFCSAVEAS, MFCTESTRENAME, MFCTESTOVERWRITE, MFCPROPPERM, MFCNEWFAMILY"));
             break;
 
         case AcRx::kUnloadAppMsg:

@@ -1,3 +1,4 @@
+#include <Dialog/rename_template_dialog.h>
 #include <Services/load_to_doc_backend.h>
 #include <acdocman.h>
 #include <acedads.h>
@@ -302,4 +303,29 @@ bool executeLoadToDocuments(const std::vector<std::wstring>& doc_ids, bool place
     }
 
     return true;
+}
+
+RenameResult showRenameDialog(const std::wstring& original_name) {
+    RenameResult result;
+
+    CWnd* pMainWnd = CWnd::FromHandle(adsw_acadMainWnd());
+    ZcBmRenameTemplateDialog dlg(CString(original_name.c_str()), pMainWnd);
+    const INT_PTR ret = dlg.DoModal();
+
+    if (ret == IDOK) {
+        result.accepted = true;
+        result.cancel_load = false;
+        result.new_name = dlg.getNewName().GetString();
+    } else {
+        result.accepted = false;
+        result.cancel_load = dlg.isCancelLoad();
+    }
+
+    return result;
+}
+
+bool showDuplicateWarning(const std::wstring& template_name) {
+    CString message;
+    message.Format(_T("目标文档中已存在构件「%s」，是否继续载入？"), template_name.c_str());
+    return AfxMessageBox(message, MB_OKCANCEL | MB_ICONWARNING) == IDOK;
 }
