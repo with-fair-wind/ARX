@@ -23,8 +23,6 @@ class ZcBmNewFamilyDialog : public CZcUiDialog {
 
     afx_msg void onCbnSelChangeCategory();
     afx_msg void onBnClickedBrowseTemplate();
-    afx_msg void onEnChangeTemplateFile();
-    afx_msg void onEnChangeFamilyName();
     afx_msg void onBnClickedOk();
 
     DECLARE_DYNAMIC(ZcBmNewFamilyDialog)

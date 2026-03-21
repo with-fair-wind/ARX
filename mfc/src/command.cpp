@@ -11,6 +11,8 @@
 #include <acedads.h>
 #include <aduiFileDialog.h>
 
+#include "acdocman.h"
+
 // 示例命令：显示MFC对话框
 void MfcTestCommand() {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -197,6 +199,28 @@ void MfcPropertyPermissionCommand() {
     dlg.DoModal();
 }
 
+struct AppContextInvoker {
+    template <typename Fn, typename... Args>
+    explicit AppContextInvoker(Fn&& func, Args&&... args) {
+        using Tuple = std::tuple<std::decay_t<Fn>, std::decay_t<Args>...>;
+        auto Decay_copied = std::make_unique<Tuple>(std::forward<Fn>(func), std::forward<Args>(args)...);
+        auto Invoker_proc = start<Tuple>(std::make_index_sequence<1 + sizeof...(Args)>{});
+        acDocManager->executeInApplicationContext(Invoker_proc, Decay_copied.release());
+    }
+
+    template <typename Tuple, std::size_t... Indices>
+    static constexpr auto start(std::index_sequence<Indices...> /*indices*/) noexcept {
+        return &Invoke<Tuple, Indices...>;  // 返回函数指针
+    }
+
+    template <class Tuple, std::size_t... Indices>
+    static void Invoke(void* RawVals) noexcept {
+        const std::unique_ptr<Tuple> FnVals(static_cast<Tuple*>(RawVals));
+        Tuple& Tup = *FnVals.get();
+        std::invoke(std::move(std::get<Indices>(Tup))...);  // 真正的调用
+    }
+};
+
 void MfcNewFamilyCommand() {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     acutPrintf(_T("\n执行新建族命令..."));
@@ -208,17 +232,43 @@ void MfcNewFamilyCommand() {
         return;
     }
 
-    std::wstring error_message;
-    if (!executeCreateNewFamily(dlg.request(), &error_message)) {
-        CString tip = _T("新建族失败。");
-        if (!error_message.empty()) {
-            tip += _T("\n");
-            tip += CString(error_message.c_str());
+    const NewFamilyRequest request = dlg.request();
+    AppContextInvoker call{[request]() {
+        std::wstring error_message;
+        if (!executeCreateNewFamily(request, &error_message)) {
+            acutPrintf(_T("\n新建族失败。"));
+            if (!error_message.empty()) {
+                acutPrintf(_T("\n错误详情: %ls"), error_message.c_str());
+            }
+            return;
         }
-        AfxMessageBox(tip, MB_OK | MB_ICONERROR);
+        acutPrintf(_T("\n新建族流程执行成功。"));
+        // 这里是CAD应用上下文中执行的代码，可以安全调用CAD API。
+    }};
+}
+
+void MfcNewFamilyTempDemoCommand() {
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    acutPrintf(_T("\n执行新建族临时文档链路 Demo..."));
+
+    CWnd* main_wnd = CWnd::FromHandle(adsw_acadMainWnd());
+    CAdUiFileDialog dlg(TRUE, _T("ztf"), _T(""), OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST,
+                        _T("模板文件 (*.ztf)|*.ztf|Drawing 文件 (*.dwg)|*.dwg|所有文件 (*.*)|*.*||"), main_wnd);
+    if (dlg.DoModal() != IDOK) {
+        acutPrintf(_T("\n已取消 Demo。"));
         return;
     }
 
-    acutPrintf(_T("\n新建族流程执行成功。"));
-    AfxMessageBox(_T("新建族成功。"), MB_OK | MB_ICONINFORMATION);
+    const std::wstring template_path = dlg.GetPathName().GetString();
+    AppContextInvoker call{[template_path]() {
+        std::wstring error_message;
+        if (!executeCreateNewFamilyTempDemo(template_path, &error_message)) {
+            acutPrintf(_T("\n[Demo] 临时文档链路失败。"));
+            if (!error_message.empty()) {
+                acutPrintf(_T("\n[Demo] 错误详情: %ls"), error_message.c_str());
+            }
+            return;
+        }
+        acutPrintf(_T("\n[Demo] 临时文档链路执行成功。"));
+    }};
 }

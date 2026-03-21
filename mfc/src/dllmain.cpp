@@ -54,12 +54,13 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCTESTOVERWRITE"), _T("MFCTESTOVERWRITE"), ACRX_CMD_MODAL, MfcTestOverwriteDialogCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCPROPPERM"), _T("MFCPROPPERM"), ACRX_CMD_MODAL, MfcPropertyPermissionCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCNEWFAMILY"), _T("MFCNEWFAMILY"), ACRX_CMD_MODAL, MfcNewFamilyCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCNEWFAMILYDEMO"), _T("MFCNEWFAMILYDEMO"), ACRX_CMD_MODAL, MfcNewFamilyTempDemoCommand);
             // 注册 EditorReactor, 用于 commandEnded 时 flush 事件
             g_pReactor = new AppEditorReactor();
             acedEditor->addReactor(g_pReactor);
 
             acutPrintf(_T("\nMFC ARX 应用程序已加载。"));
-            acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC, MFCBROWSER, MFCSAVEAS, MFCTESTRENAME, MFCTESTOVERWRITE, MFCPROPPERM, MFCNEWFAMILY"));
+            acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC, MFCBROWSER, MFCSAVEAS, MFCTESTRENAME, MFCTESTOVERWRITE, MFCPROPPERM, MFCNEWFAMILY, MFCNEWFAMILYDEMO"));
             break;
 
         case AcRx::kUnloadAppMsg:

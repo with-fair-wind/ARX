@@ -3,10 +3,17 @@ project(mfc)
 file(GLOB_RECURSE INCS CONFIGURE_DEPENDS inc/*.h)
 file(GLOB_RECURSE SRCS CONFIGURE_DEPENDS src/*.cpp src/*.def)
 file(GLOB_RECURSE RESOURCES CONFIGURE_DEPENDS resources/*.rc)
+set(TINYXML_SRCS
+    ${CMAKE_SOURCE_DIR}/3rdparty/tinyxml/tinyxml.cpp
+    ${CMAKE_SOURCE_DIR}/3rdparty/tinyxml/tinyxmlerror.cpp
+    ${CMAKE_SOURCE_DIR}/3rdparty/tinyxml/tinyxmlparser.cpp
+    ${CMAKE_SOURCE_DIR}/3rdparty/tinyxml/tinystr.cpp
+)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRCS} ${INCS} ${RESOURCES})
+source_group("3rdparty\\tinyxml" FILES ${TINYXML_SRCS})
 
-add_library(${PROJECT_NAME} SHARED ${INCS} ${SRCS} ${RESOURCES})
+add_library(${PROJECT_NAME} SHARED ${INCS} ${SRCS} ${RESOURCES} ${TINYXML_SRCS})
 
 # target_precompile_headers(${PROJECT_NAME} PUBLIC inc/stdafx.h)
 
@@ -26,6 +33,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/signalDelegate/include>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/3rdparty/tinyxml>
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC arxApi)

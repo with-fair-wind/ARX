@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<new_family_rules>
+  <categories>
+    <category key="door" display_name="门" />
+    <category key="window" display_name="窗" />
+    <category key="column" display_name="柱" />
+    <category key="beam" display_name="梁" />
+    <category key="stair" display_name="楼梯" />
+    <category key="elevator" display_name="电梯" />
+    <category key="escalator" display_name="电力扶梯" />
+    <category key="furniture" display_name="家具" />
+    <category key="sanitary" display_name="洁具" />
+    <category key="parking" display_name="车位" />
+    <category key="planting" display_name="植物" />
+    <category key="rail" display_name="栏物" />
+    <category key="legend" display_name="图例" />
+    <category key="generic" display_name="常规" />
+  </categories>
+
+  <templates>
+    <template key="door" file_name="门样板.ztt" />
+    <template key="window" file_name="窗样板.ztt" />
+    <template key="column" file_name="柱样板.ztt" />
+    <template key="linear" file_name="线性构件样板.ztt" />
+    <template key="generic" file_name="通用样板.ztt" />
+  </templates>
+
+  <category_template default="generic">
+    <map category_key="door" template_key="door" />
+    <map category_key="window" template_key="window" />
+    <map category_key="column" template_key="column" />
+    <map category_key="beam" template_key="linear" />
+  </category_template>
+</new_family_rules>

@@ -29,3 +29,6 @@ void MfcPropertyPermissionCommand();
 
 // 新建族对话框命令
 void MfcNewFamilyCommand();
+
+// 临时文档链路测试命令
+void MfcNewFamilyTempDemoCommand();
