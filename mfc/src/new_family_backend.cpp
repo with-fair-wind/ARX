@@ -17,17 +17,14 @@
 
 namespace {
 
-// 规则运行态（关系查询层 + UI 展示层）：
-// - categoryNameByKey: 类别 key -> 展示名
-// - defaultTemplateByCategoryKey: 类别 key -> 默认模板 key
-// - templateFileByKey: 模板 key -> 模板文件名
-// - categories: UI 下拉展示顺序容器（vector）
+// 规则运行态：每条规则就是“类别名 <-> 模板文件”的一对一配置。
+struct TemplateRule {
+    std::wstring category_name;
+    std::wstring template_file;
+};
+
 struct RuleSet {
-    std::unordered_map<std::wstring, std::wstring> categoryNameByKey;
-    std::unordered_map<std::wstring, std::wstring> defaultTemplateByCategoryKey;
-    std::unordered_map<std::wstring, std::wstring> templateFileByKey;
-    std::vector<FamilyCategoryOption> categories;
-    std::wstring defaultTemplateKey;
+    std::vector<TemplateRule> rules;
     std::wstring rulesBaseDirectory;
     std::wstring loadError;
 
@@ -43,7 +40,7 @@ std::wstring toLower(std::wstring text) { return StringUtils::toLowerCopy(std::m
 // 去除首尾空白。
 std::wstring trimCopy(const std::wstring& text) { return StringUtils::trimCopy(text); }
 
-// 规则 key 统一归一化：trim + lowercase。
+// 文本键统一归一化：trim + lowercase。
 std::wstring normalizeKey(const std::wstring& key) { return toLower(trimCopy(key)); }
 
 // 模板文件名归一化（用于反向索引查找）。
@@ -157,56 +154,30 @@ std::wstring utf8ToWide(const char* text) {
 // 清空规则状态。严格模式下，加载前先 reset，避免脏状态残留。
 void resetRules(RuleSet& rules) { rules = RuleSet{}; }
 
-bool hasCategoryKey(const std::vector<FamilyCategoryOption>& categories, const std::wstring& categoryKey) {
-    const std::wstring normalizedKey = normalizeKey(categoryKey);
-    // NOLINTNEXTLINE(readability-use-anyofallof)
-    for (const auto& item : categories) {
-        if (normalizeKey(item.key) == normalizedKey) {
-            return true;
+const TemplateRule* findRuleByCategoryName(const RuleSet& rules, const std::wstring& categoryName) {
+    const std::wstring normalizedName = normalizeKey(categoryName);
+    for (const auto& rule : rules.rules) {
+        if (normalizeKey(rule.category_name) == normalizedName) {
+            return &rule;
         }
     }
-    return false;
+    return nullptr;
 }
 
-// 统一规范化规则 key，避免大小写/空白差异导致匹配失败。
+// 统一规范化规则，避免大小写/空白差异导致匹配失败。
 void normalizeRules(RuleSet& rules) {
-    std::unordered_map<std::wstring, std::wstring> normalizedCategoryNameMap;
-    normalizedCategoryNameMap.reserve(rules.categoryNameByKey.size());
-    for (const auto& entry : rules.categoryNameByKey) {
-        const std::wstring categoryKey = normalizeKey(entry.first);
-        const std::wstring displayName = trimCopy(entry.second);
-        if (!categoryKey.empty() && !displayName.empty()) {
-            normalizedCategoryNameMap[categoryKey] = displayName;
-        }
-    }
-    rules.categoryNameByKey = std::move(normalizedCategoryNameMap);
+    std::vector<TemplateRule> normalizedRules;
+    normalizedRules.reserve(rules.rules.size());
 
-    std::unordered_map<std::wstring, std::wstring> normalizedDefaultTemplateMap;
-    normalizedDefaultTemplateMap.reserve(rules.defaultTemplateByCategoryKey.size());
-    for (const auto& entry : rules.defaultTemplateByCategoryKey) {
-        const std::wstring categoryKey = normalizeKey(entry.first);
-        const std::wstring templateKey = normalizeKey(entry.second);
-        if (!categoryKey.empty() && !templateKey.empty()) {
-            normalizedDefaultTemplateMap[categoryKey] = templateKey;
+    for (const auto& rule : rules.rules) {
+        const std::wstring categoryName = trimCopy(rule.category_name);
+        const std::wstring templateFile = trimCopy(rule.template_file);
+        if (categoryName.empty() || templateFile.empty()) {
+            continue;
         }
+        normalizedRules.push_back({categoryName, templateFile});
     }
-    rules.defaultTemplateByCategoryKey = std::move(normalizedDefaultTemplateMap);
-
-    for (auto& item : rules.categories) {
-        item.key = normalizeKey(item.key);
-        item.display_name = trimCopy(item.display_name);
-    }
-
-    std::unordered_map<std::wstring, std::wstring> normalizedTemplateMap;
-    normalizedTemplateMap.reserve(rules.templateFileByKey.size());
-    for (const auto& entry : rules.templateFileByKey) {
-        const std::wstring templateKey = normalizeKey(entry.first);
-        if (!templateKey.empty() && !entry.second.empty()) {
-            normalizedTemplateMap[templateKey] = entry.second;
-        }
-    }
-    rules.templateFileByKey = std::move(normalizedTemplateMap);
-    rules.defaultTemplateKey = normalizeKey(rules.defaultTemplateKey);
+    rules.rules = std::move(normalizedRules);
 }
 
 // 将“模板文件名/相对路径”解析为规则目录下的候选绝对路径。
@@ -222,11 +193,12 @@ std::wstring resolveConfiguredTemplatePath(const RuleSet& rules, const std::wstr
 }
 
 // 解析并校验 XML 规则（严格模式）。
-// 失败即返回 false，并写入可读错误：
-// - 文件不存在/解析失败
-// - 根节点错误
-// - categories/templates/category_template 缺失或无效
-// - default/template/category 映射引用非法
+// 精简版格式：
+// <new_family_rules>
+//   <rules>
+//     <rule category_name="门" template_file="门样板.ztf" />
+//   </rules>
+// </new_family_rules>
 bool parseRulesFromXml(RuleSet& rules, const std::wstring& xmlPath, std::wstring* errorMessage) {  // NOLINT(readability-function-cognitive-complexity)
     // 1) 规则文件存在性检查。
     if (xmlPath.empty() || !PathUtils::isFile(xmlPath)) {
@@ -249,95 +221,34 @@ bool parseRulesFromXml(RuleSet& rules, const std::wstring& xmlPath, std::wstring
         return false;
     }
 
-    // 4) 解析 categories，构建类别基础数据。
-    std::vector<FamilyCategoryOption> parsedCategories;
-    if (TiXmlElement* categories = root->FirstChildElement("categories")) {
-        for (TiXmlElement* item = categories->FirstChildElement("category"); item != nullptr; item = item->NextSiblingElement("category")) {
-            const std::wstring key = normalizeKey(utf8ToWide(item->Attribute("key")));
-            const std::wstring displayName = trimCopy(utf8ToWide(item->Attribute("display_name")));
-            // key/display_name 任一为空都视为无效项，直接跳过。
-            if (key.empty() || displayName.empty()) {
-                continue;
-            }
-            parsedCategories.push_back({key, displayName});
-        }
-    }
-    // 严格模式：类别为空直接失败。
-    if (parsedCategories.empty()) {
-        setError(errorMessage, L"规则文件无有效类别配置。");
+    // 4) 解析 rules：每条规则只包含类别名和模板文件。
+    TiXmlElement* rulesNode = root->FirstChildElement("rules");
+    if (rulesNode == nullptr) {
+        setError(errorMessage, L"规则文件缺少 rules 节点。");
         return false;
     }
 
-    // 5) 解析 templates，构建模板基础数据。
-    std::unordered_map<std::wstring, std::wstring> parsedTemplateFileByKey;
-    if (TiXmlElement* templates = root->FirstChildElement("templates")) {
-        for (TiXmlElement* item = templates->FirstChildElement("template"); item != nullptr; item = item->NextSiblingElement("template")) {
-            const std::wstring key = normalizeKey(utf8ToWide(item->Attribute("key")));
-            const std::wstring fileName = trimCopy(utf8ToWide(item->Attribute("file_name")));
-            // key/file_name 任一为空都视为无效项。
-            if (key.empty() || fileName.empty()) {
-                continue;
-            }
-            parsedTemplateFileByKey[key] = fileName;
+    std::vector<TemplateRule> parsedRules;
+    parsedRules.reserve(16);
+
+    for (TiXmlElement* item = rulesNode->FirstChildElement("rule"); item != nullptr; item = item->NextSiblingElement("rule")) {
+        const std::wstring categoryName = trimCopy(utf8ToWide(item->Attribute("category_name")));
+        const std::wstring templateFile = trimCopy(utf8ToWide(item->Attribute("template_file")));
+        if (categoryName.empty() || templateFile.empty()) {
+            continue;
         }
+        parsedRules.push_back({categoryName, templateFile});
     }
-    // 严格模式：模板为空直接失败。
-    if (parsedTemplateFileByKey.empty()) {
-        setError(errorMessage, L"规则文件无有效模板配置。");
+    if (parsedRules.empty()) {
+        setError(errorMessage, L"规则文件无有效规则项，至少需要一条 category_name + template_file。");
         return false;
     }
 
-    // 6) 解析 category_template，校验全局 default。
-    TiXmlElement* mappings = root->FirstChildElement("category_template");
-    if (mappings == nullptr) {
-        setError(errorMessage, L"规则文件缺少 category_template 节点。");
-        return false;
-    }
-    const std::wstring defaultKey = normalizeKey(utf8ToWide(mappings->Attribute("default")));
-    if (defaultKey.empty()) {
-        setError(errorMessage, L"规则文件 category_template.default 不能为空。");
-        return false;
-    }
-
-    // 7) 初始化类别默认映射：先全部用全局 default。
-    std::unordered_map<std::wstring, std::wstring> parsedCategoryNameByKey;
-    std::unordered_map<std::wstring, std::wstring> parsedDefaultTemplateByCategoryKey;
-    for (const auto& category : parsedCategories) {
-        const std::wstring categoryKey = normalizeKey(category.key);
-        parsedCategoryNameByKey[categoryKey] = trimCopy(category.display_name);
-        parsedDefaultTemplateByCategoryKey[categoryKey] = defaultKey;
-    }
-
-    // 8) 再按 map 做逐项覆盖，并做引用合法性校验。
-    for (TiXmlElement* map = mappings->FirstChildElement("map"); map != nullptr; map = map->NextSiblingElement("map")) {
-        const std::wstring categoryKey = normalizeKey(utf8ToWide(map->Attribute("category_key")));
-        const std::wstring templateKey = normalizeKey(utf8ToWide(map->Attribute("template_key")));
-        if (categoryKey.empty() || templateKey.empty()) {
-            setError(errorMessage, L"规则文件 map 配置存在空 category_key/template_key。");
-            return false;
-        }
-        if (!hasCategoryKey(parsedCategories, categoryKey)) {
-            setError(errorMessage, L"规则文件映射引用了未知类别: " + categoryKey);
-            return false;
-        }
-        if (parsedTemplateFileByKey.find(templateKey) == parsedTemplateFileByKey.end()) {
-            setError(errorMessage, L"规则文件映射引用了未知模板: " + templateKey);
-            return false;
-        }
-        parsedDefaultTemplateByCategoryKey[categoryKey] = templateKey;
-    }
-
-    // 9) 提交解析结果并做规范化。
-    rules.categoryNameByKey = std::move(parsedCategoryNameByKey);
-    rules.defaultTemplateByCategoryKey = std::move(parsedDefaultTemplateByCategoryKey);
-    rules.categories = std::move(parsedCategories);
-    rules.templateFileByKey = std::move(parsedTemplateFileByKey);
-    rules.defaultTemplateKey = defaultKey;
+    // 5) 提交解析结果并做规范化。
+    rules.rules = std::move(parsedRules);
     normalizeRules(rules);
-
-    // default 必须能在模板映射中命中。
-    if (rules.templateFileByKey.find(rules.defaultTemplateKey) == rules.templateFileByKey.end()) {
-        setError(errorMessage, L"规则文件默认模板不存在: " + rules.defaultTemplateKey);
+    if (rules.rules.empty()) {
+        setError(errorMessage, L"规则文件无有效规则项，至少需要一条 category_name + template_file。");
         return false;
     }
 
@@ -352,7 +263,7 @@ bool ensureRulesLoaded(RuleSet& rules, std::wstring* errorMessage = nullptr) {
     // 2) 优先使用插件目录，宿主目录仅兜底。
     const std::wstring pluginDir = getModuleDirectoryByHandle(getCurrentModuleHandle());
     rules.rulesBaseDirectory = pluginDir.empty() ? getModuleDirectory() : pluginDir;
-    const std::wstring xmlPath = PathUtils::join(rules.rulesBaseDirectory, L"new_family_rules.xml");
+    const std::wstring xmlPath = PathUtils::join(rules.rulesBaseDirectory, L"FileTemplateRules.xml");
     // 3) 严格解析 XML；失败则回传可读错误并保持未加载状态。
     if (!parseRulesFromXml(rules, xmlPath, &rules.loadError)) {
         setError(errorMessage, rules.loadError);
@@ -361,46 +272,38 @@ bool ensureRulesLoaded(RuleSet& rules, std::wstring* errorMessage = nullptr) {
     return true;
 }
 
-// 判断类别 key 是否存在于规则集。
-bool containsCategoryKey(const RuleSet& rules, const std::wstring& categoryKey) { return rules.categoryNameByKey.find(normalizeKey(categoryKey)) != rules.categoryNameByKey.end(); }
+// 判断类别名是否存在于规则集。
+bool containsCategoryName(const RuleSet& rules, const std::wstring& categoryName) { return findRuleByCategoryName(rules, categoryName) != nullptr; }
 
-// 根据类别 key 返回显示名；找不到则回退原 key。
-std::wstring categoryDisplayNameByKey(const RuleSet& rules, const std::wstring& categoryKey) {
-    const auto it = rules.categoryNameByKey.find(normalizeKey(categoryKey));
-    if (it != rules.categoryNameByKey.end()) {
-        return it->second;
+// 根据类别名返回显示名；找不到则回退原输入。
+std::wstring categoryDisplayNameByName(const RuleSet& rules, const std::wstring& categoryName) {
+    if (const TemplateRule* rule = findRuleByCategoryName(rules, categoryName)) {
+        return rule->category_name;
     }
-    return categoryKey;
+    return categoryName;
 }
 
-// 获取类别默认模板 key；若类别未配置，回退全局 default。
-std::wstring defaultTemplateKeyForCategory(const RuleSet& rules, const std::wstring& categoryKey) {
-    const auto it = rules.defaultTemplateByCategoryKey.find(normalizeKey(categoryKey));
-    if (it != rules.defaultTemplateByCategoryKey.end() && !it->second.empty()) {
-        return it->second;
+// 根据类别名获取模板文件名；若类别未命中，回退第一条规则。
+std::wstring templateFileForCategoryName(const RuleSet& rules, const std::wstring& categoryName) {
+    if (const TemplateRule* rule = findRuleByCategoryName(rules, categoryName)) {
+        return rule->template_file;
     }
-    return rules.defaultTemplateKey;
-}
-
-// 根据模板 key 获取文件名。
-std::wstring templateFileNameByKey(const RuleSet& rules, const std::wstring& templateKey) {
-    const auto it = rules.templateFileByKey.find(normalizeKey(templateKey));
-    if (it == rules.templateFileByKey.end()) {
+    if (rules.rules.empty()) {
         return L"";
     }
-    return it->second;
+    return rules.rules.front().template_file;
 }
 
-// 根据路径（或文件名）反查预定义模板 key。
-std::wstring resolveTemplateKeyByPathInternal(const RuleSet& rules, const std::wstring& templatePath) {
+// 根据路径（或文件名）反查预定义模板“类别名”。
+std::wstring resolveCategoryNameByPathInternal(const RuleSet& rules, const std::wstring& templatePath) {
     const std::wstring inputPathKey = PathUtils::normalizeForCompare(templatePath);
     if (inputPathKey.empty()) {
         return L"";
     }
-    for (const auto& entry : rules.templateFileByKey) {
-        const std::wstring configuredFullPath = resolveConfiguredTemplatePath(rules, entry.second);
+    for (const auto& rule : rules.rules) {
+        const std::wstring configuredFullPath = resolveConfiguredTemplatePath(rules, rule.template_file);
         if (PathUtils::normalizeForCompare(configuredFullPath) == inputPathKey) {
-            return entry.first;
+            return rule.category_name;
         }
     }
     return L"";
@@ -420,9 +323,9 @@ std::wstring resolveTemplatePathForExecution(const RuleSet& rules, const std::ws
         return input;
     }
 
-    const std::wstring templateKey = resolveTemplateKeyByPathInternal(rules, input);
-    if (!templateKey.empty()) {
-        const std::wstring configuredPath = resolveConfiguredTemplatePath(rules, templateFileNameByKey(rules, templateKey));
+    const std::wstring categoryName = resolveCategoryNameByPathInternal(rules, input);
+    if (!categoryName.empty()) {
+        const std::wstring configuredPath = resolveConfiguredTemplatePath(rules, templateFileForCategoryName(rules, categoryName));
         if (PathUtils::isFile(configuredPath)) {
             return configuredPath;
         }
@@ -430,11 +333,11 @@ std::wstring resolveTemplatePathForExecution(const RuleSet& rules, const std::ws
 
     // 兼容“预定义模板只显示文件名”的输入场景。
     const std::wstring fileNameKey = normalizeTemplateFileNameKey(input);
-    for (const auto& entry : rules.templateFileByKey) {
-        if (normalizeTemplateFileNameKey(entry.second) != fileNameKey) {
+    for (const auto& rule : rules.rules) {
+        if (normalizeTemplateFileNameKey(rule.template_file) != fileNameKey) {
             continue;
         }
-        const std::wstring configuredPath = resolveConfiguredTemplatePath(rules, entry.second);
+        const std::wstring configuredPath = resolveConfiguredTemplatePath(rules, rule.template_file);
         if (PathUtils::isFile(configuredPath)) {
             return configuredPath;
         }
@@ -468,12 +371,12 @@ class NewFamilyService {
     // - 激活该临时文档并标记为未保存
     static bool executeCreate(const NewFamilyRequest& request, std::wstring* errorMessage) {
         RuleSet& activeRules = RuleSet::active();
-        if (activeRules.categoryNameByKey.empty() || activeRules.templateFileByKey.empty()) {
+        if (activeRules.rules.empty()) {
             if (!initializeNewFamilyRules(errorMessage)) {
                 return false;
             }
         }
-        if (activeRules.categoryNameByKey.empty() || activeRules.templateFileByKey.empty()) {
+        if (activeRules.rules.empty()) {
             return false;
         }
 
@@ -484,7 +387,7 @@ class NewFamilyService {
             return false;
         }
 
-        const std::wstring categoryDisplayName = categoryDisplayNameByKey(activeRules, resolvedRequest.category_key);
+        const std::wstring categoryDisplayName = categoryDisplayNameByName(activeRules, resolvedRequest.category_name);
         const std::wstring resolvedFamilyName = resolvedRequest.family_name.empty() ? makeDefaultFamilyName(categoryDisplayName) : resolvedRequest.family_name;
 
         acutPrintf(_T("\n[新建族] 开始执行后端流程..."));
@@ -498,12 +401,12 @@ class NewFamilyService {
    private:
     // 输入参数校验（严格模式补充了类别存在性检查）。
     static bool validateRequest(const RuleSet& rules, const NewFamilyRequest& request, std::wstring* errorMessage) {
-        if (request.category_key.empty()) {
+        if (request.category_name.empty()) {
             setError(errorMessage, L"族类别不能为空。");
             return false;
         }
-        if (!containsCategoryKey(rules, request.category_key)) {
-            setError(errorMessage, L"族类别在规则中不存在: " + request.category_key);
+        if (!containsCategoryName(rules, request.category_name)) {
+            setError(errorMessage, L"族类别在规则中不存在: " + request.category_name);
             return false;
         }
         if (request.template_path.empty()) {
@@ -628,28 +531,33 @@ class NewFamilyService {
 // ===== 对外接口（保持与头文件约定一致）=====
 
 // 返回可选类别列表。严格模式下规则加载失败则返回空列表。
-std::vector<FamilyCategoryOption> listFamilyCategories() {
+std::vector<std::wstring> listFamilyCategories() {
     const RuleSet& rules = RuleSet::active();
-    if (rules.categoryNameByKey.empty() || rules.templateFileByKey.empty()) {
+    if (rules.rules.empty()) {
         return {};
     }
-    return rules.categories;
+    std::vector<std::wstring> categories;
+    categories.reserve(rules.rules.size());
+    for (const auto& rule : rules.rules) {
+        categories.push_back(rule.category_name);
+    }
+    return categories;
 }
 
 // 根据类别返回推荐模板路径（规则目录下）。
-std::wstring suggestTemplateFileForCategoryKey(const std::wstring& category_key) {
+std::wstring suggestTemplateFileForCategoryName(const std::wstring& category_name) {
     const RuleSet& rules = RuleSet::active();
-    return resolveConfiguredTemplatePath(rules, templateFileNameByKey(rules, defaultTemplateKeyForCategory(rules, category_key)));
+    return resolveConfiguredTemplatePath(rules, templateFileForCategoryName(rules, category_name));
 }
 
-// 反查预定义模板 key（不抛错，找不到返回空字符串）。
-std::wstring resolveTemplateKeyByPath(const std::wstring& template_path) {
+// 反查预定义模板对应类别名（不抛错，找不到返回空字符串）。
+std::wstring resolveCategoryNameByTemplatePath(const std::wstring& template_path) {
     const RuleSet& rules = RuleSet::active();
-    return resolveTemplateKeyByPathInternal(rules, template_path);
+    return resolveCategoryNameByPathInternal(rules, template_path);
 }
 
 // 便捷判断：是否预定义模板文件。
-bool isPredefinedTemplateFile(const std::wstring& template_path) { return !resolveTemplateKeyByPath(template_path).empty(); }
+bool isPredefinedTemplateFile(const std::wstring& template_path) { return !resolveCategoryNameByTemplatePath(template_path).empty(); }
 
 // 业务流程入口。
 bool initializeNewFamilyRules(std::wstring* error_message) { return ensureRulesLoaded(RuleSet::active(), error_message); }

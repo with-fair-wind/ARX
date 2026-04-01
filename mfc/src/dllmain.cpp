@@ -1,6 +1,7 @@
 #include <Command/command.h>
 #include <Services/app_editor_reactor.h>
 #include <Services/app_event_service.h>
+#include <Services/zcBm_lisp_bridge.h>
 
 // CmfcApp
 class CmfcApp : public CWinApp {
@@ -55,12 +56,25 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCPROPPERM"), _T("MFCPROPPERM"), ACRX_CMD_MODAL, MfcPropertyPermissionCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCNEWFAMILY"), _T("MFCNEWFAMILY"), ACRX_CMD_MODAL, MfcNewFamilyCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCNEWFAMILYDEMO"), _T("MFCNEWFAMILYDEMO"), ACRX_CMD_MODAL, MfcNewFamilyTempDemoCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLISPTEST0"), _T("MFCLISPTEST0"), ACRX_CMD_MODAL, MfcLispInvokeNoArgsCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLISPTEST1"), _T("MFCLISPTEST1"), ACRX_CMD_MODAL, MfcLispInvokeIntRealCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLISPTEST2"), _T("MFCLISPTEST2"), ACRX_CMD_MODAL, MfcLispInvokePointStringCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLISPCATTEST"), _T("MFCLISPCATTEST"), ACRX_CMD_MODAL, MfcLispValueCategoryTestCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLISPDYNTEST"), _T("MFCLISPDYNTEST"), ACRX_CMD_MODAL, MfcLispDynamicApiTestCommand);
             // 注册 EditorReactor, 用于 commandEnded 时 flush 事件
             g_pReactor = new AppEditorReactor();
             acedEditor->addReactor(g_pReactor);
 
             acutPrintf(_T("\nMFC ARX 应用程序已加载。"));
-            acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC, MFCBROWSER, MFCSAVEAS, MFCTESTRENAME, MFCTESTOVERWRITE, MFCPROPPERM, MFCNEWFAMILY, MFCNEWFAMILYDEMO"));
+            acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC, MFCBROWSER, MFCSAVEAS, MFCTESTRENAME, MFCTESTOVERWRITE, MFCPROPPERM, MFCNEWFAMILY, MFCNEWFAMILYDEMO, MFCLISPTEST0/1/2, MFCLISPCATTEST, MFCLISPDYNTEST"));
+            break;
+
+        case AcRx::kLoadDwgMsg:
+            ZcBmRegisterLispCommands();
+            break;
+
+        case AcRx::kInvkSubrMsg:
+            ZcBmDispatchLispCommand();
             break;
 
         case AcRx::kUnloadAppMsg:
@@ -71,6 +85,7 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
                 g_pReactor = nullptr;
             }
             AppEventService::instance().reset();
+            ZcBmUnregisterLispCommands();
 
             acedRegCmds->removeGroup(_T("MFCGROUP"));
             acutPrintf(_T("\nMFC ARX 应用程序已卸载。"));

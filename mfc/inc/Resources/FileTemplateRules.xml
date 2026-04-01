@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<new_family_rules>
+  <rules>
+    <rule category_name="门" template_file="门样板.ztf" />
+    <rule category_name="窗" template_file="窗样板.ztf" />
+    <rule category_name="柱" template_file="柱样板.ztf" />
+    <rule category_name="梁" template_file="线性构件样板.ztf" />
+    <rule category_name="楼梯" template_file="通用样板.ztf" />
+    <rule category_name="电梯" template_file="通用样板.ztf" />
+    <rule category_name="电力扶梯" template_file="通用样板.ztf" />
+    <rule category_name="家具" template_file="通用样板.ztf" />
+    <rule category_name="洁具" template_file="通用样板.ztf" />
+    <rule category_name="车位" template_file="通用样板.ztf" />
+    <rule category_name="植物" template_file="通用样板.ztf" />
+    <rule category_name="栏物" template_file="通用样板.ztf" />
+    <rule category_name="图例" template_file="通用样板.ztf" />
+    <rule category_name="常规" template_file="通用样板.ztf" />
+  </rules>
+</new_family_rules>

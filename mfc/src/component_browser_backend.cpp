@@ -324,10 +324,16 @@ std::vector<ComponentNode> getComponentTree() {
         makeTemplate(L"tpl_single_casement", L"单扇平开窗", ComponentLoadState::kLoaded, false, {
             makeType(L"typ_single_900x1200", L"900*1200", ComponentLoadState::kLoaded, false),
             makeType(L"typ_single_1200x1500", L"1200*1500", ComponentLoadState::kLoaded, false),
+            makeType(L"typ_single_1000x1200", L"1000*1200", ComponentLoadState::kLoaded, false),
         }),
         makeTemplate(L"tpl_double_casement", L"双扇平开窗", ComponentLoadState::kLoaded, false, {
             makeType(L"typ_double_1600x1500", L"1600*1500", ComponentLoadState::kLoaded, false),
             makeType(L"typ_double_1800x2000", L"1800*2000", ComponentLoadState::kLoaded, false),
+            makeType(L"typ_double_2000x2200", L"2000*2200", ComponentLoadState::kLoaded, false),
+        }),
+        makeTemplate(L"tpl_fixed_window", L"固定窗", ComponentLoadState::kLoaded, true, {
+            makeType(L"typ_fixed_1200x1200", L"1200*1200", ComponentLoadState::kLoaded, true),
+            makeType(L"typ_fixed_1800x1500", L"1800*1500", ComponentLoadState::kLoaded, true),
         }),
         makeTemplate(L"tpl_sliding", L"悬拉窗", ComponentLoadState::kNotLoaded, false, {}),
         makeTemplate(L"tpl_corner", L"转角窗", ComponentLoadState::kNotLoaded, false, {}),
@@ -337,11 +343,98 @@ std::vector<ComponentNode> getComponentTree() {
         makeTemplate(L"tpl_basic_wall", L"基本墙", ComponentLoadState::kLoaded, true, {
             makeType(L"typ_wall_200", L"200mm", ComponentLoadState::kLoaded, true),
             makeType(L"typ_wall_240", L"240mm", ComponentLoadState::kLoaded, true),
+            makeType(L"typ_wall_300", L"300mm", ComponentLoadState::kLoaded, true),
+        }),
+        makeTemplate(L"tpl_curtain_wall_unit", L"单元式幕墙墙体", ComponentLoadState::kNotLoaded, false, {
+            makeType(L"typ_cw_unit_150", L"单元板块-150", ComponentLoadState::kNotLoaded, false),
+            makeType(L"typ_cw_unit_180", L"单元板块-180", ComponentLoadState::kNotLoaded, false),
+        }),
+    }));
+
+    tree.push_back(makeCategory(L"cat_door", L"门", {
+        makeTemplate(L"tpl_single_door", L"单扇门", ComponentLoadState::kLoaded, false, {
+            makeType(L"typ_door_single_900x2100", L"900*2100", ComponentLoadState::kLoaded, false),
+            makeType(L"typ_door_single_1000x2100", L"1000*2100", ComponentLoadState::kLoaded, false),
+        }),
+        makeTemplate(L"tpl_double_door", L"双开门", ComponentLoadState::kLoaded, false, {
+            makeType(L"typ_door_double_1500x2100", L"1500*2100", ComponentLoadState::kLoaded, false),
+            makeType(L"typ_door_double_1800x2400", L"1800*2400", ComponentLoadState::kLoaded, false),
+        }),
+        makeTemplate(L"tpl_fire_door", L"防火门", ComponentLoadState::kNotLoaded, true, {
+            makeType(L"typ_fire_door_a", L"甲级防火门", ComponentLoadState::kNotLoaded, true),
+            makeType(L"typ_fire_door_b", L"乙级防火门", ComponentLoadState::kNotLoaded, true),
+        }),
+    }));
+
+    tree.push_back(makeCategory(L"cat_stair", L"楼梯", {
+        makeTemplate(L"tpl_stair_straight", L"直跑楼梯", ComponentLoadState::kLoaded, false, {
+            makeType(L"typ_stair_straight_3000", L"层高3000", ComponentLoadState::kLoaded, false),
+            makeType(L"typ_stair_straight_3300", L"层高3300", ComponentLoadState::kLoaded, false),
+        }),
+        makeTemplate(L"tpl_stair_u_shape", L"双跑楼梯", ComponentLoadState::kNotLoaded, false, {
+            makeType(L"typ_stair_u_3000", L"双跑-3000", ComponentLoadState::kNotLoaded, false),
+            makeType(L"typ_stair_u_3600", L"双跑-3600", ComponentLoadState::kNotLoaded, false),
+        }),
+    }));
+
+    tree.push_back(makeCategory(L"cat_roof", L"屋顶", {
+        makeTemplate(L"tpl_flat_roof", L"平屋顶", ComponentLoadState::kLoaded, true, {
+            makeType(L"typ_flat_roof_150", L"保温层150", ComponentLoadState::kLoaded, true),
+            makeType(L"typ_flat_roof_200", L"保温层200", ComponentLoadState::kLoaded, true),
+        }),
+        makeTemplate(L"tpl_slope_roof", L"坡屋顶", ComponentLoadState::kNotLoaded, false, {
+            makeType(L"typ_slope_roof_15", L"坡度15deg", ComponentLoadState::kNotLoaded, false),
+            makeType(L"typ_slope_roof_30", L"坡度30deg", ComponentLoadState::kNotLoaded, false),
         }),
     }));
 
     tree.push_back(makeCategory(L"cat_column", L"柱", {
-        makeTemplate(L"tpl_rect_column", L"矩形柱", ComponentLoadState::kNotLoaded, false, {}),
+        makeTemplate(L"tpl_rect_column", L"矩形柱", ComponentLoadState::kLoaded, false, {
+            makeType(L"typ_rect_col_500x500", L"500*500", ComponentLoadState::kLoaded, false),
+            makeType(L"typ_rect_col_600x600", L"600*600", ComponentLoadState::kLoaded, false),
+        }),
+        makeTemplate(L"tpl_round_column", L"圆柱", ComponentLoadState::kNotLoaded, false, {
+            makeType(L"typ_round_col_d500", L"D500", ComponentLoadState::kNotLoaded, false),
+            makeType(L"typ_round_col_d700", L"D700", ComponentLoadState::kNotLoaded, false),
+        }),
+    }));
+
+    tree.push_back(makeCategory(L"cat_curtain_wall", L"幕墙", {
+        makeTemplate(L"tpl_curtain_wall_stick", L"框架式幕墙", ComponentLoadState::kLoaded, false, {
+            makeType(L"typ_cw_stick_150", L"竖梃150", ComponentLoadState::kLoaded, false),
+            makeType(L"typ_cw_stick_180", L"竖梃180", ComponentLoadState::kLoaded, false),
+        }),
+        makeTemplate(L"tpl_curtain_wall_unitized", L"单元式幕墙", ComponentLoadState::kNotLoaded, false, {
+            makeType(L"typ_cw_unitized_1200", L"板块宽1200", ComponentLoadState::kNotLoaded, false),
+            makeType(L"typ_cw_unitized_1500", L"板块宽1500", ComponentLoadState::kNotLoaded, false),
+        }),
+    }));
+
+    tree.push_back(makeCategory(L"cat_furniture", L"家具", {
+        makeTemplate(L"tpl_desk", L"办公桌", ComponentLoadState::kLoaded, false, {
+            makeType(L"typ_desk_1200", L"1200*600", ComponentLoadState::kLoaded, false),
+            makeType(L"typ_desk_1400", L"1400*700", ComponentLoadState::kLoaded, false),
+        }),
+        makeTemplate(L"tpl_chair", L"办公椅", ComponentLoadState::kNotLoaded, false, {
+            makeType(L"typ_chair_standard", L"标准办公椅", ComponentLoadState::kNotLoaded, false),
+            makeType(L"typ_chair_ergonomic", L"人体工学椅", ComponentLoadState::kNotLoaded, false),
+        }),
+        makeTemplate(L"tpl_storage", L"储物柜", ComponentLoadState::kNotLoaded, false, {}),
+    }));
+
+    tree.push_back(makeCategory(L"cat_equipment", L"设备", {
+        makeTemplate(L"tpl_ahu", L"空调机组", ComponentLoadState::kLoaded, true, {
+            makeType(L"typ_ahu_5000", L"5000m3/h", ComponentLoadState::kLoaded, true),
+            makeType(L"typ_ahu_8000", L"8000m3/h", ComponentLoadState::kLoaded, true),
+        }),
+        makeTemplate(L"tpl_fan_coil", L"风机盘管", ComponentLoadState::kLoaded, false, {
+            makeType(L"typ_fc_2p", L"2P", ComponentLoadState::kLoaded, false),
+            makeType(L"typ_fc_3p", L"3P", ComponentLoadState::kLoaded, false),
+        }),
+        makeTemplate(L"tpl_pump", L"循环泵", ComponentLoadState::kNotLoaded, false, {
+            makeType(L"typ_pump_25_160", L"25-160", ComponentLoadState::kNotLoaded, false),
+            makeType(L"typ_pump_40_200", L"40-200", ComponentLoadState::kNotLoaded, false),
+        }),
     }));
 
     return tree;

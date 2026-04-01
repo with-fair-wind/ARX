@@ -52,10 +52,10 @@ class ZcBmNewFamilyDialogImpl {
     void applyCategoryDefaultTemplate();
     [[nodiscard]] std::wstring getTemplateText() const;
     [[nodiscard]] std::wstring getFamilyNameText() const;
-    [[nodiscard]] std::wstring getSelectedCategoryKey() const;
+    [[nodiscard]] std::wstring getSelectedCategoryName() const;
 
     ZcBmNewFamilyDialog* m_owner = nullptr;
-    std::vector<FamilyCategoryOption> m_categories;
+    std::vector<std::wstring> m_categories;
     NewFamilyRequest m_request;
     bool m_lockTemplateByCustomSelection = false;
 };
@@ -65,8 +65,8 @@ ZcBmNewFamilyDialogImpl::ZcBmNewFamilyDialogImpl(ZcBmNewFamilyDialog& owner) : m
 void ZcBmNewFamilyDialogImpl::fillCategoryCombo() {
     m_owner->m_categoryCombo.ResetContent();
     m_categories = listFamilyCategories();
-    for (const auto& item : m_categories) {
-        m_owner->m_categoryCombo.AddString(item.display_name.c_str());
+    for (const auto& categoryName : m_categories) {
+        m_owner->m_categoryCombo.AddString(categoryName.c_str());
     }
 
     if (!m_categories.empty()) {
@@ -79,7 +79,7 @@ void ZcBmNewFamilyDialogImpl::applyCategoryDefaultTemplate() {
         return;
     }
 
-    const std::wstring suggestion = suggestTemplateFileForCategoryKey(getSelectedCategoryKey());
+    const std::wstring suggestion = suggestTemplateFileForCategoryName(getSelectedCategoryName());
     if (!suggestion.empty()) {
         m_owner->m_templateEdit.SetWindowTextW(suggestion.c_str());
     }
@@ -97,12 +97,12 @@ std::wstring ZcBmNewFamilyDialogImpl::getFamilyNameText() const {
     return trimCopy(std::wstring(text.GetString()));
 }
 
-std::wstring ZcBmNewFamilyDialogImpl::getSelectedCategoryKey() const {
+std::wstring ZcBmNewFamilyDialogImpl::getSelectedCategoryName() const {
     const int index = m_owner->m_categoryCombo.GetCurSel();
     if (index < 0 || index >= static_cast<int>(m_categories.size())) {
-        return L"generic";
+        return L"";
     }
-    return m_categories[static_cast<size_t>(index)].key;
+    return m_categories[static_cast<size_t>(index)];
 }
 
 void ZcBmNewFamilyDialogImpl::initDialog() {
@@ -124,7 +124,7 @@ void ZcBmNewFamilyDialogImpl::onCategoryChanged() { applyCategoryDefaultTemplate
 
 void ZcBmNewFamilyDialogImpl::onBrowseTemplateClicked() {
     CWnd* main_wnd = CWnd::FromHandle(adsw_acadMainWnd());
-    CAdUiFileDialog dlg(TRUE, _T("dwg"), _T(""), OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST, _T("模板文件 (*.dwg)|*.dwg|所有文件 (*.*)|*.*||"), main_wnd);
+    CAdUiFileDialog dlg(TRUE, _T("ztf"), _T(""), OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST, _T("模板文件 (*.ztf;*.dwg)|*.ztf;*.dwg|所有文件 (*.*)|*.*||"), main_wnd);
     if (dlg.DoModal() != IDOK) {
         return;
     }
@@ -142,7 +142,7 @@ void ZcBmNewFamilyDialogImpl::onBrowseTemplateClicked() {
 
 void ZcBmNewFamilyDialogImpl::onOkClicked() {
     NewFamilyRequest req;
-    req.category_key = getSelectedCategoryKey();
+    req.category_name = getSelectedCategoryName();
     req.template_path = getTemplateText();
     req.family_name = getFamilyNameText();
     if (req.template_path.empty()) {

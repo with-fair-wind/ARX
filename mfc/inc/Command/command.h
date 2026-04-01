@@ -32,3 +32,10 @@ void MfcNewFamilyCommand();
 
 // 临时文档链路测试命令
 void MfcNewFamilyTempDemoCommand();
+
+// zcedInvoke 测试命令（不同传参）
+void MfcLispInvokeNoArgsCommand();
+void MfcLispInvokeIntRealCommand();
+void MfcLispInvokePointStringCommand();
+void MfcLispValueCategoryTestCommand();
+void MfcLispDynamicApiTestCommand();
