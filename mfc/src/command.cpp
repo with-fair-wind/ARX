@@ -6,7 +6,10 @@
 #include <Dialog/overwrite_confirm_dialog.h>
 #include <Dialog/property_permission_dialog.h>
 #include <Dialog/rename_template_dialog.h>
+#include <Dialog/template_manager_dialog.h>
 #include <Dialog/test_dialog.h>
+#include <Dialog/view_workplane_dialog.h>
+#include <Resources/mfc_rc.h>
 #include <Services/new_family_backend.h>
 #include <acutads.h>
 #include <acedads.h>
@@ -22,6 +25,32 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
+
+namespace {
+std::unique_ptr<ZcBmViewWorkPlaneDialog> g_viewWorkPlaneDialog;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+
+void showViewWorkPlaneDialog(CWnd* parent) {
+    if (g_viewWorkPlaneDialog != nullptr && ::IsWindow(g_viewWorkPlaneDialog->GetSafeHwnd()) != FALSE) {
+        if (g_viewWorkPlaneDialog->IsWindowVisible() == FALSE) {
+            g_viewWorkPlaneDialog->ShowWindow(SW_SHOW);
+        }
+        g_viewWorkPlaneDialog->SetForegroundWindow();
+        g_viewWorkPlaneDialog->SetActiveWindow();
+        g_viewWorkPlaneDialog->SetFocus();
+        return;
+    }
+
+    g_viewWorkPlaneDialog = std::make_unique<ZcBmViewWorkPlaneDialog>(parent);
+    if (g_viewWorkPlaneDialog == nullptr || g_viewWorkPlaneDialog->Create(IDD_MFC_VIEW_WORKPLANE, parent) == FALSE) {
+        AfxMessageBox(_T("打开关联工作平面对话框失败。"), MB_OK | MB_ICONERROR);
+        g_viewWorkPlaneDialog.reset();
+        return;
+    }
+    g_viewWorkPlaneDialog->ShowWindow(SW_SHOW);
+    g_viewWorkPlaneDialog->SetForegroundWindow();
+    g_viewWorkPlaneDialog->SetActiveWindow();
+}
+}  // namespace
 
 
 #if 0
@@ -426,6 +455,15 @@ void MfcComponentBrowserCommand() {
     dlg.DoModal();
 }
 
+// 族模板管理器命令（数据驱动版本）
+void MfcTemplateManagerCommand() {
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+    CWnd* pMainWnd = CWnd::FromHandle(adsw_acadMainWnd());
+    ZcBmTemplateManagerDlg dlg(pMainWnd);
+    dlg.DoModal();
+}
+
 // 示例命令：触发CAD另存为对话框
 void MfcSaveAsDialogCommand() {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -520,6 +558,14 @@ void MfcPropertyPermissionCommand() {
     CWnd* pMainWnd = CWnd::FromHandle(adsw_acadMainWnd());
     ZcBmPropertyPermissionDialog dlg(pMainWnd);
     dlg.DoModal();
+}
+
+void MfcViewWorkPlaneCommand() {
+    AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    acutPrintf(_T("\n执行视图关联工作平面命令..."));
+
+    CWnd* pMainWnd = CWnd::FromHandle(adsw_acadMainWnd());
+    showViewWorkPlaneDialog(pMainWnd);
 }
 
 struct AppContextInvoker {

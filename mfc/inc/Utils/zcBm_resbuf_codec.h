@@ -2,6 +2,7 @@
 
 #include <acedads.h>
 #include <acutads.h>
+#include <zAcString.h>
 
 #include <cstdint>
 #include <cstring>
@@ -181,6 +182,40 @@ struct ZcBmResbufCodec<std::int64_t> {
 };
 
 template <>
+struct ZcBmResbufCodec<bool> {
+    static bool decode(const resbuf* node, short restype, bool* out_value) {
+        if (node == nullptr || out_value == nullptr || node->restype != restype) {
+            return false;
+        }
+        *out_value = (node->resval.rint != 0);
+        return true;
+    }
+
+    static bool writeValue(resbuf* node, bool value) {
+        if (node == nullptr) {
+            return false;
+        }
+        node->resval.rint = static_cast<short>(value ? 1 : 0);
+        return true;
+    }
+
+    static bool encode(short restype, bool value, ZcBmResbufChain* chain) {
+        if (chain == nullptr) {
+            return false;
+        }
+        resbuf* node = acutNewRb(restype);
+        if (node == nullptr || !writeValue(node, value)) {
+            if (node != nullptr) {
+                acutRelRb(node);
+            }
+            return false;
+        }
+        chain->append(node);
+        return true;
+    }
+};
+
+template <>
 struct ZcBmResbufCodec<double> {
     static bool decode(const resbuf* node, short restype, double* out_value) {
         if (node == nullptr || out_value == nullptr || node->restype != restype) {
@@ -244,6 +279,91 @@ struct ZcBmResbufCodec<std::wstring> {
             return false;
         }
         chain->append(node);
+        return true;
+    }
+};
+
+template <>
+struct ZcBmResbufCodec<ZcString> {
+    static bool decode(const resbuf* node, short restype, ZcString* out_value) {
+        if (node == nullptr || out_value == nullptr || node->restype != restype) {
+            return false;
+        }
+        const ZTCHAR* text = node->resval.rstring;
+        *out_value = (text == nullptr) ? ZcString() : ZcString(text);
+        return true;
+    }
+
+    static bool writeValue(resbuf* node, const ZcString& value) {
+        if (node == nullptr) {
+            return false;
+        }
+        return zcutNewString(value.kTCharPtr(), node->resval.rstring) == Zcad::eOk;
+    }
+
+    static bool encode(short restype, const ZcString& value, ZcBmResbufChain* chain) {
+        if (chain == nullptr) {
+            return false;
+        }
+        resbuf* node = acutNewRb(restype);
+        if (node == nullptr || !writeValue(node, value)) {
+            if (node != nullptr) {
+                acutRelRb(node);
+            }
+            return false;
+        }
+        chain->append(node);
+        return true;
+    }
+};
+
+template <>
+struct ZcBmResbufCodec<ZTCHAR*> {
+    static bool decode(const resbuf* node, short restype, ZTCHAR** out_value) {
+        if (node == nullptr || out_value == nullptr || node->restype != restype) {
+            return false;
+        }
+        if (node->resval.rstring == nullptr) {
+            *out_value = nullptr;
+            return true;
+        }
+        return zcutNewString(node->resval.rstring, *out_value) == Zcad::eOk;
+    }
+
+    static bool writeValue(resbuf* node, const ZTCHAR* value) {
+        if (node == nullptr) {
+            return false;
+        }
+        return zcutNewString(value == nullptr ? _T("") : value, node->resval.rstring) == Zcad::eOk;
+    }
+
+    static bool encode(short restype, const ZTCHAR* value, ZcBmResbufChain* chain) {
+        if (chain == nullptr) {
+            return false;
+        }
+        resbuf* node = acutNewRb(restype);
+        if (node == nullptr || !writeValue(node, value)) {
+            if (node != nullptr) {
+                acutRelRb(node);
+            }
+            return false;
+        }
+        chain->append(node);
+        return true;
+    }
+};
+
+template <>
+struct ZcBmResbufCodec<const ZTCHAR*> : ZcBmResbufCodec<ZTCHAR*> {
+    static bool decode(const resbuf* node, short restype, const ZTCHAR** out_value) {
+        if (out_value == nullptr) {
+            return false;
+        }
+        ZTCHAR* copied = nullptr;
+        if (!ZcBmResbufCodec<ZTCHAR*>::decode(node, restype, &copied)) {
+            return false;
+        }
+        *out_value = copied;
         return true;
     }
 };
@@ -344,6 +464,47 @@ struct ZcBmResbufCodec<zds_name> {
     }
 
     static bool encode(short restype, const zds_name& value, ZcBmResbufChain* chain) {
+        if (chain == nullptr) {
+            return false;
+        }
+        resbuf* node = acutNewRb(restype);
+        if (node == nullptr || !writeValue(node, value)) {
+            if (node != nullptr) {
+                acutRelRb(node);
+            }
+            return false;
+        }
+        chain->append(node);
+        return true;
+    }
+};
+
+template <>
+struct ZcBmResbufCodec<AcDbObjectId> {
+    static bool decode(const resbuf* node, short restype, AcDbObjectId* out_value) {
+        if (node == nullptr || out_value == nullptr || node->restype != restype) {
+            return false;
+        }
+        zds_name name = {0, 0};
+        name[0] = node->resval.rlname[0];
+        name[1] = node->resval.rlname[1];
+        return acdbGetObjectId(*out_value, name) == Zcad::eOk;
+    }
+
+    static bool writeValue(resbuf* node, const AcDbObjectId& value) {
+        if (node == nullptr || value.isNull()) {
+            return false;
+        }
+        zds_name name = {0, 0};
+        if (acdbGetAdsName(name, value) != Zcad::eOk) {
+            return false;
+        }
+        node->resval.rlname[0] = name[0];
+        node->resval.rlname[1] = name[1];
+        return true;
+    }
+
+    static bool encode(short restype, const AcDbObjectId& value, ZcBmResbufChain* chain) {
         if (chain == nullptr) {
             return false;
         }

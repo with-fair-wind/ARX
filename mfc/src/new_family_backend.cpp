@@ -350,13 +350,25 @@ std::wstring resolveTemplatePathForExecution(const RuleSet& rules, const std::ws
     return input;
 }
 
-// 自动生成族名（类别名 + 递增计数）。
-std::wstring makeDefaultFamilyName(const std::wstring& categoryName) {
+std::unordered_map<std::wstring, int>& autoFamilyNameCounters() {
     static std::unordered_map<std::wstring, int> categoryCounter;
+    return categoryCounter;
+}
+
+// 生成默认族名候选（不提交计数）。
+std::wstring makeDefaultFamilyName(const std::wstring& categoryName) {
+    auto& categoryCounter = autoFamilyNameCounters();
     const std::wstring key = toLower(categoryName);
-    int& counter = categoryCounter[key];
-    ++counter;
-    return categoryName + std::to_wstring(counter);
+    const auto it = categoryCounter.find(key);
+    const int nextCounter = (it == categoryCounter.end()) ? 1 : (it->second + 1);
+    return categoryName + std::to_wstring(nextCounter);
+}
+
+// 新建成功后提交计数，确保失败/取消不消耗编号。
+void commitDefaultFamilyNameCounter(const std::wstring& categoryName) {
+    auto& categoryCounter = autoFamilyNameCounters();
+    const std::wstring key = toLower(categoryName);
+    ++categoryCounter[key];
 }
 
 // 业务流程服务：只处理“新建族执行流程”。
@@ -388,11 +400,15 @@ class NewFamilyService {
         }
 
         const std::wstring categoryDisplayName = categoryDisplayNameByName(activeRules, resolvedRequest.category_name);
-        const std::wstring resolvedFamilyName = resolvedRequest.family_name.empty() ? makeDefaultFamilyName(categoryDisplayName) : resolvedRequest.family_name;
+        const bool useAutoFamilyName = resolvedRequest.family_name.empty();
+        const std::wstring resolvedFamilyName = useAutoFamilyName ? makeDefaultFamilyName(categoryDisplayName) : resolvedRequest.family_name;
 
         acutPrintf(_T("\n[新建族] 开始执行后端流程..."));
         if (!buildAndActivateTemporaryFamilyDocument(resolvedRequest.template_path, categoryDisplayName, resolvedFamilyName, resolvedFamilyName, errorMessage)) {
             return false;
+        }
+        if (useAutoFamilyName) {
+            commitDefaultFamilyNameCounter(categoryDisplayName);
         }
         acutPrintf(_T("\n[新建族] 后端流程执行完成。"));
         return true;

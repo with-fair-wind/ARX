@@ -4,6 +4,8 @@
 #include <acedads.h>
 #include <acutads.h>
 
+#include <algorithm>
+#include <cstdint>
 #include <functional>
 #include <initializer_list>
 #include <string>
@@ -11,11 +13,10 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <cstdint>
-#include <algorithm>
 
 namespace {
 using ZcBmLispHandler = std::function<int(resbuf*)>;
+static const int kZcBmLispFuncCodeBase = 20000;
 
 struct ZcBmLispFunctionEntry {
     std::wstring function_name;
@@ -38,11 +39,23 @@ struct ZcBmLispInvokeRestype<std::int64_t> {
     static const int value = RTINT64;
 };
 template <>
+struct ZcBmLispInvokeRestype<bool> {
+    static const int value = RTSHORT;
+};
+template <>
 struct ZcBmLispInvokeRestype<double> {
     static const int value = RTREAL;
 };
 template <>
 struct ZcBmLispInvokeRestype<std::wstring> {
+    static const int value = RTSTR;
+};
+template <>
+struct ZcBmLispInvokeRestype<ZTCHAR*> {
+    static const int value = RTSTR;
+};
+template <>
+struct ZcBmLispInvokeRestype<const ZTCHAR*> {
     static const int value = RTSTR;
 };
 template <>
@@ -53,6 +66,8 @@ template <>
 struct ZcBmLispInvokeRestype<zds_name> {
     static const int value = RTENAME;
 };
+template <>
+struct ZcBmLispInvokeRestype<AcDbObjectId> : ZcBmLispInvokeRestype<zds_name> {};
 
 template <typename T>
 bool parseLispArg(const resbuf* node, T* out_value) {
@@ -65,9 +80,7 @@ bool parseLispArg(const resbuf* node, T* out_value) {
 template <typename... Args>
 using DecayedArgsTuple = std::tuple<typename std::decay<Args>::type...>;
 
-bool hasNoMoreArgs(const resbuf* node) {
-    return node == nullptr || (node->restype == RTNONE && node->rbnext == nullptr);
-}
+bool hasNoMoreArgs(const resbuf* node) { return node == nullptr || (node->restype == RTNONE && node->rbnext == nullptr); }
 
 template <std::size_t Index, typename Tuple>
 bool parseTupleElement(const resbuf*& current, Tuple* out_values) {
@@ -110,8 +123,7 @@ auto invokeFromTupleImpl(Fn&& fn, Tuple& values, std::index_sequence<Indices...>
 }
 
 template <typename Fn, typename Tuple>
-auto invokeFromTuple(Fn&& fn, Tuple& values)
-    -> decltype(invokeFromTupleImpl(std::forward<Fn>(fn), values, std::make_index_sequence<std::tuple_size<Tuple>::value>{})) {
+auto invokeFromTuple(Fn&& fn, Tuple& values) -> decltype(invokeFromTupleImpl(std::forward<Fn>(fn), values, std::make_index_sequence<std::tuple_size<Tuple>::value>{})) {
     return invokeFromTupleImpl(std::forward<Fn>(fn), values, std::make_index_sequence<std::tuple_size<Tuple>::value>{});
 }
 
@@ -155,50 +167,33 @@ ZcBmLispHandler makeTypedLispHandler(const ZTCHAR* function_name, Fn fn) {
 
 std::vector<ZcBmLispFunctionEntry>& lispFunctionTable() {
     static std::vector<ZcBmLispFunctionEntry> table = {
-        {L"mfcEchoNoArgs",
-         makeTypedLispHandler<>(_T("mfcEchoNoArgs"), []() -> int {
-             acutPrintf(_T("\n[LISP] mfcEchoNoArgs 被调用。"));
-             zcedRetStr(_T("MFC Lisp NoArgs OK"));
-             return RTNORM;
-         })},
-        {L"mfcSumIntReal",
-         makeTypedLispHandler<int, double>(_T("mfcSumIntReal"), [](int left, double right) -> int {
-             const double result = static_cast<double>(left) + right;
-             acutPrintf(_T("\n[LISP] mfcSumIntReal 参数: %d, %.6f => %.6f"), left, right, result);
-             zcedRetReal(result);
-             return RTNORM;
-         })},
-        {L"mfcDescribePoint",
-         makeTypedLispHandler<AcGePoint3d, std::wstring>(_T("mfcDescribePoint"), [](const AcGePoint3d& pt, const std::wstring& label) -> int {
-             CString text;
-             text.Format(_T("%ls:(%.3f, %.3f, %.3f)"), label.c_str(), pt.x, pt.y, pt.z);
-             acutPrintf(_T("\n[LISP] mfcDescribePoint => %s"), text.GetString());
-             zcedRetStr(text.GetString());
-             return RTNORM;
-         })},
-        {L"mfcCatByValue",
-         makeWStringCategoryHandler(_T("mfcCatByValue"), _T("by value"), [](std::wstring text) {
-             printWStringAddress(_T("[callback value ]"), text);
-         })},
-        {L"mfcCatByConstLRef",
-         makeWStringCategoryHandler(_T("mfcCatByConstLRef"), _T("by const lref"), [](const std::wstring& text) {
-             printWStringAddress(_T("[callback const&]"), text);
-         })},
-        {L"mfcCatByRRef",
-         makeWStringCategoryHandler(_T("mfcCatByRRef"), _T("by rref"), [](std::wstring&& text) {
-             printWStringAddress(_T("[callback &&    ]"), text);
-         })},
-        {L"mfcCatByConstRRef",
-         makeWStringCategoryHandler(_T("mfcCatByConstRRef"), _T("by const rref"), [](const std::wstring&& text) {
-             printWStringAddress(_T("[callback const&&]"), text);
-         })},
+        {L"mfcEchoNoArgs", makeTypedLispHandler<>(_T("mfcEchoNoArgs"),
+                                                  []() -> int {
+                                                      acutPrintf(_T("\n[LISP] mfcEchoNoArgs 被调用。"));
+                                                      zcedRetStr(_T("MFC Lisp NoArgs OK"));
+                                                      return RTNORM;
+                                                  })},
+        {L"mfcSumIntReal", makeTypedLispHandler<int, double>(_T("mfcSumIntReal"),
+                                                             [](int left, double right) -> int {
+                                                                 const double result = static_cast<double>(left) + right;
+                                                                 acutPrintf(_T("\n[LISP] mfcSumIntReal 参数: %d, %.6f => %.6f"), left, right, result);
+                                                                 zcedRetReal(result);
+                                                                 return RTNORM;
+                                                             })},
+        {L"mfcDescribePoint", makeTypedLispHandler<AcGePoint3d, std::wstring>(_T("mfcDescribePoint"),
+                                                                              [](const AcGePoint3d& pt, const std::wstring& label) -> int {
+                                                                                  CString text;
+                                                                                  text.Format(_T("%ls:(%.3f, %.3f, %.3f)"), label.c_str(), pt.x, pt.y, pt.z);
+                                                                                  acutPrintf(_T("\n[LISP] mfcDescribePoint => %s"), text.GetString());
+                                                                                  zcedRetStr(text.GetString());
+                                                                                  return RTNORM;
+                                                                              })},
+        {L"mfcCatByValue", makeWStringCategoryHandler(_T("mfcCatByValue"), _T("by value"), [](std::wstring text) { printWStringAddress(_T("[callback value ]"), text); })},
+        {L"mfcCatByConstLRef", makeWStringCategoryHandler(_T("mfcCatByConstLRef"), _T("by const lref"), [](const std::wstring& text) { printWStringAddress(_T("[callback const&]"), text); })},
+        {L"mfcCatByRRef", makeWStringCategoryHandler(_T("mfcCatByRRef"), _T("by rref"), [](std::wstring&& text) { printWStringAddress(_T("[callback &&    ]"), text); })},
+        {L"mfcCatByConstRRef", makeWStringCategoryHandler(_T("mfcCatByConstRRef"), _T("by const rref"), [](const std::wstring&& text) { printWStringAddress(_T("[callback const&&]"), text); })},
     };
     return table;
-}
-
-bool& lispRegistrationState() {
-    static bool registered = false;
-    return registered;
 }
 
 int dynamicEchoRawHandler(resbuf* args) {
@@ -232,10 +227,8 @@ int invokeLispFunction(const std::wstring& function_name, Args&&... args) {
     }
 
     bool args_ok = true;
-    std::initializer_list<int>{(args_ok = args_ok &&
-                                           ZcBmResbufCodec<typename std::decay<Args>::type>::encode(
-                                               ZcBmLispInvokeRestype<typename std::decay<Args>::type>::value, std::forward<Args>(args), &chain),
-                                0)...};
+    std::initializer_list<int>{
+        (args_ok = args_ok && ZcBmResbufCodec<typename std::decay<Args>::type>::encode(ZcBmLispInvokeRestype<typename std::decay<Args>::type>::value, std::forward<Args>(args), &chain), 0)...};
     if (!args_ok) {
         acutPrintf(_T("\n[zcedInvoke] 构建参数失败: %ls"), function_name.c_str());
         chain.release();
@@ -289,57 +282,51 @@ int invokeLispFunction(const std::wstring& function_name, Args&&... args) {
 }  // namespace
 
 int ZcBmRegisterLispCommands() {
-    if (lispRegistrationState()) {
-        return RTNORM;
-    }
-
     const auto& table = lispFunctionTable();
     for (size_t i = 0; i < table.size(); ++i) {
         if (table[i].handler == nullptr || table[i].function_name.empty()) {
             continue;
         }
-        if (zcedDefun(table[i].function_name.c_str(), static_cast<int>(i)) == 0) {
+        const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(i);
+        if (zcedDefun(table[i].function_name.c_str(), func_code) == 0) {
             acutPrintf(_T("\n[LISP] 注册失败: %ls"), table[i].function_name.c_str());
             return RTERROR;
         }
     }
 
     acutPrintf(_T("\n[LISP] 已注册 %d 个函数。"), static_cast<int>(table.size()));
-    lispRegistrationState() = true;
     return RTNORM;
 }
 
 int ZcBmUnregisterLispCommands() {
-    if (!lispRegistrationState()) {
-        return RTNORM;
-    }
-
     const auto& table = lispFunctionTable();
     for (size_t i = 0; i < table.size(); ++i) {
         if (table[i].handler == nullptr || table[i].function_name.empty()) {
             continue;
         }
-        if (zcedUndef(table[i].function_name.c_str(), static_cast<int>(i)) == 0) {
-            acutPrintf(_T("\n[LISP] 反注册失败: %ls"), table[i].function_name.c_str());
-            return RTERROR;
-        }
+        const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(i);
+        // 文档关闭/切换时可能已无绑定，忽略失败，做 best-effort 清理。
+        zcedUndef(table[i].function_name.c_str(), func_code);
     }
 
-    lispRegistrationState() = false;
     return RTNORM;
 }
 
 int ZcBmDispatchLispCommand() {
     const auto& table = lispFunctionTable();
     const int function_code = zcedGetFunCode();
-    if (function_code < 0 || function_code >= static_cast<int>(table.size()) || table[function_code].handler == nullptr) {
-        acutPrintf(_T("\n[LISP] 未知函数编码: %d"), function_code);
+    const int local_index = function_code - kZcBmLispFuncCodeBase;
+    if (local_index < 0 || local_index >= static_cast<int>(table.size())) {
+        return kZcBmLispDispatchNotHandled;
+    }
+    if (table[local_index].handler == nullptr) {
+        acutPrintf(_T("\n[LISP] 空处理器编码: %d"), function_code);
         zcedRetNil();
         return RTERROR;
     }
 
     resbuf* args = zcedGetArgs();
-    const int result = table[function_code].handler(args);
+    const int result = table[local_index].handler(args);
     if (args != nullptr) {
         acutRelRb(args);
     }
@@ -418,12 +405,13 @@ int ZcBmAddLispFunction(const ZTCHAR* function_name, ZcBmLispRawHandler handler,
                 return RTERROR;
             }
             table[i].handler = handler;
-            if (lispRegistrationState() && zcedDefun(table[i].function_name.c_str(), static_cast<int>(i)) == 0) {
+            const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(i);
+            if (zcedDefun(table[i].function_name.c_str(), func_code) == 0) {
                 table[i].handler = nullptr;
                 return RTERROR;
             }
             if (out_func_code != nullptr) {
-                *out_func_code = static_cast<int>(i);
+                *out_func_code = func_code;
             }
             return RTNORM;
         }
@@ -433,9 +421,9 @@ int ZcBmAddLispFunction(const ZTCHAR* function_name, ZcBmLispRawHandler handler,
     entry.function_name = name;
     entry.handler = handler;
     table.push_back(std::move(entry));
-    const int func_code = static_cast<int>(table.size() - 1);
+    const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(table.size() - 1);
 
-    if (lispRegistrationState() && zcedDefun(table.back().function_name.c_str(), func_code) == 0) {
+    if (zcedDefun(table.back().function_name.c_str(), func_code) == 0) {
         table.pop_back();
         return RTERROR;
     }
@@ -456,9 +444,8 @@ int ZcBmRemoveLispFunction(const ZTCHAR* function_name) {
         if (table[i].function_name != name || table[i].handler == nullptr) {
             continue;
         }
-        if (lispRegistrationState() && zcedUndef(table[i].function_name.c_str(), static_cast<int>(i)) == 0) {
-            return RTERROR;
-        }
+        const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(i);
+        zcedUndef(table[i].function_name.c_str(), func_code);
         table[i].handler = nullptr;
         return RTNORM;
     }

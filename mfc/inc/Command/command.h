@@ -15,6 +15,9 @@ void MfcLoadToDocCommand();
 // 构件浏览器命令
 void MfcComponentBrowserCommand();
 
+// 族模板管理器命令（ID 驱动版本）
+void MfcTemplateManagerCommand();
+
 // 另存为测试命令
 void MfcSaveAsDialogCommand();
 
@@ -29,6 +32,9 @@ void MfcPropertyPermissionCommand();
 
 // 新建族对话框命令
 void MfcNewFamilyCommand();
+
+// 视图关联工作平面对话框命令（非模态）
+void MfcViewWorkPlaneCommand();
 
 // 临时文档链路测试命令
 void MfcNewFamilyTempDemoCommand();

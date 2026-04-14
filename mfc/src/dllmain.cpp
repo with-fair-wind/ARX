@@ -50,11 +50,13 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCENT"), _T("MFCENT"), ACRX_CMD_MODAL, MfcCreateEntity);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLOADDOC"), _T("MFCLOADDOC"), ACRX_CMD_MODAL, MfcLoadToDocCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCBROWSER"), _T("MFCBROWSER"), ACRX_CMD_MODAL, MfcComponentBrowserCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCTMGR"), _T("MFCTMGR"), ACRX_CMD_MODAL, MfcTemplateManagerCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCSAVEAS"), _T("MFCSAVEAS"), ACRX_CMD_MODAL, MfcSaveAsDialogCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCTESTRENAME"), _T("MFCTESTRENAME"), ACRX_CMD_MODAL, MfcTestRenameDialogCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCTESTOVERWRITE"), _T("MFCTESTOVERWRITE"), ACRX_CMD_MODAL, MfcTestOverwriteDialogCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCPROPPERM"), _T("MFCPROPPERM"), ACRX_CMD_MODAL, MfcPropertyPermissionCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCNEWFAMILY"), _T("MFCNEWFAMILY"), ACRX_CMD_MODAL, MfcNewFamilyCommand);
+            acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCVIEWWORKPLANE"), _T("MFCVIEWWORKPLANE"), ACRX_CMD_MODAL, MfcViewWorkPlaneCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCNEWFAMILYDEMO"), _T("MFCNEWFAMILYDEMO"), ACRX_CMD_MODAL, MfcNewFamilyTempDemoCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLISPTEST0"), _T("MFCLISPTEST0"), ACRX_CMD_MODAL, MfcLispInvokeNoArgsCommand);
             acedRegCmds->addCommand(_T("MFCGROUP"), _T("MFCLISPTEST1"), _T("MFCLISPTEST1"), ACRX_CMD_MODAL, MfcLispInvokeIntRealCommand);
@@ -66,7 +68,8 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
             acedEditor->addReactor(g_pReactor);
 
             acutPrintf(_T("\nMFC ARX 应用程序已加载。"));
-            acutPrintf(_T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC, MFCBROWSER, MFCSAVEAS, MFCTESTRENAME, MFCTESTOVERWRITE, MFCPROPPERM, MFCNEWFAMILY, MFCNEWFAMILYDEMO, MFCLISPTEST0/1/2, MFCLISPCATTEST, MFCLISPDYNTEST"));
+            acutPrintf(
+                _T("\n可用命令: MFCTEST, MFCARXUI, MFCENT, MFCLOADDOC, MFCBROWSER, MFCTMGR, MFCSAVEAS, MFCTESTRENAME, MFCTESTOVERWRITE, MFCPROPPERM, MFCNEWFAMILY, MFCVIEWWORKPLANE, MFCNEWFAMILYDEMO, MFCLISPTEST0/1/2, MFCLISPCATTEST, MFCLISPDYNTEST"));
             break;
 
         case AcRx::kLoadDwgMsg:

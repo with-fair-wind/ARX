@@ -18,11 +18,11 @@
   </categories>
 
   <templates>
-    <template key="door" file_name="门样板.ztt" />
-    <template key="window" file_name="窗样板.ztt" />
-    <template key="column" file_name="柱样板.ztt" />
-    <template key="linear" file_name="线性构件样板.ztt" />
-    <template key="generic" file_name="通用样板.ztt" />
+    <template key="door" file_name="门样板.ztf" />
+    <template key="window" file_name="窗样板.ztf" />
+    <template key="column" file_name="柱样板.ztf" />
+    <template key="linear" file_name="线性构件样板.ztf" />
+    <template key="generic" file_name="通用样板.ztf" />
   </templates>
 
   <category_template default="generic">

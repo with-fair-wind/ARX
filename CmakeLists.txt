@@ -29,7 +29,7 @@ include(UsefulFuncs)
 
 set(ZRX_VERSION "2026" CACHE STRING "ZRX SDK version to use (e.g., 2024, 2025, 2026)")
 set_property(CACHE ZRX_VERSION PROPERTY STRINGS 2024 2025 2026)
-set(zrxsdk_dir "E:/sdk/ZrxSDK/ZWCAD_${ZRX_VERSION}_ZRXSDK" CACHE PATH "Path to the ZRX SDK")
+set(zrxsdk_dir "D:/3rdparty/ZrxSDK/ZWCAD_${ZRX_VERSION}_ZRXSDK" CACHE PATH "Path to the ZRX SDK")
 message(STATUS "zrxsdk_dir: ${zrxsdk_dir}")
 set(ZWCAD_INSTALL_PATH "D:/soft/ZWCAD 2026" CACHE PATH "Path to the ZWCAD")
 
@@ -45,7 +45,7 @@ if(MSVC)
 endif()
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install CACHE PATH "installation path" FORCE)
-set(QT_PATH "E:/sdk/qt/Qt5.14.2/msvc2017_64" CACHE PATH "QT_PATH" FORCE)
+set(QT_PATH "D:/3rdparty/qt/Qt5.15.17/msvc2019_64" CACHE PATH "QT_PATH" FORCE)
 
 add_subdirectory(arxApi)
 add_subdirectory(main)
