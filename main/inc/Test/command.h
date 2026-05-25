@@ -9,4 +9,5 @@ void test5();
 void test6();
 void test6Place();
 void test7();
+void testArc();
 }  // namespace Test_Command

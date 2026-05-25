@@ -19,6 +19,7 @@ class ZcBmPropertyPermissionDialog : public CZcUiDialog {
 
     afx_msg void onBnClickedOk();
     afx_msg void onBnClickedMasterEditable();
+    afx_msg void onBnClickedNewElevationProperty();
     afx_msg void onNmClickPropertyList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void onNmCustomdrawPropertyList(NMHDR* pNMHDR, LRESULT* pResult);
 

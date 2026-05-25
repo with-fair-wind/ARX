@@ -1,3 +1,4 @@
+#include <Entity/arcEntity.h>
 #include <Entity/testEntity.h>
 #include <Test/command.h>
 
@@ -5,9 +6,11 @@ namespace {
 void registerEntity() {
     Test_Entity::TestEntity::rxInit();
     Test_Entity::TestEntity2::rxInit();
+    ArcEntity::rxInit();
 }
 
 void deleteEntity() {
+    deleteAcRxClass(ArcEntity::desc());
     deleteAcRxClass(Test_Entity::TestEntity::desc());
     deleteAcRxClass(Test_Entity::TestEntity2::desc());
 }
@@ -21,6 +24,7 @@ void initApp() {
     acedRegCmds->addCommand(_T("TestCMD"), _T("test6"), _T("test6"), ACRX_CMD_TRANSPARENT, Test_Command::test6);
     acedRegCmds->addCommand(_T("TestCMD"), _T("_test6_place"), _T("_test6_place"), ACRX_CMD_MODAL, Test_Command::test6Place);
     acedRegCmds->addCommand(_T("TestCMD"), _T("test7"), _T("test7"), ACRX_CMD_MODAL, Test_Command::test7);
+    acedRegCmds->addCommand(_T("TestCMD"), _T("testArc"), _T("testArc"), ACRX_CMD_MODAL, Test_Command::testArc);
     registerEntity();
     acrxBuildClassHierarchy();
 }

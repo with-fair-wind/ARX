@@ -1,13 +1,30 @@
 #include <Dialog/component_browser_dialog.h>
 #include <Resources/mfc_rc.h>
 #include <Services/component_browser_backend.h>
+#include <acdocman.h>
 #include <afxcmn.h>
 
+#include <memory>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 IMPLEMENT_DYNAMIC(ZcBmComponentBrowserDialog, CZcUiDialog)
+
+namespace {
+ZcBmComponentBrowserDialog* g_activeComponentBrowserDialog = nullptr;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+
+void* docKeyFromDocument(AcApDocument* doc) {
+    if (doc == nullptr) {
+        return nullptr;
+    }
+    if (doc->database() != nullptr) {
+        return doc->database();
+    }
+    return doc;
+}
+}  // namespace
 
 // ============================================================
 // Impl
@@ -36,6 +53,12 @@ class ZcBmComponentBrowserImpl {
     void updatePlaceButton();
     // 切换“显示未加载”开关并刷新树。
     void toggleUnloadedVisibility();
+    // 文档切换前保存当前树状态。
+    void onBeforeDocumentSwitch();
+    // 文档切换后刷新并恢复目标文档状态。
+    void onAfterDocumentSwitch();
+    // 文档销毁前清理对应缓存桶。
+    void onDocumentToBeDestroyed(void* docKey);
 
     // 处理树选中变化事件。
     void handleSelChanged();
@@ -107,9 +130,27 @@ class ZcBmComponentBrowserImpl {
     [[nodiscard]] std::vector<HTREEITEM> getSelectedItems() const;
     // 按节点层级过滤并返回选中节点 id 列表。
     [[nodiscard]] std::vector<std::wstring> getSelectedIds(ComponentNodeLevel level) const;
+    // 获取当前文档唯一键（优先数据库指针）。
+    [[nodiscard]] void* currentDocKey() const;
+    // 捕获当前树的展开状态到当前文档桶。
+    void captureCurrentExpandedState(bool isSearchMode);
+    // 恢复当前文档对应模式的展开状态，返回是否有历史快照。
+    [[nodiscard]] bool restoreExpandedStateForCurrentDoc(bool isSearchMode);
+    // 删除已关闭文档对应的状态，避免缓存长期增长。
+    void pruneDocStateIfNeeded();
 
     ZcBmComponentBrowserDialog* m_owner = nullptr;
     std::unordered_map<HTREEITEM, TreeNodeInfo> m_nodeMap;
+    std::unordered_map<std::wstring, HTREEITEM> m_idToItem;
+    struct TreeViewState {
+        std::unordered_set<std::wstring> expandedIdsNormal;
+        std::unordered_set<std::wstring> expandedIdsSearch;
+        bool hasNormalState = false;
+        bool hasSearchState = false;
+    };
+    std::unordered_map<void*, TreeViewState> m_docTreeStates;
+    bool m_currentTreeIsSearchMode = false;
+    bool m_suspendPreBuildCapture = false;
     bool m_showUnloaded = true;
 };
 
@@ -122,15 +163,23 @@ void ZcBmComponentBrowserImpl::buildTree() {
     // 3) 递归插入节点
     // 4) 默认展开到一级
     auto& tree = m_owner->m_tree;
+    if (!m_suspendPreBuildCapture) {
+        captureCurrentExpandedState(m_currentTreeIsSearchMode);
+    }
     tree.SetRedraw(FALSE);
     tree.DeleteAllItems();
     m_nodeMap.clear();
+    m_idToItem.clear();
     tree.clearInteractionState();
 
     const auto roots = getComponentTree();
     insertChildren(TVI_ROOT, roots);
 
-    expandToLevel(TVI_ROOT, 0, 1);
+    const bool hasState = restoreExpandedStateForCurrentDoc(false);
+    if (!hasState) {
+        expandToLevel(TVI_ROOT, 0, 1);
+    }
+    m_currentTreeIsSearchMode = false;
 
     tree.SetRedraw(TRUE);
     tree.Invalidate();
@@ -140,15 +189,23 @@ void ZcBmComponentBrowserImpl::buildSearchTree(const std::wstring& keyword) {
     // 搜索树构建与全量构建一致，但数据源换成 searchComponents。
     // 搜索结果默认展开更多层级，便于用户快速定位命中项。
     auto& tree = m_owner->m_tree;
+    if (!m_suspendPreBuildCapture) {
+        captureCurrentExpandedState(m_currentTreeIsSearchMode);
+    }
     tree.SetRedraw(FALSE);
     tree.DeleteAllItems();
     m_nodeMap.clear();
+    m_idToItem.clear();
     tree.clearInteractionState();
 
     const auto results = searchComponents(keyword);
     insertChildren(TVI_ROOT, results);
 
-    expandToLevel(TVI_ROOT, 0, 3);
+    const bool hasState = restoreExpandedStateForCurrentDoc(true);
+    if (!hasState) {
+        expandToLevel(TVI_ROOT, 0, 3);
+    }
+    m_currentTreeIsSearchMode = true;
 
     tree.SetRedraw(TRUE);
     tree.Invalidate();
@@ -189,6 +246,25 @@ void ZcBmComponentBrowserImpl::toggleUnloadedVisibility() {
     refreshTree();
 }
 
+void ZcBmComponentBrowserImpl::onBeforeDocumentSwitch() { captureCurrentExpandedState(m_currentTreeIsSearchMode); }
+
+void ZcBmComponentBrowserImpl::onAfterDocumentSwitch() {
+    pruneDocStateIfNeeded();
+    m_suspendPreBuildCapture = true;
+    refreshTree();
+    m_suspendPreBuildCapture = false;
+}
+
+void ZcBmComponentBrowserImpl::onDocumentToBeDestroyed(void* docKey) {
+    if (docKey == nullptr) {
+        return;
+    }
+    if (docKey == currentDocKey()) {
+        captureCurrentExpandedState(m_currentTreeIsSearchMode);
+    }
+    m_docTreeStates.erase(docKey);
+}
+
 HTREEITEM ZcBmComponentBrowserImpl::insertNode(HTREEITEM hParent, const ComponentNode& node) {
     auto& tree = m_owner->m_tree;
 
@@ -214,6 +290,7 @@ HTREEITEM ZcBmComponentBrowserImpl::insertNode(HTREEITEM hParent, const Componen
     info.load_state = node.load_state;
     info.is_system = node.is_system;
     m_nodeMap[hItem] = std::move(info);
+    m_idToItem[node.id] = hItem;
     tree.setItemLogicalLevel(hItem, static_cast<int>(node.level));
 
     if (!node.children.empty()) {
@@ -225,6 +302,7 @@ HTREEITEM ZcBmComponentBrowserImpl::insertNode(HTREEITEM hParent, const Componen
         if (tree.ItemHasChildren(hItem) == FALSE) {
             tree.DeleteItem(hItem);
             m_nodeMap.erase(hItem);
+            m_idToItem.erase(node.id);
             return nullptr;
         }
     }
@@ -494,6 +572,91 @@ std::vector<std::wstring> ZcBmComponentBrowserImpl::getSelectedIds(ComponentNode
     return ids;
 }
 
+void* ZcBmComponentBrowserImpl::currentDocKey() const {
+    if (acDocManager == nullptr) {
+        return nullptr;
+    }
+    return docKeyFromDocument(acDocManager->curDocument());
+}
+
+void ZcBmComponentBrowserImpl::captureCurrentExpandedState(bool isSearchMode) {
+    if (m_idToItem.empty()) {
+        return;
+    }
+    void* docKey = currentDocKey();
+    if (docKey == nullptr) {
+        return;
+    }
+    auto& treeState = m_docTreeStates[docKey];
+    auto& expandedIds = isSearchMode ? treeState.expandedIdsSearch : treeState.expandedIdsNormal;
+    expandedIds.clear();
+
+    for (const auto& [componentId, item] : m_idToItem) {
+        if (item == nullptr) {
+            continue;
+        }
+        const UINT state = m_owner->m_tree.GetItemState(item, TVIS_EXPANDED);
+        if ((state & TVIS_EXPANDED) != 0U) {
+            expandedIds.insert(componentId);
+        }
+    }
+
+    if (isSearchMode) {
+        treeState.hasSearchState = true;
+    } else {
+        treeState.hasNormalState = true;
+    }
+}
+
+bool ZcBmComponentBrowserImpl::restoreExpandedStateForCurrentDoc(bool isSearchMode) {
+    void* docKey = currentDocKey();
+    if (docKey == nullptr) {
+        return false;
+    }
+
+    auto docIt = m_docTreeStates.find(docKey);
+    if (docIt == m_docTreeStates.end()) {
+        return false;
+    }
+
+    const TreeViewState& treeState = docIt->second;
+    const bool hasState = isSearchMode ? treeState.hasSearchState : treeState.hasNormalState;
+    if (!hasState) {
+        return false;
+    }
+
+    const auto& expandedIds = isSearchMode ? treeState.expandedIdsSearch : treeState.expandedIdsNormal;
+    for (const auto& componentId : expandedIds) {
+        auto itemIt = m_idToItem.find(componentId);
+        if (itemIt != m_idToItem.end() && itemIt->second != nullptr) {
+            m_owner->m_tree.Expand(itemIt->second, TVE_EXPAND);
+        }
+    }
+    return true;
+}
+
+void ZcBmComponentBrowserImpl::pruneDocStateIfNeeded() {
+    if (m_docTreeStates.empty() || acDocManager == nullptr) {
+        return;
+    }
+
+    std::unordered_set<void*> aliveDocKeys;
+    std::unique_ptr<AcApDocumentIterator> iterator(acDocManager->newAcApDocumentIterator());
+    if (iterator != nullptr) {
+        for (; !iterator->done(); iterator->step()) {
+            aliveDocKeys.insert(docKeyFromDocument(iterator->document()));
+        }
+    }
+
+    for (auto it = m_docTreeStates.begin(); it != m_docTreeStates.end();) {
+        if (aliveDocKeys.find(it->first) == aliveDocKeys.end()) {
+            it = m_docTreeStates.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
 // ============================================================
 // Context menu actions
 // ============================================================
@@ -752,7 +915,38 @@ ZcBmComponentBrowserDialog::ZcBmComponentBrowserDialog(CWnd* pParent)
     : CZcUiDialog(IDD_MFC_COMPONENT_BROWSER, pParent), m_parent(pParent), m_impl(std::make_unique<ZcBmComponentBrowserImpl>(*this)) {}
 
 // Impl 采用 RAII 自动释放，这里保持默认析构即可。
-ZcBmComponentBrowserDialog::~ZcBmComponentBrowserDialog() = default;
+ZcBmComponentBrowserDialog::~ZcBmComponentBrowserDialog() {
+    if (g_activeComponentBrowserDialog == this) {
+        g_activeComponentBrowserDialog = nullptr;
+    }
+}
+
+void ZcBmComponentBrowserDialog::notifyBeforeDocumentSwitch() {
+    if (g_activeComponentBrowserDialog == nullptr || g_activeComponentBrowserDialog->m_impl == nullptr) {
+        return;
+    }
+    if (::IsWindow(g_activeComponentBrowserDialog->GetSafeHwnd()) == FALSE) {
+        return;
+    }
+    g_activeComponentBrowserDialog->m_impl->onBeforeDocumentSwitch();
+}
+
+void ZcBmComponentBrowserDialog::notifyAfterDocumentSwitch() {
+    if (g_activeComponentBrowserDialog == nullptr || g_activeComponentBrowserDialog->m_impl == nullptr) {
+        return;
+    }
+    if (::IsWindow(g_activeComponentBrowserDialog->GetSafeHwnd()) == FALSE) {
+        return;
+    }
+    g_activeComponentBrowserDialog->m_impl->onAfterDocumentSwitch();
+}
+
+void ZcBmComponentBrowserDialog::notifyDocumentToBeDestroyed(void* docKey) {
+    if (g_activeComponentBrowserDialog == nullptr || g_activeComponentBrowserDialog->m_impl == nullptr) {
+        return;
+    }
+    g_activeComponentBrowserDialog->m_impl->onDocumentToBeDestroyed(docKey);
+}
 
 void ZcBmComponentBrowserDialog::DoDataExchange(CDataExchange* pDX) {
     // 绑定对话框控件到成员变量。
@@ -779,6 +973,7 @@ BOOL ZcBmComponentBrowserDialog::OnInitDialog() {
     m_tree.ModifyStyle(0, TVS_EDITLABELS | TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_SHOWSELALWAYS);
 
     m_btnPlace.EnableWindow(FALSE);
+    g_activeComponentBrowserDialog = this;
 
     m_impl->buildTree();
     m_impl->updatePlaceButton();

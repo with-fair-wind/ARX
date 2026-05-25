@@ -19,8 +19,6 @@ class ZcBmViewWorkPlaneDialog : public CZcUiDialog {
     void OnOK() override;
     void OnCancel() override;
 
-    afx_msg void onBnClickedOk();
-    afx_msg void onBnClickedCancel();
     afx_msg void onNmClickViewList(NMHDR* pNMHDR, LRESULT* pResult);
 
     DECLARE_DYNAMIC(ZcBmViewWorkPlaneDialog)

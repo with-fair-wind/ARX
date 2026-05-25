@@ -23,6 +23,12 @@ class ZcBmComponentBrowserDialog : public CZcUiDialog {
     ZcBmComponentBrowserDialog(ZcBmComponentBrowserDialog&&) = delete;
     ZcBmComponentBrowserDialog& operator=(ZcBmComponentBrowserDialog&&) = delete;
 
+    // 文档切换通知入口（由 DocManagerReactor 调用）。
+    static void notifyBeforeDocumentSwitch();
+    static void notifyAfterDocumentSwitch();
+    // 文档销毁前通知入口（用于释放按文档缓存）。
+    static void notifyDocumentToBeDestroyed(void* docKey);
+
    protected:
     // MFC 标准控件绑定入口。
     void DoDataExchange(CDataExchange* pDX) override;

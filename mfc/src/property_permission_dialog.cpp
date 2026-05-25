@@ -16,6 +16,13 @@
 IMPLEMENT_DYNAMIC(ZcBmPropertyPermissionDialog, CZcUiDialog)
 #pragma comment(lib, "UxTheme.lib")
 
+namespace {
+class ZcBmNewElevationPropertyDialog final : public CZcUiDialog {
+   public:
+    explicit ZcBmNewElevationPropertyDialog(CWnd* pParent = nullptr) : CZcUiDialog(IDD_MFC_NEW_ELEVATION_PROPERTY, pParent) {}
+};
+}  // namespace
+
 class ZcBmPropertyPermissionDialogImpl {
    public:
     explicit ZcBmPropertyPermissionDialogImpl(ZcBmPropertyPermissionDialog& owner);
@@ -279,6 +286,12 @@ void ZcBmPropertyPermissionDialog::onBnClickedOk() { m_impl->onOkClicked(); }
 
 void ZcBmPropertyPermissionDialog::onBnClickedMasterEditable() { m_impl->onMasterEditableClicked(); }
 
+void ZcBmPropertyPermissionDialog::onBnClickedNewElevationProperty() {
+    // 占位模态框：内网版本可在此弹窗中实现“新建标高属性”完整流程。
+    ZcBmNewElevationPropertyDialog dialog(this);
+    dialog.DoModal();
+}
+
 void ZcBmPropertyPermissionDialog::onNmClickPropertyList(NMHDR* pNMHDR, LRESULT* pResult) { m_impl->onListClick(pNMHDR, pResult); }
 
 void ZcBmPropertyPermissionDialog::onNmCustomdrawPropertyList(NMHDR* pNMHDR, LRESULT* pResult) { m_impl->onListCustomDraw(pNMHDR, pResult); }
@@ -286,6 +299,7 @@ void ZcBmPropertyPermissionDialog::onNmCustomdrawPropertyList(NMHDR* pNMHDR, LRE
 BEGIN_MESSAGE_MAP(ZcBmPropertyPermissionDialog, CZcUiDialog)
 ON_BN_CLICKED(IDOK, &ZcBmPropertyPermissionDialog::onBnClickedOk)
 ON_BN_CLICKED(IDC_PROPERTY_PERMISSION_MASTER, &ZcBmPropertyPermissionDialog::onBnClickedMasterEditable)
+ON_BN_CLICKED(IDC_PROPERTY_PERMISSION_NEW_ELEVATION, &ZcBmPropertyPermissionDialog::onBnClickedNewElevationProperty)
 ON_NOTIFY(NM_CLICK, IDC_PROPERTY_PERMISSION_LIST, &ZcBmPropertyPermissionDialog::onNmClickPropertyList)
 ON_NOTIFY(NM_CUSTOMDRAW, IDC_PROPERTY_PERMISSION_LIST, &ZcBmPropertyPermissionDialog::onNmCustomdrawPropertyList)
 END_MESSAGE_MAP()

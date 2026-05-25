@@ -7,6 +7,7 @@
 #include <acedads.h>
 #include <afxcmn.h>
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -20,19 +21,60 @@ constexpr int kGroupPlan = 1;
 constexpr int kGroupElevation = 2;
 constexpr int kGroupSection = 3;
 
-CString workPlaneDisplayText(const WorkPlaneRef& plane) {
-    if (!plane.name.empty()) {
-        return CString(plane.name.c_str());
-    }
-    if (!plane.id.empty()) {
-        return CString(plane.id.c_str());
-    }
-    return _T("拾取面");
-}
-
 bool isEmptyWorkPlane(const WorkPlaneRef& plane) { return plane.id.empty() && plane.name.empty(); }
 
 bool isSameWorkPlane(const WorkPlaneRef& lhs, const WorkPlaneRef& rhs) { return lhs.id == rhs.id && lhs.name == rhs.name; }
+
+enum class WorkPlaneUiState : std::uint8_t {
+    kMissing = 0,
+    kExisting = 1,
+    kUpdated = 2,
+};
+
+std::wstring shortenIdentifier(const std::wstring& id) {
+    if (id.size() <= 12) {
+        return id;
+    }
+    return id.substr(0, 6) + L"..." + id.substr(id.size() - 4);
+}
+
+std::wstring readableWorkPlaneName(const WorkPlaneRef& plane) {
+    if (!plane.name.empty()) {
+        return plane.name;
+    }
+    if (!plane.id.empty()) {
+        return L"未命名(" + shortenIdentifier(plane.id) + L")";
+    }
+    return L"";
+}
+
+WorkPlaneUiState calcWorkPlaneUiState(const WorkPlaneRef& current, const WorkPlaneRef& original) {
+    if (isEmptyWorkPlane(current)) {
+        return WorkPlaneUiState::kMissing;
+    }
+    if (isSameWorkPlane(current, original)) {
+        return WorkPlaneUiState::kExisting;
+    }
+    return WorkPlaneUiState::kUpdated;
+}
+
+CString workPlaneDisplayText(const WorkPlaneRef& current, const WorkPlaneRef& original) {
+    const WorkPlaneUiState state = calcWorkPlaneUiState(current, original);
+    switch (state) {
+        case WorkPlaneUiState::kMissing:
+            return _T("[未关联] 点击拾取");
+        case WorkPlaneUiState::kExisting: {
+            const std::wstring text = L"[已关联] " + readableWorkPlaneName(current);
+            return CString(text.c_str());
+        }
+        case WorkPlaneUiState::kUpdated: {
+            const std::wstring text = L"[已更新] " + readableWorkPlaneName(current) + L"（待保存）";
+            return CString(text.c_str());
+        }
+        default:
+            return _T("[未关联] 点击拾取");
+    }
+}
 
 bool isUiSupportedViewKind(BimViewKind kind) {
     return kind == BimViewKind::kPlan || kind == BimViewKind::kElevation || kind == BimViewKind::kSection;
@@ -183,7 +225,7 @@ void ZcBmViewWorkPlaneDialogImpl::renderRows() {
         item.iGroupId = toGroupId(row.view.kind);
         const int itemIndex = m_owner->m_viewList.InsertItem(&item);
         row.itemIndex = itemIndex;
-        m_owner->m_viewList.SetItemText(itemIndex, 1, workPlaneDisplayText(row.currentWorkPlane));
+        m_owner->m_viewList.SetItemText(itemIndex, 1, workPlaneDisplayText(row.currentWorkPlane, row.originalWorkPlane));
     }
 }
 
@@ -264,7 +306,7 @@ bool ZcBmViewWorkPlaneDialogImpl::pickWorkPlaneForRow(int rowIndex) {
     }
 
     row.currentWorkPlane = std::move(picked);
-    m_owner->m_viewList.SetItemText(row.itemIndex, 1, workPlaneDisplayText(row.currentWorkPlane));
+    m_owner->m_viewList.SetItemText(row.itemIndex, 1, workPlaneDisplayText(row.currentWorkPlane, row.originalWorkPlane));
     updatePendingChange(row);
 
     return true;
@@ -336,14 +378,8 @@ void ZcBmViewWorkPlaneDialog::OnOK() { m_impl->onOkClicked(); }
 
 void ZcBmViewWorkPlaneDialog::OnCancel() { m_impl->onCancelClicked(); }
 
-void ZcBmViewWorkPlaneDialog::onBnClickedOk() { m_impl->onOkClicked(); }
-
-void ZcBmViewWorkPlaneDialog::onBnClickedCancel() { m_impl->onCancelClicked(); }
-
 void ZcBmViewWorkPlaneDialog::onNmClickViewList(NMHDR* pNMHDR, LRESULT* pResult) { m_impl->onListClick(pNMHDR, pResult); }
 
 BEGIN_MESSAGE_MAP(ZcBmViewWorkPlaneDialog, CZcUiDialog)
-ON_BN_CLICKED(IDOK, &ZcBmViewWorkPlaneDialog::onBnClickedOk)
-ON_BN_CLICKED(IDCANCEL, &ZcBmViewWorkPlaneDialog::onBnClickedCancel)
 ON_NOTIFY(NM_CLICK, IDC_VWP_LIST, &ZcBmViewWorkPlaneDialog::onNmClickViewList)
 END_MESSAGE_MAP()

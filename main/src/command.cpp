@@ -1,4 +1,6 @@
+#include <Entity/arcEntity.h>
 #include <Entity/testEntity.h>
+#include <Jig/arcJig.h>
 #include <KTArxTool/KTArxCompare.h>
 #include <KTArxTool/KTArxConvert.h>
 #include <KTArxTool/KTArxCurve.h>
@@ -440,5 +442,10 @@ void test7() {
     acutPrintf(_T("\n[命令上下文] 即将进入纤程，测试各种 aced* 函数..."));
     acDocManager->executeInApplicationContext(test7AppContextCallback, targetDoc);
     acutPrintf(_T("\n[命令上下文] 纤程已返回。"));
+}
+void testArc() {
+    ArcPlaceJig jig;
+    AcDbObjectIdArray ids = jig.doIt();
+    acutPrintf(_T("\n已创建 %d 个圆弧实体。"), ids.length());
 }
 }  // namespace Test_Command

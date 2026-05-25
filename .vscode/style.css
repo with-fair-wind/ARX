@@ -1,0 +1,17 @@
+/* fix inline code contrast */
+code {
+    color: #000000 !important;
+    background-color: #f5f5f5 !important;
+    font-weight: 500;
+}
+
+/* 代码块 */
+pre code {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+/* 提高整体对比度 */
+body {
+    color: #000000;
+}

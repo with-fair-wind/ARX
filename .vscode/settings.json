@@ -52,7 +52,8 @@
     "functional": "cpp",
     "ratio": "cpp"
   },
-  "cmake.generator": "Visual Studio 18 2026",
-  // "cmake.generator": "Ninja",
-  "cmake.outputLogEncoding": "utf8"
+  // "cmake.generator": "Visual Studio 18 2026",
+  "cmake.generator": "Ninja",
+  "cmake.outputLogEncoding": "utf8",
+  "markdown-pdf.styles": ["style.css"]
 }

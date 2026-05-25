@@ -14,10 +14,24 @@ struct ZcBmNilTag {};
 class ZcBmResbufChain {
    public:
     ZcBmResbufChain() = default;
-    ~ZcBmResbufChain() = default;
+    ~ZcBmResbufChain() { release(); }
 
     ZcBmResbufChain(const ZcBmResbufChain&) = delete;
     ZcBmResbufChain& operator=(const ZcBmResbufChain&) = delete;
+    ZcBmResbufChain(ZcBmResbufChain&& other) noexcept : m_head(other.m_head), m_tail(other.m_tail) {
+        other.m_head = nullptr;
+        other.m_tail = nullptr;
+    }
+    ZcBmResbufChain& operator=(ZcBmResbufChain&& other) noexcept {
+        if (this != &other) {
+            release();
+            m_head = other.m_head;
+            m_tail = other.m_tail;
+            other.m_head = nullptr;
+            other.m_tail = nullptr;
+        }
+        return *this;
+    }
 
     void append(resbuf* node) noexcept {
         if (node == nullptr) {
@@ -59,6 +73,9 @@ class ZcBmResbufChain {
         append(node);
         return true;
     }
+
+    operator resbuf*() noexcept { return m_head; }
+    operator const resbuf*() const noexcept { return m_head; }
 
     resbuf* head() const noexcept { return m_head; }
 

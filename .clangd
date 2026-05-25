@@ -16,7 +16,13 @@ Diagnostics:
 Index:
   Background: Build
 CompileFlags:
-  Add: [--cuda-gpu-arch=sm_86] # 这里写你的 GPU 计算能力版本
+  Add: [--driver-mode=cl]
   Remove:
-    - -rdc=true
-    - -gencode
+    - /Fo*
+    # - /Fd*
+    # - /Fp*
+    # - /Yu*
+    # - /Yc*
+    # - /FI*
+    # - /MP
+    # - /nologo

@@ -1,9 +1,3 @@
-#include <Command/command.h>
-#include <Services/zcBm_lisp_bridge.h>
-#include <Utils/zcBm_resbuf_codec.h>
-#include <acedads.h>
-#include <acutads.h>
-
 #include <algorithm>
 #include <cstdint>
 #include <functional>
@@ -11,63 +5,20 @@
 #include <string>
 #include <tuple>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
+#include <Command/command.h>
+#include <Services/zcBm_lisp_bridge.h>
+#include <Utils/zcBm_resbuf_codec.h>
+#include <acedads.h>
+#include <acutads.h>
+
+
 namespace {
-using ZcBmLispHandler = std::function<int(resbuf*)>;
-static const int kZcBmLispFuncCodeBase = 20000;
-
-struct ZcBmLispFunctionEntry {
-    std::wstring function_name;
-    ZcBmLispHandler handler;
-};
-
-template <typename T>
-struct ZcBmLispInvokeRestype;
-
-template <>
-struct ZcBmLispInvokeRestype<int> {
-    static const int value = RTLONG;
-};
-template <>
-struct ZcBmLispInvokeRestype<std::int16_t> {
-    static const int value = RTSHORT;
-};
-template <>
-struct ZcBmLispInvokeRestype<std::int64_t> {
-    static const int value = RTINT64;
-};
-template <>
-struct ZcBmLispInvokeRestype<bool> {
-    static const int value = RTSHORT;
-};
-template <>
-struct ZcBmLispInvokeRestype<double> {
-    static const int value = RTREAL;
-};
-template <>
-struct ZcBmLispInvokeRestype<std::wstring> {
-    static const int value = RTSTR;
-};
-template <>
-struct ZcBmLispInvokeRestype<ZTCHAR*> {
-    static const int value = RTSTR;
-};
-template <>
-struct ZcBmLispInvokeRestype<const ZTCHAR*> {
-    static const int value = RTSTR;
-};
-template <>
-struct ZcBmLispInvokeRestype<AcGePoint3d> {
-    static const int value = RT3DPOINT;
-};
-template <>
-struct ZcBmLispInvokeRestype<zds_name> {
-    static const int value = RTENAME;
-};
-template <>
-struct ZcBmLispInvokeRestype<AcDbObjectId> : ZcBmLispInvokeRestype<zds_name> {};
+using ZcBmLispHandler = ZcBmLispBridge::ZcBmLispHandler;
+using ZcBmLispFunctionEntry = ZcBmLispBridge::ZcBmLispFunctionEntry;
 
 template <typename T>
 bool parseLispArg(const resbuf* node, T* out_value) {
@@ -80,7 +31,9 @@ bool parseLispArg(const resbuf* node, T* out_value) {
 template <typename... Args>
 using DecayedArgsTuple = std::tuple<typename std::decay<Args>::type...>;
 
-bool hasNoMoreArgs(const resbuf* node) { return node == nullptr || (node->restype == RTNONE && node->rbnext == nullptr); }
+bool hasNoMoreArgs(const resbuf* node) {
+    return node == nullptr || (node->restype == RTNONE && node->rbnext == nullptr);
+}
 
 template <std::size_t Index, typename Tuple>
 bool parseTupleElement(const resbuf*& current, Tuple* out_values) {
@@ -154,19 +107,19 @@ ZcBmLispHandler makeWStringCategoryHandler(const ZTCHAR* function_name, const ZT
 template <typename... Args, typename Fn>
 ZcBmLispHandler makeTypedLispHandler(const ZTCHAR* function_name, Fn fn) {
     typedef typename std::decay<Fn>::type DecayedFn;
-    return [name = std::wstring(function_name), callback = DecayedFn(fn)](resbuf* args) -> int {
+    return [name = std::wstring(function_name), fn_capture = DecayedFn(fn)](resbuf* args) -> int {
         DecayedArgsTuple<Args...> values;
         if (!parseTypedArgs<Args...>(args, &values)) {
             acutPrintf(_T("\n[LISP:%ls] 参数不匹配。"), name.c_str());
             zcedRetNil();
             return RTERROR;
         }
-        return invokeFromTuple(callback, values);
+        return invokeFromTuple(fn_capture, values);
     };
 }
 
-std::vector<ZcBmLispFunctionEntry>& lispFunctionTable() {
-    static std::vector<ZcBmLispFunctionEntry> table = {
+ZcBmLispBridge::ZcBmLispCache makeInitialLispCache() {
+    return ZcBmLispBridge::ZcBmLispCache{std::vector<ZcBmLispFunctionEntry>{
         {L"mfcEchoNoArgs", makeTypedLispHandler<>(_T("mfcEchoNoArgs"),
                                                   []() -> int {
                                                       acutPrintf(_T("\n[LISP] mfcEchoNoArgs 被调用。"));
@@ -192,8 +145,21 @@ std::vector<ZcBmLispFunctionEntry>& lispFunctionTable() {
         {L"mfcCatByConstLRef", makeWStringCategoryHandler(_T("mfcCatByConstLRef"), _T("by const lref"), [](const std::wstring& text) { printWStringAddress(_T("[callback const&]"), text); })},
         {L"mfcCatByRRef", makeWStringCategoryHandler(_T("mfcCatByRRef"), _T("by rref"), [](std::wstring&& text) { printWStringAddress(_T("[callback &&    ]"), text); })},
         {L"mfcCatByConstRRef", makeWStringCategoryHandler(_T("mfcCatByConstRRef"), _T("by const rref"), [](const std::wstring&& text) { printWStringAddress(_T("[callback const&&]"), text); })},
-    };
-    return table;
+    }};
+}
+
+const ZcBmLispBridge::ZcBmLispCache& initialLispCache() {
+    static const ZcBmLispBridge::ZcBmLispCache cache = makeInitialLispCache();
+    return cache;
+}
+
+ZcBmLispBridge::ZcBmLispCache& defaultLispCache() {
+    static ZcBmLispBridge::ZcBmLispCache cache = makeInitialLispCache();
+    return cache;
+}
+
+void resetDefaultLispCacheToInitial() {
+    defaultLispCache() = initialLispCache();
 }
 
 int dynamicEchoRawHandler(resbuf* args) {
@@ -218,24 +184,25 @@ int dynamicEchoRawHandler(resbuf* args) {
 }
 
 template <typename... Args>
-int invokeLispFunction(const std::wstring& function_name, Args&&... args) {
+int invokeLispFunction(const ZcString& function_name, Args&&... args) {
     ZcBmResbufChain chain;
-    if (!ZcBmResbufCodec<std::wstring>::encode(RTSTR, function_name, &chain)) {
-        acutPrintf(_T("\n[zcedInvoke] 构建函数名失败: %ls"), function_name.c_str());
+    if (!ZcBmResbufCodec<ZcString>::encode(RTSTR, function_name, &chain)) {
+        acutPrintf(_T("\n[zcedInvoke] 构建函数名失败: %s"), function_name.kTCharPtr());
         chain.release();
         return RTERROR;
     }
 
     bool args_ok = true;
     std::initializer_list<int>{
-        (args_ok = args_ok && ZcBmResbufCodec<typename std::decay<Args>::type>::encode(ZcBmLispInvokeRestype<typename std::decay<Args>::type>::value, std::forward<Args>(args), &chain), 0)...};
+        (args_ok = args_ok && ZcBmResbufCodec<typename std::decay<Args>::type>::encode(ZcBmLispBridge::ZcBmLispInvokeRestype<typename std::decay<Args>::type>::value, std::forward<Args>(args), &chain),
+         0)...};
     if (!args_ok) {
-        acutPrintf(_T("\n[zcedInvoke] 构建参数失败: %ls"), function_name.c_str());
+        acutPrintf(_T("\n[zcedInvoke] 构建参数失败: %s"), function_name.kTCharPtr());
         chain.release();
         return RTERROR;
     }
     if (!chain.appendTerminator()) {
-        acutPrintf(_T("\n[zcedInvoke] 构建 RTNONE 终止参数失败: %ls"), function_name.c_str());
+        acutPrintf(_T("\n[zcedInvoke] 构建 RTNONE 终止参数失败: %s"), function_name.kTCharPtr());
         chain.release();
         return RTERROR;
     }
@@ -245,7 +212,7 @@ int invokeLispFunction(const std::wstring& function_name, Args&&... args) {
     chain.release();
 
     if (status != RTNORM) {
-        acutPrintf(_T("\n[zcedInvoke] 调用失败: %ls, status=%d"), function_name.c_str(), status);
+        acutPrintf(_T("\n[zcedInvoke] 调用失败: %s, status=%d"), function_name.kTCharPtr(), status);
         if (result != nullptr) {
             acutRelRb(result);
         }
@@ -281,15 +248,16 @@ int invokeLispFunction(const std::wstring& function_name, Args&&... args) {
 }
 }  // namespace
 
-int ZcBmRegisterLispCommands() {
-    const auto& table = lispFunctionTable();
+namespace ZcBmLispBridge {
+int ZcBmRegisterLispCommands(ZcBmLispCache& cache) {
+    const auto& table = cache.m_table;
     for (size_t i = 0; i < table.size(); ++i) {
-        if (table[i].handler == nullptr || table[i].function_name.empty()) {
+        if (table[i].handler == nullptr || table[i].function_name.isEmpty()) {
             continue;
         }
         const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(i);
-        if (zcedDefun(table[i].function_name.c_str(), func_code) == 0) {
-            acutPrintf(_T("\n[LISP] 注册失败: %ls"), table[i].function_name.c_str());
+        if (zcedDefun(table[i].function_name.kTCharPtr(), func_code) == 0) {
+            acutPrintf(_T("\n[LISP] 注册失败: %s"), table[i].function_name.kTCharPtr());
             return RTERROR;
         }
     }
@@ -298,39 +266,120 @@ int ZcBmRegisterLispCommands() {
     return RTNORM;
 }
 
-int ZcBmUnregisterLispCommands() {
-    const auto& table = lispFunctionTable();
+int ZcBmUnregisterLispCommands(ZcBmLispCache& cache) {
+    const auto& table = cache.m_table;
     for (size_t i = 0; i < table.size(); ++i) {
-        if (table[i].handler == nullptr || table[i].function_name.empty()) {
+        if (table[i].handler == nullptr || table[i].function_name.isEmpty()) {
             continue;
         }
         const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(i);
-        // 文档关闭/切换时可能已无绑定，忽略失败，做 best-effort 清理。
-        zcedUndef(table[i].function_name.c_str(), func_code);
+        zcedUndef(table[i].function_name.kTCharPtr(), func_code);
     }
-
     return RTNORM;
 }
 
-int ZcBmDispatchLispCommand() {
-    const auto& table = lispFunctionTable();
+int ZcBmDispatchLispCommand(ZcBmLispCache& cache) {
+    const auto& table = cache.m_table;
     const int function_code = zcedGetFunCode();
     const int local_index = function_code - kZcBmLispFuncCodeBase;
     if (local_index < 0 || local_index >= static_cast<int>(table.size())) {
         return kZcBmLispDispatchNotHandled;
     }
-    if (table[local_index].handler == nullptr) {
+    if (table[static_cast<size_t>(local_index)].handler == nullptr) {
         acutPrintf(_T("\n[LISP] 空处理器编码: %d"), function_code);
         zcedRetNil();
         return RTERROR;
     }
 
     resbuf* args = zcedGetArgs();
-    const int result = table[local_index].handler(args);
+    const int result = table[static_cast<size_t>(local_index)].handler(args);
     if (args != nullptr) {
         acutRelRb(args);
     }
     return result;
+}
+
+int invokeLispFunction(resbuf* args, resbuf** out_result) {
+    if (args == nullptr) {
+        return RTERROR;
+    }
+
+    resbuf* result = nullptr;
+    const int status = zcedInvoke(args, &result);
+    acutRelRb(args);
+    if (out_result != nullptr) {
+        *out_result = result;
+    } else if (result != nullptr) {
+        acutRelRb(result);
+    }
+    return status;
+}
+
+int ZcBmAddLispFunction(ZcBmLispCache& cache, const ZcString& function_name, const ZcBmLispHandler& handler, int* out_func_code) {
+    if (function_name.isEmpty() || handler == nullptr) {
+        return RTERROR;
+    }
+
+    size_t target_index = 0;
+    ZcBmLispHandler previous_handler;
+    if (cache.push(function_name, handler, &target_index, &previous_handler) != RTNORM) {
+        return RTERROR;
+    }
+
+    const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(target_index);
+    if (zcedDefun(function_name.kTCharPtr(), func_code) == 0) {
+        if (previous_handler != nullptr) {
+            size_t rollback_index = 0;
+            ZcBmLispHandler ignored_previous;
+            if (cache.push(function_name, previous_handler, &rollback_index, &ignored_previous) != RTNORM || rollback_index != target_index) {
+                return RTERROR;
+            }
+        } else {
+            cache.remove(function_name, nullptr, nullptr, nullptr);
+        }
+        return RTERROR;
+    }
+
+    if (out_func_code != nullptr) {
+        *out_func_code = func_code;
+    }
+    return RTNORM;
+}
+
+int ZcBmRemoveLispFunction(ZcBmLispCache& cache, const ZcString& function_name) {
+    if (function_name.isEmpty()) {
+        return RTERROR;
+    }
+
+    size_t index = 0;
+    ZcString registered_name;
+    ZcBmLispHandler removed_handler;
+    if (cache.remove(function_name, &index, &registered_name, &removed_handler) != RTNORM) {
+        return RTERROR;
+    }
+
+    const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(index);
+    if (zcedUndef(registered_name.kTCharPtr(), func_code) == 0) {
+        size_t rollback_index = 0;
+        ZcBmLispHandler ignored_previous;
+        if (cache.push(registered_name, removed_handler, &rollback_index, &ignored_previous) != RTNORM || rollback_index != index) {
+            return RTERROR;
+        }
+        return RTERROR;
+    }
+    return RTNORM;
+}
+}  // namespace ZcBmLispBridge
+
+int ZcBmRegisterLispCommands() {
+    resetDefaultLispCacheToInitial();
+    return ZcBmLispBridge::ZcBmRegisterLispCommands(defaultLispCache());
+}
+int ZcBmUnregisterLispCommands() {
+    return ZcBmLispBridge::ZcBmUnregisterLispCommands(defaultLispCache());
+}
+int ZcBmDispatchLispCommand() {
+    return ZcBmLispBridge::ZcBmDispatchLispCommand(defaultLispCache());
 }
 
 void MfcLispInvokeNoArgsCommand() {
@@ -387,67 +436,40 @@ void MfcLispDynamicApiTestCommand() {
     acutPrintf(_T("\n[LISP-DYN] Remove 后调用 status=%d（预期失败）"), second_invoke_status);
 }
 
-int MfcRegisterLispCommands() { return ZcBmRegisterLispCommands(); }
-int MfcUnregisterLispCommands() { return ZcBmUnregisterLispCommands(); }
-int MfcDispatchLispCommand() { return ZcBmDispatchLispCommand(); }
+int MfcRegisterLispCommands() {
+    return ZcBmRegisterLispCommands();
+}
+int MfcUnregisterLispCommands() {
+    return ZcBmUnregisterLispCommands();
+}
+int MfcDispatchLispCommand() {
+    return ZcBmDispatchLispCommand();
+}
 
-int ZcBmAddLispFunction(const ZTCHAR* function_name, ZcBmLispRawHandler handler, int* out_func_code) {
+int ZcBmAddLispFunction(const ZTCHAR* function_name, const ZcBmLispRawHandler& handler, int* out_func_code) {
     if (function_name == nullptr || *function_name == 0 || handler == nullptr) {
         return RTERROR;
     }
-
-    auto& table = lispFunctionTable();
-    const std::wstring name(function_name);
-
-    for (size_t i = 0; i < table.size(); ++i) {
-        if (table[i].function_name == name) {
-            if (table[i].handler != nullptr) {
-                return RTERROR;
-            }
-            table[i].handler = handler;
-            const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(i);
-            if (zcedDefun(table[i].function_name.c_str(), func_code) == 0) {
-                table[i].handler = nullptr;
-                return RTERROR;
-            }
-            if (out_func_code != nullptr) {
-                *out_func_code = func_code;
-            }
-            return RTNORM;
-        }
-    }
-
-    ZcBmLispFunctionEntry entry;
-    entry.function_name = name;
-    entry.handler = handler;
-    table.push_back(std::move(entry));
-    const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(table.size() - 1);
-
-    if (zcedDefun(table.back().function_name.c_str(), func_code) == 0) {
-        table.pop_back();
-        return RTERROR;
-    }
-    if (out_func_code != nullptr) {
-        *out_func_code = func_code;
-    }
-    return RTNORM;
+    return ZcBmLispBridge::ZcBmAddLispFunction(defaultLispCache(), ZcString(function_name), ZcBmLispBridge::ZcBmLispHandler(handler), out_func_code);
 }
 
 int ZcBmRemoveLispFunction(const ZTCHAR* function_name) {
     if (function_name == nullptr || *function_name == 0) {
         return RTERROR;
     }
+    return ZcBmLispBridge::ZcBmRemoveLispFunction(defaultLispCache(), ZcString(function_name));
+}
 
-    auto& table = lispFunctionTable();
-    const std::wstring name(function_name);
-    for (size_t i = 0; i < table.size(); ++i) {
-        if (table[i].function_name != name || table[i].handler == nullptr) {
-            continue;
-        }
-        const int func_code = kZcBmLispFuncCodeBase + static_cast<int>(i);
-        zcedUndef(table[i].function_name.c_str(), func_code);
-        table[i].handler = nullptr;
-        return RTNORM;
+int ZcBmLegacyRaw(resbuf* rb) {
+    resbuf* cur = rb;
+    if (cur->restype == RTREAL) {
+        double data = cur->resval.rreal;
+        zcutPrintf(T("\n[LIsP] lisp Testcmd5 参数1:%.6f"), data);
+        cur = cur->rbnext;
     }
-    return RTERROR;
+    if (cur->restype == RTSHORT) {
+        short data = cur->resval.rint;
+        zcutPrintf(T("\n[LISP] lisp Testcmd5 参数2:%d"), data);
+    }
+    return RTNORM;
 }

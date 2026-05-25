@@ -1,6 +1,8 @@
+#include <acdocman.h>
 #include <Command/command.h>
 #include <Services/app_editor_reactor.h>
 #include <Services/app_event_service.h>
+#include <Services/component_browser_doc_reactor.h>
 #include <Services/zcBm_lisp_bridge.h>
 
 // CmfcApp
@@ -19,6 +21,7 @@ class CmfcApp : public CWinApp {
 namespace {
 CmfcApp theApp;                          // NOLINT(cppcoreguidelines-avoid-non-const-global-variables,cert-err58-cpp)
 AppEditorReactor* g_pReactor = nullptr;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+ComponentBrowserDocReactor* g_pComponentBrowserDocReactor = nullptr;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 }  // namespace
 
 // CmfcApp 初始化
@@ -66,6 +69,8 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
             // 注册 EditorReactor, 用于 commandEnded 时 flush 事件
             g_pReactor = new AppEditorReactor();
             acedEditor->addReactor(g_pReactor);
+            g_pComponentBrowserDocReactor = new ComponentBrowserDocReactor();
+            acDocManager->addReactor(g_pComponentBrowserDocReactor);
 
             acutPrintf(_T("\nMFC ARX 应用程序已加载。"));
             acutPrintf(
@@ -86,6 +91,11 @@ extern "C" AcRx::AppRetCode zcrxEntryPoint(AcRx::AppMsgCode msg, void* pkt) {
                 acedEditor->removeReactor(g_pReactor);
                 delete g_pReactor;
                 g_pReactor = nullptr;
+            }
+            if (g_pComponentBrowserDocReactor != nullptr) {
+                acDocManager->removeReactor(g_pComponentBrowserDocReactor);
+                delete g_pComponentBrowserDocReactor;
+                g_pComponentBrowserDocReactor = nullptr;
             }
             AppEventService::instance().reset();
             ZcBmUnregisterLispCommands();
